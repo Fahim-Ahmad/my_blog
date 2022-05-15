@@ -203,5 +203,150 @@ vline&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
+    <item>
+      <title>Exploring Relationship Between Variables | scatter-plot</title>
+      <link>/post/exploring-relationship-between-variables-scatter-plot/</link>
+      <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>/post/exploring-relationship-between-variables-scatter-plot/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/plotly-binding/plotly.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/typedarray/typedarray.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/crosstalk/css/crosstalk.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/crosstalk/js/crosstalk.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/plotly-main/plotly-latest.min.js&#34;&gt;&lt;/script&gt;
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#when-to-use-scatterplot&#34;&gt;When to use scatterplot?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#scatterplot-using-the-base-r-functions&#34;&gt;Scatterplot using the base R functions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#scatterplot-using-ggplot2-package&#34;&gt;Scatterplot using ggplot2 package&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;when-to-use-scatterplot&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;When to use scatterplot?&lt;/h3&gt;
+&lt;p&gt;When dealing with numerical data, the most common way to graphically explore the patterns and relationships between variables and draw a conclusion about how variables correlate to one another is by plotting the data points using a scatterplot. A scatterplot uses dots/markers to represent values for two numeric variables where the position of each dot indicates values for an individual data point in the (x,y) coordinates.&lt;/p&gt;
+&lt;p&gt;Scatterplots are used primarily to determine the &lt;strong&gt;strength&lt;/strong&gt; and &lt;strong&gt;direction&lt;/strong&gt; of the relationship between two numeric variables.&lt;/p&gt;
+&lt;p&gt;The direction of the relationship is determined by how &lt;code&gt;y&lt;/code&gt; variable changes by an increase in &lt;code&gt;x&lt;/code&gt; variable.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;When the &lt;code&gt;y&lt;/code&gt; variable tends to increase by increasing the &lt;code&gt;x&lt;/code&gt; variable, it shows the positive relationship between two variables.&lt;/li&gt;
+&lt;li&gt;When the &lt;code&gt;y&lt;/code&gt; variable tends to decrease by increasing the &lt;code&gt;x&lt;/code&gt; variable, it shows the negative relationship between two variables.&lt;/li&gt;
+&lt;li&gt;If it is impossible to establish either of the above criteria, there is not any meaningful relationship between the variables.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The strength of the relationship is determined by how spread the data points are in the (x,y) coordinates.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;When the data points lie exactly along a straight line, it shows the perfect relationship.&lt;/li&gt;
+&lt;li&gt;When the data points are closed to one another and are concentrated near the straight line, it shows a strong relationship.&lt;/li&gt;
+&lt;li&gt;If the data points appeared randomly scattered or equally distributed across the plot, it shows no relationship or a weak relationship.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/images/ExploringRelationshipBetweenVariablesscatterplot.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;scatterplot-using-the-base-r-functions&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Scatterplot using the base R functions&lt;/h3&gt;
+&lt;p&gt;The &lt;code&gt;plot(x,y)&lt;/code&gt; function is used to create a scatterplot where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are columns to be plotted in the x-axis and y-axis, respectively. Each point’s horizontal position indicates the value of &lt;code&gt;x&lt;/code&gt; (column that is plotted in the x-axis) and the vertical position of each point indicates the value of &lt;code&gt;y&lt;/code&gt; (column that is plotted in the y-axis).&lt;/p&gt;
+&lt;p&gt;For example, you collect data from 30 individuals about their education level, age, and salary as well as the gender of each individual as below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df &amp;lt;- data.frame(
+  gender = c(&amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Male&amp;quot;),
+  age =       c(30,    25,    27,    28,    24,    29,    27,    24,    22,    NA,    NA,    21,    25,    27,    29,    24,    22,    18,    NA,    25,    22,    23,    27,    NA,    18,    23,    19,    26,    23, 22),
+  salary =    c(25000, 31000, 35000, 27000, 32000, 26000, 31000, 30000, 35000, 38000, 37000, 36000, 33000, 30000, 25000, 29000, 37000, 28000, 38000, 31000, 37000, 34000, 31000, 38000, 38000, 35000, 37000, 29000, 37000, 36000),
+  education = c(9,     12,    16,    10,    14,    10,    11,    14,    16,    18,    18,    NA,    14,    12,    9,     13,    15,    10,    18,    12,    17,    16,    13,    18,    NA,    16,    NA,    12,    18, 17)
+)
+
+df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    gender age salary education
+## 1    Male  30  25000         9
+## 2    Male  25  31000        12
+## 3    Male  27  35000        16
+## 4    Male  28  27000        10
+## 5    Male  24  32000        14
+## 6    Male  29  26000        10
+## 7    Male  27  31000        11
+## 8    Male  24  30000        14
+## 9    Male  22  35000        16
+## 10 Female  NA  38000        18
+## 11 Female  NA  37000        18
+## 12 Female  21  36000        NA
+## 13 Female  25  33000        14
+## 14 Female  27  30000        12
+## 15 Female  29  25000         9
+## 16 Female  24  29000        13
+## 17 Female  22  37000        15
+## 18 Female  18  28000        10
+## 19 Female  NA  38000        18
+## 20 Female  25  31000        12
+## 21   Male  22  37000        17
+## 22   Male  23  34000        16
+## 23   Male  27  31000        13
+## 24   Male  NA  38000        18
+## 25 Female  18  38000        NA
+## 26 Female  23  35000        16
+## 27 Female  19  37000        NA
+## 28 Female  26  29000        12
+## 29 Female  23  37000        18
+## 30   Male  22  36000        17&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;By plotting the data points we can explore the relationship between age, education, and salary.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# plot Age against Salary
+plot(df$age, df$salary, main = &amp;#39;Age vs. Salary&amp;#39;)
+
+# plot Education against Salary
+plot(df$education, df$salary, main = &amp;#39;Education vs. Salary&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-3-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The plot shown above reveals that those who are younger tend to have a higher salary. Moreover, a higher education level can predict a higher salary as well.&lt;/p&gt;
+&lt;p&gt;Let’s plot age against education to explore the relationship between the two variables.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot(df$age, df$education, main = &amp;quot;Age vs. Education&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;It is also possible to explore the relationship between age, salary, and education in one plot by creating a scatterplot matrix using &lt;code&gt;pairs()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pairs(~salary+education+age, data = df, main = &amp;quot;Scatterplot Matrix&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above plot confirms the same findings. It shows a positive correlation between education and salary, however, there is a negative correlation between age and salary. Furthermore, those who are younger tend to have a higher education level.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;scatterplot-using-ggplot2-package&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Scatterplot using ggplot2 package&lt;/h3&gt;
+&lt;p&gt;As I mentioned in the previous posts, it is preferred to use the ggplot2 packages for visualization because the resulting plot is easy to modify and it is more popular among R users to use the ggplot2 package. The &lt;code&gt;geom_point()&lt;/code&gt; function can be used from &lt;strong&gt;ggplot2&lt;/strong&gt; package to create scatterplots. For example, let’s plot age against salary.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+
+ggplot(df, aes(x = age, y = salary)) +
+  geom_point() +
+  theme_bw() +
+  labs(title = &amp;quot;Age vs. Salary&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The common issue with scatterplot is when we have lots of data, the points will overlap (known as overplotting). There are several ways to alleviate this issue. The most common way is to use &lt;code&gt;geom_jitter()&lt;/code&gt; instead of &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;geom_jitter()&lt;/code&gt; adds a small amount of random noise to the location of each point to make the plot easier to read. For example, compare the below plot to the one above.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(df, aes(x = age, y = salary)) +
+  geom_jitter() +
+  theme_bw() +
+  labs(title = &amp;quot;Age vs. Salary&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Scatterplots are very useful in identifying the relationship between two numerical variables among several groups as well by adding a third variable. When the third variable is categorical data, the most common way is by giving the dots a distinct hue to show the membership of each point to a respective group. For instance, let’s plot the relationship between age and salary among males and females.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(df, aes(x = age, y = salary, color = gender)) +
+  geom_jitter() +
+  theme_bw() +
+  labs(title = &amp;quot;Age vs. Salary, by Gender&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;To depict the third variable that has numeric values, the common way is to change the dots’ size based on the values of the third variable, where larger points indicate higher values and smaller points indicate lower values. Moreover, hue can also be used when the third variable has numeric values by using a sequence of colors rather than using distinct colors for points like in the categorical case.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(df, aes(x = age, y = salary, size = education)) +
+  geom_jitter() +
+  theme_bw() +
+  labs(title = &amp;quot;Age vs. Salary&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(df, aes(x = age, y = salary, color = education)) +
+  geom_jitter() +
+  scale_fill_gradient(low = &amp;quot;orange&amp;quot;, high = &amp;quot;red&amp;quot;, na.value = &amp;quot;grey50&amp;quot;, aesthetics = &amp;quot;color&amp;quot;) +
+  theme_bw() +
+  labs(title = &amp;quot;Age vs. Salary&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-08-10-exploring-relationship-between-variables-scatter-plot/index_files/figure-html/unnamed-chunk-9-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Also, adding another dimension to create a 3D scatterplot can be used to depict the third variable that has numeric values as another alternative rather than changing the dots’ size. Since the ggplot2 package does not produce plots with three dimensions, I use the plotly package as an example here.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(plotly)
+plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;visdat&#34;:{&#34;de1a7254039c&#34;:[&#34;function () &#34;,&#34;plotlyVisDat&#34;]},&#34;cur_data&#34;:&#34;de1a7254039c&#34;,&#34;attrs&#34;:{&#34;de1a7254039c&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;z&#34;:{},&#34;alpha_stroke&#34;:1,&#34;sizes&#34;:[10,100],&#34;spans&#34;:[1,20],&#34;type&#34;:&#34;scatter3d&#34;}},&#34;layout&#34;:{&#34;margin&#34;:{&#34;b&#34;:40,&#34;l&#34;:60,&#34;t&#34;:25,&#34;r&#34;:10},&#34;scene&#34;:{&#34;xaxis&#34;:{&#34;title&#34;:&#34;age&#34;},&#34;yaxis&#34;:{&#34;title&#34;:&#34;salary&#34;},&#34;zaxis&#34;:{&#34;title&#34;:&#34;education&#34;}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;showlegend&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;config&#34;:{&#34;showSendToCloud&#34;:false},&#34;data&#34;:[{&#34;x&#34;:[30,25,27,28,24,29,27,24,22,25,27,29,24,22,18,25,22,23,27,23,26,23,22],&#34;y&#34;:[25000,31000,35000,27000,32000,26000,31000,30000,35000,33000,30000,25000,29000,37000,28000,31000,37000,34000,31000,35000,29000,37000,36000],&#34;z&#34;:[9,12,16,10,14,10,11,14,16,14,12,9,13,15,10,12,17,16,13,16,12,18,17],&#34;type&#34;:&#34;scatter3d&#34;,&#34;mode&#34;:&#34;markers&#34;,&#34;marker&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;,&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;}},&#34;error_y&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;error_x&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;frame&#34;:null}],&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;shinyEvents&#34;:[&#34;plotly_hover&#34;,&#34;plotly_click&#34;,&#34;plotly_selected&#34;,&#34;plotly_relayout&#34;,&#34;plotly_brushed&#34;,&#34;plotly_brushing&#34;,&#34;plotly_clickannotation&#34;,&#34;plotly_doubleclick&#34;,&#34;plotly_deselect&#34;,&#34;plotly_afterplot&#34;,&#34;plotly_sunburstclick&#34;],&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
