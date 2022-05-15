@@ -50,6 +50,6 @@ superuser: true
 title: Fahim Ahmad
 ---
 
-I am an aspiring data analyst and experienced researcher with a Master of Arts in Economics. Apart from my formal education, I have been self-learning and teaching topics in statistics and research methods. I have several publications in the form of text-books on <span style="text-decoration:underline">Research Method</span>; <span style="text-decoration:underline">Applied Statistics for Policy Analysis</span>; and <span style="text-decoration:underline">Data Management, Analysis, and Visualization</span> that are freely available to anyone who is interested in this field.
+I am an aspiring data analyst and experienced researcher with a Master of Arts in Economics. Apart from my formal education, I have been self-learning and teaching topics in statistics and research methods. I have several publications in the form of textbooks on <span style="text-decoration:underline">Research Method</span>; <span style="text-decoration:underline">Applied Statistics for Policy Analysis</span>; and <span style="text-decoration:underline">Data Management, Analysis, and Visualization</span> that are freely available to anyone who is interested in this field.
 
-I started this blog to share data anlaysis tips and tricks using R and Pythong.
+I started this blog to share data analysis tips and tricks using R and Python.
