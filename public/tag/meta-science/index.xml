@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Meta-science | Fahim Ahmad</title>
+    <link>/tag/meta-science/</link>
+      <atom:link href="/tag/meta-science/index.xml" rel="self" type="application/rss+xml" />
+    <description>Meta-science</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Meta-science</title>
+      <link>/tag/meta-science/</link>
+    </image>
+    
+    <item>
+      <title>Want to see more behavior? Consider institutional-level positive reinforcement</title>
+      <link>/publication/kurz-2019/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/kurz-2019/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;. In the original paper, I mistakenly forgot to include the focal article by Newsom and colleagues (2019) in the reference section. Though we eventually caught the mistake in the publishing process, I was told it was too late to correct the mistake. &lt;em&gt;Sigh&lt;/em&gt;. You can find their original article at &lt;a href=&#34;https://doi.org/10.1016/j.jcbs.2018.11.005&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://doi.org/10.1016/j.jcbs.2018.11.005&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

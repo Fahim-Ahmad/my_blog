@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R | Fahim Ahmad</title>
+    <link>/tag/r/</link>
+      <atom:link href="/tag/r/index.xml" rel="self" type="application/rss+xml" />
+    <description>R</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Sat, 14 May 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>R</title>
+      <link>/tag/r/</link>
+    </image>
+    
+    <item>
+      <title>Using Survey Weight</title>
+      <link>/post/using-survey-weight-in-r/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      <guid>/post/using-survey-weight-in-r/</guid>
+      <description>
+
+
+&lt;p&gt;In R working with survey weight is made possible using &lt;code&gt;survey&lt;/code&gt; package. Let’s use below data frame as an exmaple here:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1000)
+age &amp;lt;- c(18:100)
+age &amp;lt;- sample(age, 100, replace = TRUE)
+gender &amp;lt;- c(&amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;)
+gender &amp;lt;- sample(gender, 100, replace = TRUE)
+country &amp;lt;- c(&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;)
+country &amp;lt;- sample(country, 100, replace = TRUE)
+
+df &amp;lt;- data.frame(age, gender, country)
+
+df$weight[df$gender==&amp;quot;Female&amp;quot;] &amp;lt;-50/sum(df$gender==&amp;quot;Female&amp;quot;)
+df$weight[df$gender==&amp;quot;Male&amp;quot;] &amp;lt;-50/sum(df$gender==&amp;quot;Male&amp;quot;)
+
+# summary of data
+summary(df)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##       age           gender            country              weight      
+##  Min.   :18.00   Length:100         Length:100         Min.   :0.8929  
+##  1st Qu.:38.75   Class :character   Class :character   1st Qu.:0.8929  
+##  Median :54.50   Mode  :character   Mode  :character   Median :0.8929  
+##  Mean   :55.79                                         Mean   :1.0000  
+##  3rd Qu.:73.25                                         3rd Qu.:1.1364  
+##  Max.   :97.00                                         Max.   :1.1364&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The most important variable here is the &lt;em&gt;weight&lt;/em&gt; variable which is constructed to balance the sex ratio.&lt;/p&gt;
+&lt;p&gt;Inside the &lt;code&gt;survey&lt;/code&gt; package, there is &lt;code&gt;svydesign()&lt;/code&gt; function that can be used to link a data frame with a weight.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;survey&amp;quot;)
+library(survey)
+df.w &amp;lt;- svydesign(ids = ~1, data = df, weights = ~weight)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The resulting object is not a data frame anymore, but is a list of different objects that can be seen using &lt;code&gt;attributes()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;attributes(df.w)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $names
+## [1] &amp;quot;cluster&amp;quot;    &amp;quot;strata&amp;quot;     &amp;quot;has.strata&amp;quot; &amp;quot;prob&amp;quot;       &amp;quot;allprob&amp;quot;   
+## [6] &amp;quot;call&amp;quot;       &amp;quot;variables&amp;quot;  &amp;quot;fpc&amp;quot;        &amp;quot;pps&amp;quot;       
+## 
+## $class
+## [1] &amp;quot;survey.design2&amp;quot; &amp;quot;survey.design&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Therefore, we need to use &lt;code&gt;survey&lt;/code&gt;’s own analytical functions. For example, here is a comparison of unweighted and weighted sex ratio.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# unweighted
+df %&amp;gt;%
+{table(.$gender)} %&amp;gt;%
+  prop.table()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Female   Male 
+##   0.44   0.56&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# weighted
+df.w %&amp;gt;%
+  svytable(~gender, .) %&amp;gt;%
+  prop.table()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## gender
+## Female   Male 
+##    0.5    0.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;svytable()&lt;/code&gt; can be used to create more than one-way frequency/percentage tables as well. For example, let’s create contingency table of &lt;code&gt;gender&lt;/code&gt; and &lt;code&gt;country&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df.w %&amp;gt;%
+svytable(~gender+country, .) %&amp;gt;%
+  prop.table(2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##         country
+## gender           A         B
+##   Female 0.5600000 0.4329897
+##   Male   0.4400000 0.5670103&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Below are other useful functions of &lt;code&gt;survey&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# to compute weighted mean
+svymean(~age, df.w)
+# to compute weighted quantiles
+svyquantile(~age, df.w, c(.25, .50, .75))
+# to compute weigted variance
+svyvar(~age, df.w)
+# to perform t-test
+svyttest(age~gender, df.w)&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

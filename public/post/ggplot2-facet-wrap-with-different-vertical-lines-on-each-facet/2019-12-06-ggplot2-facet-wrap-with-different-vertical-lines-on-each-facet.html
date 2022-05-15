@@ -1,0 +1,31 @@
+
+
+<p>The <code>geom_histogram()</code> function from <strong>ggplot2</strong> package is used to create a histogram plot. For example, let’s plot the distribution of <code>Sepal.Length</code> from <strong>iris</strong> data.</p>
+<pre class="r"><code>library(ggplot2)
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &quot;orange&quot;)</code></pre>
+<p><img src="2019-12-06-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>To add a vertical line to show the mean value of <code>Sepal.Length</code>, we can use <code>geom_vline()</code>.</p>
+<pre class="r"><code>library(ggplot2)
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &quot;orange&quot;) +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))</code></pre>
+<p><img src="2019-12-06-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>One of the most powerful aspects of <strong>ggplot2</strong> is the ease with which you can create multiple sub-plots using <code>facet_wrap()</code>. For example, let’s plot the distribution of <code>Sepal.Length</code> by each group of <code>Species</code> from <strong>iris</strong> data.</p>
+<pre class="r"><code>ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &quot;orange&quot;) +
+  facet_wrap(~Species) +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))</code></pre>
+<p><img src="2019-12-06-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>While using <code>facet_wrap()</code> each plot shows a different subset of the data, however, the <code>geom_vline()</code> adds the vertical line on the same x-intercept in all plots. For instance, in the above histograms the vertical line shows the overall mean of <code>Sepal.Length</code> column instead of mean of each group.</p>
+<p>It’s more practical to add a vertical line on each facet showing the mean for each group of data. To do so, a separate data frame containing the mean of each group should be created to use with <code>geom_vline()</code>.</p>
+<pre class="r"><code>library(dplyr)
+vline &lt;- summarise(group_by(iris,Species), mean = mean(Sepal.Length))
+vline</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   Species     mean
+##   &lt;fct&gt;      &lt;dbl&gt;
+## 1 setosa      5.01
+## 2 versicolor  5.94
+## 3 virginica   6.59</code></pre>
+<pre class="r"><code>ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &quot;orange&quot;) +
+  facet_wrap(~Species) +
+  geom_vline(data = vline, aes(xintercept = mean))</code></pre>
+<p><img src="2019-12-06-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Books | Fahim Ahmad</title>
+    <link>/bookdown/</link>
+      <atom:link href="/bookdown/index.xml" rel="self" type="application/rss+xml" />
+    <description>Books</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Books</title>
+      <link>/bookdown/</link>
+    </image>
+    
+  </channel>
+</rss>

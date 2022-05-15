@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>missing data | Fahim Ahmad</title>
+    <link>/tag/missing-data/</link>
+      <atom:link href="/tag/missing-data/index.xml" rel="self" type="application/rss+xml" />
+    <description>missing data</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Thu, 21 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>missing data</title>
+      <link>/tag/missing-data/</link>
+    </image>
+    
+    <item>
+      <title>If you fit a model with multiply imputed data, you can still plot the line.</title>
+      <link>/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      <guid>/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/</guid>
+      <description>
+&lt;script src=&#34;/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;what&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What?&lt;/h2&gt;
+&lt;p&gt;If you’re in the know, you know there are three major ways to handle missing data:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;full-information maximum likelihood,&lt;/li&gt;
+&lt;li&gt;multiple imputation, and&lt;/li&gt;
+&lt;li&gt;one-step full-luxury&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; Bayesian imputation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you’re a frequentist, you only have the first two options. If you’re an &lt;strong&gt;R&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-base&#34; role=&#34;doc-biblioref&#34;&gt;R Core Team, 2020&lt;/a&gt;)&lt;/span&gt; user and like multiple imputation, you probably know all about the &lt;strong&gt;mice&lt;/strong&gt; package &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-mice2011&#34; role=&#34;doc-biblioref&#34;&gt;van Buuren &amp;amp; Groothuis-Oudshoorn, 2011&lt;/a&gt;, &lt;a href=&#34;#ref-R-mice&#34; role=&#34;doc-biblioref&#34;&gt;2021&lt;/a&gt;)&lt;/span&gt;, which generally works great. The bummer is there are no built-in ways to plot the fitted lines from models fit from multiply-imputed data using van Buuren’s &lt;strong&gt;mice&lt;/strong&gt;-oriented workflow (see &lt;a href=&#34;https://github.com/amices/mice/issues/82&#34;&gt;GitHub issue #82&lt;/a&gt;). However, there is a way to plot your fitted lines by hand and in this blog post I’ll show you how.&lt;/p&gt;
+&lt;div id=&#34;i-make-assumptions.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;I make assumptions.&lt;/h3&gt;
+&lt;p&gt;For this post, I’m presuming some background knowledge:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You should be familiar with regression. For frequentist introductions, I recommend Roback and Legler’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-roback2021beyond&#34; role=&#34;doc-biblioref&#34;&gt;2021&lt;/a&gt;)&lt;/span&gt; online text or James, Witten, Hastie, and Tibshirani’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-james2021AnIntroduction&#34; role=&#34;doc-biblioref&#34;&gt;2021&lt;/a&gt;)&lt;/span&gt; online text. For Bayesian introductions, I recommend either edition of McElreath’s text &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;, &lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;; Kruschke’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-kruschkeDoingBayesianData2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; text; or Gelman, Hill, and Vehtari’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-gelmanRegressionOtherStories2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;)&lt;/span&gt; text.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You should be familiar with contemporary missing data theory. You can find brief overviews in the texts by McElreath and Gelman et al, above. For a deeper dive, I recommend &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-enders2010applied&#34; role=&#34;doc-biblioref&#34;&gt;Enders&lt;/a&gt; (&lt;a href=&#34;#ref-enders2010applied&#34; role=&#34;doc-biblioref&#34;&gt;2010&lt;/a&gt;)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-little2019statistical&#34; role=&#34;doc-biblioref&#34;&gt;Little &amp;amp; Rubin&lt;/a&gt; (&lt;a href=&#34;#ref-little2019statistical&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt;, or &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-vanbuurenFlexibleImputationMissing2018&#34; role=&#34;doc-biblioref&#34;&gt;van Buuren&lt;/a&gt; (&lt;a href=&#34;#ref-vanbuurenFlexibleImputationMissing2018&#34; role=&#34;doc-biblioref&#34;&gt;2018&lt;/a&gt;)&lt;/span&gt;. Also, heads up: &lt;a href=&#34;https://twitter.com/AmandaKMontoya/status/1341936335301406722&#34;&gt;word on the street&lt;/a&gt; is Enders is working on the second edition of his book.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;All code is in &lt;strong&gt;R&lt;/strong&gt;. Data wrangling and plotting were done with help from the &lt;strong&gt;tidyverse&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-tidyverse&#34; role=&#34;doc-biblioref&#34;&gt;Wickham, 2019&lt;/a&gt;; &lt;a href=&#34;#ref-wickhamWelcomeTidyverse2019&#34; role=&#34;doc-biblioref&#34;&gt;Wickham et al., 2019&lt;/a&gt;)&lt;/span&gt; and &lt;strong&gt;GGally&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-GGally&#34; role=&#34;doc-biblioref&#34;&gt;Schloerke et al., 2021&lt;/a&gt;)&lt;/span&gt;. The data and multiple-imputation workflow are from the &lt;a href=&#34;https://CRAN.R-project.org/package=mice&#34;&gt;&lt;strong&gt;mice&lt;/strong&gt; package&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here we load our primary &lt;strong&gt;R&lt;/strong&gt; packages.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(GGally)
+library(mice)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;we-need-data.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;We need data.&lt;/h3&gt;
+&lt;p&gt;In this post we’ll focus on a subset of the &lt;code&gt;brandsma&lt;/code&gt; data set &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-brandsma1989effects&#34; role=&#34;doc-biblioref&#34;&gt;Brandsma &amp;amp; Knuver, 1989&lt;/a&gt;)&lt;/span&gt;. The goal, here, is to take a small enough subset that there will be noticeable differences across the imputed data sets.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(201)
+
+b_small &amp;lt;-
+  brandsma %&amp;gt;% 
+  filter(!complete.cases(.)) %&amp;gt;% 
+  slice_sample(n = 50) %&amp;gt;% 
+  select(ses, iqv, iqp)
+
+glimpse(b_small)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Rows: 50
+## Columns: 3
+## $ ses &amp;lt;dbl&amp;gt; -12.6666667, NA, -4.6666667, 19.3333333, NA, NA, 0.3333333, -4.666…
+## $ iqv &amp;lt;dbl&amp;gt; NA, -0.8535094, -0.3535094, 1.1464906, 1.1464906, -0.3535094, -0.3…
+## $ iqp &amp;lt;dbl&amp;gt; -1.72274979, -4.05608313, 2.61058354, 3.94391687, 1.61058354, -1.3…&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here are our three variables.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggpairs(b_small)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We’ll be focusing on the relation between socioeconomic status (&lt;code&gt;ses&lt;/code&gt;) and verbal IQ (&lt;code&gt;iqv&lt;/code&gt;) and performance IQ (&lt;code&gt;iqp&lt;/code&gt;) will be a missing data covariate.&lt;/p&gt;
+&lt;p&gt;Here’s what the missing data patterns look like.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;b_small %&amp;gt;% 
+  mutate_all(.funs = ~ ifelse(is.na(.), 0, 1)) %&amp;gt;% 
+  count(ses, iqv, iqp, sort = TRUE) %&amp;gt;% 
+  mutate(percent = 100 * n / sum(n))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   ses iqv iqp  n percent
+## 1   1   1   1 36      72
+## 2   0   1   1 11      22
+## 3   1   0   1  2       4
+## 4   1   0   0  1       2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here &lt;code&gt;1&lt;/code&gt; means the value was observed and &lt;code&gt;0&lt;/code&gt; means the value was missing. Twenty-eight percent of the cases have missingness on one of the two focal variables. The bulk of the missingness is in &lt;code&gt;ses&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;impute&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Impute&lt;/h2&gt;
+&lt;p&gt;We’ll use the &lt;code&gt;mice()&lt;/code&gt; function to impute. By setting &lt;code&gt;m = 10&lt;/code&gt;, we’ll get back 10 multiply-imputed data sets. By setting &lt;code&gt;method = &#34;norm&#34;&lt;/code&gt;, we will be using Bayesian linear regression with the Gaussian likelihood to compute the imputed values.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;imp &amp;lt;- mice(b_small, seed = 540, m = 10, method = &amp;quot;norm&amp;quot;, print = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Model&lt;/h2&gt;
+&lt;p&gt;Our statistical model will be&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{align*}
+\text{iqv}_i &amp;amp; \sim \mathcal N(\mu_i, \sigma) \\
+\mu_i &amp;amp; = \beta_0 + \beta_1 \text{ses}_i.
+\end{align*}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;With the &lt;code&gt;mice::with()&lt;/code&gt; function, we fit that model once to each of the 10 imputed data sets.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit &amp;lt;- with(imp, lm(iqv ~ 1 + ses))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There’s a lot of information packed into our &lt;code&gt;fit&lt;/code&gt; object. Within the &lt;code&gt;analyses&lt;/code&gt; section we can find the results of all 10 models.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit$analyses %&amp;gt;% str(max.level = 1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## List of 10
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;
+##  $ :List of 12
+##   ..- attr(*, &amp;quot;class&amp;quot;)= chr &amp;quot;lm&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This insight will come in handy in just a bit.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;we-want-lines&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;We want lines!&lt;/h2&gt;
+&lt;div id=&#34;start-naïve.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Start naïve.&lt;/h3&gt;
+&lt;p&gt;If you wanted to plot the fitted line for a simple linear model, you’d probably use the &lt;code&gt;fitted()&lt;/code&gt; or &lt;code&gt;predict()&lt;/code&gt; function. But when you have fit that model to your multiply-imputed data sets, that just won’t work. For example:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;predict(fit)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you try executing that line, you’ll get a nasty error message reading:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Error in UseMethod(“predict”) : no applicable method for ‘predict’ applied to an object of class “c(‘mira,’ ‘matrix’)”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Our &lt;code&gt;fit&lt;/code&gt; object is not a regular fit object. It’s an object of class &lt;code&gt;&#34;mira&#34;&lt;/code&gt; and &lt;code&gt;&#34;matrix&#34;&lt;/code&gt;, which means it’s fancy and temperamental.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(fit)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;mira&amp;quot;   &amp;quot;matrix&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;At the time of this writing, the &lt;strong&gt;mice&lt;/strong&gt; package does not have a built-in solution to this problem. If you’re willing to put in a little work, you can do the job yourself.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;off-label.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Off label.&lt;/h3&gt;
+&lt;p&gt;Remember how we showed how our &lt;code&gt;fit$analyses&lt;/code&gt; is a list of all 10 of our individual model fits? Turns out we can leverage that. For example, here’s the model summary for the model fit to the seventh imputed data set.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit$analyses[[7]] %&amp;gt;% 
+  summary()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Call:
+## lm(formula = iqv ~ 1 + ses)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.1947 -1.0600  0.1209  0.9678  5.5680 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&amp;gt;|t|)    
+## (Intercept)  0.26981    0.29403   0.918 0.363405    
+## ses          0.11479    0.02732   4.201 0.000115 ***
+## ---
+## Signif. codes:  0 &amp;#39;***&amp;#39; 0.001 &amp;#39;**&amp;#39; 0.01 &amp;#39;*&amp;#39; 0.05 &amp;#39;.&amp;#39; 0.1 &amp;#39; &amp;#39; 1
+## 
+## Residual standard error: 2.024 on 48 degrees of freedom
+## Multiple R-squared:  0.2689, Adjusted R-squared:  0.2536 
+## F-statistic: 17.65 on 1 and 48 DF,  p-value: 0.0001146&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;All we needed to do was use the double-bracket indexing. If you’re not up on how to do that, Hadley Wickham has a &lt;a href=&#34;https://twitter.com/hadleywickham/status/643381054758363136&#34;&gt;famous tweet&lt;/a&gt; on the subject and Jenny Bryan has a &lt;a href=&#34;https://www.youtube.com/watch?v=4MfUCX_KpdE&amp;amp;t=615s&amp;amp;frags=pl%2Cwn&#34;&gt;great talk&lt;/a&gt; discussing the role of lists within data wrangling. With the double-bracket indexing trick, you can use &lt;code&gt;fitted()&lt;/code&gt; or &lt;code&gt;predict()&lt;/code&gt; one model iteration at a time. E.g.,&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit$analyses[[1]] %&amp;gt;% 
+  fitted() %&amp;gt;% 
+  str()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Named num [1:50] -1.341 0.135 -0.512 1.975 -0.794 ...
+##  - attr(*, &amp;quot;names&amp;quot;)= chr [1:50] &amp;quot;1&amp;quot; &amp;quot;2&amp;quot; &amp;quot;3&amp;quot; &amp;quot;4&amp;quot; ...&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Building, here’s what that can look like if we use &lt;code&gt;predict()&lt;/code&gt; for all 10 of our models, bind the individual results, and plot them all at once.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# define the sequence of predictor values
+ses_min &amp;lt;- min(b_small$ses, na.rm = T)
+ses_max &amp;lt;- max(b_small$ses, na.rm = T)
+
+ses_length &amp;lt;- 30
+
+nd &amp;lt;- tibble(ses = seq(from = ses_min, to = ses_max, length.out = ses_length))
+
+# use `predict()` for each separate model
+rbind(
+  predict(fit$analyses[[1]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[2]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[3]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[4]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[5]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[6]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[7]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[8]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[9]], newdata = nd, interval = &amp;quot;confidence&amp;quot;),
+  predict(fit$analyses[[10]], newdata = nd, interval = &amp;quot;confidence&amp;quot;)
+) %&amp;gt;%
+  # wrangle a bit
+  data.frame() %&amp;gt;% 
+  bind_cols(
+    bind_rows(replicate(10, nd, simplify = FALSE))
+    ) %&amp;gt;% 
+  mutate(.imp = rep(1:10, each = ses_length)) %&amp;gt;% 
+  
+  # plot!
+  ggplot(aes(x = ses)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr, group = .imp),
+              alpha = 1/10) +
+  geom_line(aes(y = fit, group = .imp), 
+            size = 1/4) +
+  # add the observed data for good measure
+  geom_point(data = b_small,
+             aes(y = iqv)) +
+  ylab(&amp;quot;iqv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;I kinda like this visualization approach. It has a certain Bayesian flair and it does an okay job displaying the stochasticity built in to the multiple imputation framework. However, this approach is totally off label and will probably get shot down by any self-respecting Reviewer #2.&lt;/p&gt;
+&lt;p&gt;Fortunately for us, we have a principled and peer-reviewed solution, instead.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;level-up-with-miles.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Level up with Miles.&lt;/h3&gt;
+&lt;p&gt;In his &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-miles2016obtaining&#34; role=&#34;doc-biblioref&#34;&gt;2016&lt;/a&gt;)&lt;/span&gt; paper, &lt;em&gt;Obtaining predictions from models fit to multiply imputed data&lt;/em&gt;, &lt;a href=&#34;https://www.andrewamiles.com/&#34;&gt;Andrew Miles&lt;/a&gt; presented two methods for, well, doing what his title said he’d do. Miles called these two methods &lt;em&gt;Predict Then Combine&lt;/em&gt; (PC) and &lt;em&gt;Combine Then Predict&lt;/em&gt; (CP). The CP approach invokes first derivatives in a way I’m not prepared to implement on my own. Fortunately for us, the PC approach just requires a little iteration, a few lines within a grouped &lt;code&gt;summarise()&lt;/code&gt;, and a tiny bit of wrangling. In my world, that’s cake. 🍰&lt;/p&gt;
+&lt;div id=&#34;first-iteration.&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;First: iteration.&lt;/h4&gt;
+&lt;p&gt;For our first step, we’ll use &lt;code&gt;predict()&lt;/code&gt; again for each of our individual versions of the model. This time, however, we’ll use thriftier code and iterate with help from &lt;code&gt;purrr::map()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines &amp;lt;-
+  tibble(.imp = 1:10) %&amp;gt;% 
+  mutate(p = map(.imp, ~ predict(fit$analyses[[.]], 
+                                 newdata = nd, 
+                                 se.fit = TRUE) %&amp;gt;% 
+                   data.frame())
+         )
+
+# what have we done?
+fitted_lines&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 10 × 2
+##     .imp p            
+##    &amp;lt;int&amp;gt; &amp;lt;list&amp;gt;       
+##  1     1 &amp;lt;df [30 × 4]&amp;gt;
+##  2     2 &amp;lt;df [30 × 4]&amp;gt;
+##  3     3 &amp;lt;df [30 × 4]&amp;gt;
+##  4     4 &amp;lt;df [30 × 4]&amp;gt;
+##  5     5 &amp;lt;df [30 × 4]&amp;gt;
+##  6     6 &amp;lt;df [30 × 4]&amp;gt;
+##  7     7 &amp;lt;df [30 × 4]&amp;gt;
+##  8     8 &amp;lt;df [30 × 4]&amp;gt;
+##  9     9 &amp;lt;df [30 × 4]&amp;gt;
+## 10    10 &amp;lt;df [30 × 4]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have a nested tibble where the results of all 10 &lt;code&gt;predict()&lt;/code&gt; operations are waiting for us in the &lt;code&gt;p&lt;/code&gt; column and each is conveniently indexed by &lt;code&gt;.imp&lt;/code&gt;. Note also how we did not request confidence intervals in the output, but we did set &lt;code&gt;se.fit = TRUE&lt;/code&gt;. We’ll be all about those standard errors in just a bit.&lt;/p&gt;
+&lt;p&gt;Here’s how we unnest the results and then augment a little.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines &amp;lt;- fitted_lines %&amp;gt;% 
+  unnest(p) %&amp;gt;% 
+  # add in the nd predictor data
+  bind_cols(
+    bind_rows(replicate(10, nd, simplify = FALSE))
+    ) %&amp;gt;% 
+  # drop two unneeded columns
+  select(-df, -residual.scale)
+
+# now what did we do?
+glimpse(fitted_lines)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Rows: 300
+## Columns: 4
+## $ .imp   &amp;lt;int&amp;gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ fit    &amp;lt;dbl&amp;gt; -1.75590067, -1.62725529, -1.49860992, -1.36996455, -1.24131917…
+## $ se.fit &amp;lt;dbl&amp;gt; 0.5285145, 0.4991145, 0.4705449, 0.4429666, 0.4165764, 0.391614…
+## $ ses    &amp;lt;dbl&amp;gt; -16.6666667, -15.4252874, -14.1839080, -12.9425287, -11.7011494…&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;second-equations-and-the-implied-code.&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Second: equations and the implied code.&lt;/h4&gt;
+&lt;p&gt;In his paper (p. 176), Miles’s used &lt;em&gt;predictions&lt;/em&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;as a blanket term for any value &lt;span class=&#34;math inline&#34;&gt;\(\hat p\)&lt;/span&gt; that can
+be calculated by applying some type of transformation &lt;span class=&#34;math inline&#34;&gt;\(t()\)&lt;/span&gt; to the vector of coefficients from a fitted model &lt;span class=&#34;math inline&#34;&gt;\((\hat \beta)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat p = t(\hat \beta)\]&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In our case, &lt;span class=&#34;math inline&#34;&gt;\(\hat p\)&lt;/span&gt; covers the values in our &lt;code&gt;fit&lt;/code&gt; column and the &lt;span class=&#34;math inline&#34;&gt;\(t(\hat \beta)\)&lt;/span&gt; part is what we did with &lt;code&gt;predict()&lt;/code&gt;. Well, technically we should refer to those &lt;code&gt;fit&lt;/code&gt; values as &lt;span class=&#34;math inline&#34;&gt;\(\hat p_j\)&lt;/span&gt;, where &lt;span class=&#34;math inline&#34;&gt;\(j\)&lt;/span&gt; is the index for a given imputed data set, &lt;span class=&#34;math inline&#34;&gt;\(j = 1, \dots, m\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; is the total number of imputations. In our &lt;code&gt;fitted_lines&lt;/code&gt; tibble, we have called Miles’s &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; index &lt;code&gt;.imp&lt;/code&gt;&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Anyway, Miles showed we can compute the conditional pooled point estimate &lt;span class=&#34;math inline&#34;&gt;\(\bar p\)&lt;/span&gt; by&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\bar p = \frac{1}{m} \sum_{j=1}^m \hat p_j,\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;which is a formal way of saying we simply average across the &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; imputed solutions. Here’s that in code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines %&amp;gt;% 
+  group_by(ses) %&amp;gt;% 
+  summarise(fit_bar = mean(fit))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 30 × 2
+##       ses fit_bar
+##     &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;
+##  1 -16.7   -2.07 
+##  2 -15.4   -1.91 
+##  3 -14.2   -1.76 
+##  4 -12.9   -1.60 
+##  5 -11.7   -1.45 
+##  6 -10.5   -1.30 
+##  7  -9.22  -1.14 
+##  8  -7.98  -0.989
+##  9  -6.74  -0.835
+## 10  -5.49  -0.681
+## # … with 20 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Though the expected values are pretty easy to compute, it’ll take a little more effort to express the uncertainty around those expectations because we have to account for both within- and between-imputation variance. We can define the within-imputation variance &lt;span class=&#34;math inline&#34;&gt;\(V_W\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[V_W = \frac{1}{m} \sum_{j=1}^m \widehat{SE}_j^2,\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;which is a formal way of saying we simply average the squared standard errors across the &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; imputed solutions, for each fitted value. Here’s that in code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines %&amp;gt;% 
+  group_by(ses) %&amp;gt;% 
+  summarise(fit_bar = mean(fit),
+            v_w     = mean(se.fit^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 30 × 3
+##       ses fit_bar    v_w
+##     &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;
+##  1 -16.7   -2.07  0.260 
+##  2 -15.4   -1.91  0.232 
+##  3 -14.2   -1.76  0.206 
+##  4 -12.9   -1.60  0.182 
+##  5 -11.7   -1.45  0.161 
+##  6 -10.5   -1.30  0.142 
+##  7  -9.22  -1.14  0.126 
+##  8  -7.98  -0.989 0.112 
+##  9  -6.74  -0.835 0.100 
+## 10  -5.49  -0.681 0.0908
+## # … with 20 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can define the between imputation variance &lt;span class=&#34;math inline&#34;&gt;\(V_B\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[V_B = \frac{1}{m - 1} \sum_{j=1}^m (\hat p_j - \bar p_j)^2,\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where we’re no longer quite averaging across the &lt;span class=&#34;math inline&#34;&gt;\(m\)&lt;/span&gt; imputations because our denominator is now the corrected value &lt;span class=&#34;math inline&#34;&gt;\((m - 1)\)&lt;/span&gt;. What can I say? Variances are tricky. Here’s the code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# define the total number of imputations
+m &amp;lt;- 10
+
+fitted_lines %&amp;gt;% 
+  group_by(ses) %&amp;gt;% 
+  summarise(fit_bar = mean(fit),
+            v_w     = mean(se.fit^2),
+            v_b     = sum(fit - fit_bar)^2 / (m - 1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 30 × 4
+##       ses fit_bar    v_w      v_b
+##     &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;
+##  1 -16.7   -2.07  0.260  2.68e-31
+##  2 -15.4   -1.91  0.232  8.77e-32
+##  3 -14.2   -1.76  0.206  4.93e-32
+##  4 -12.9   -1.60  0.182  8.77e-32
+##  5 -11.7   -1.45  0.161  4.93e-32
+##  6 -10.5   -1.30  0.142  1.37e-33
+##  7  -9.22  -1.14  0.126  0       
+##  8  -7.98  -0.989 0.112  1.23e-32
+##  9  -6.74  -0.835 0.100  3.42e-32
+## 10  -5.49  -0.681 0.0908 5.48e-33
+## # … with 20 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can define the total variance of the prediction &lt;span class=&#34;math inline&#34;&gt;\(V_{\bar p}\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[V_{\bar p} = V_W + V_B \left ( 1 + \frac{1}{m} \right ),\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where the pooled standard error is just &lt;span class=&#34;math inline&#34;&gt;\(\sqrt{V_{\bar p}}\)&lt;/span&gt;. Here are those in code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines %&amp;gt;% 
+  group_by(ses) %&amp;gt;% 
+  summarise(fit_bar = mean(fit),
+            v_w     = mean(se.fit^2),
+            v_b     = sum(fit - fit_bar)^2 / (m - 1),
+            v_p     = v_w + v_b * (1 + (1 / m)),
+            se_p    = sqrt(v_p))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 30 × 6
+##       ses fit_bar    v_w      v_b    v_p  se_p
+##     &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 -16.7   -2.07  0.260  2.68e-31 0.260  0.510
+##  2 -15.4   -1.91  0.232  8.77e-32 0.232  0.481
+##  3 -14.2   -1.76  0.206  4.93e-32 0.206  0.453
+##  4 -12.9   -1.60  0.182  8.77e-32 0.182  0.427
+##  5 -11.7   -1.45  0.161  4.93e-32 0.161  0.401
+##  6 -10.5   -1.30  0.142  1.37e-33 0.142  0.377
+##  7  -9.22  -1.14  0.126  0        0.126  0.354
+##  8  -7.98  -0.989 0.112  1.23e-32 0.112  0.334
+##  9  -6.74  -0.835 0.100  3.42e-32 0.100  0.316
+## 10  -5.49  -0.681 0.0908 5.48e-33 0.0908 0.301
+## # … with 20 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we finally have both &lt;span class=&#34;math inline&#34;&gt;\(\bar p\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(V_{\bar p}\)&lt;/span&gt; for each desired level of &lt;code&gt;ses&lt;/code&gt;, we can use the conventional normal-theory approach to compute the pooled 95% confidence intervals.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# this time we&amp;#39;ll save the results
+fitted_lines &amp;lt;- fitted_lines %&amp;gt;% 
+  group_by(ses) %&amp;gt;% 
+  summarise(fit_bar = mean(fit),
+            v_w     = mean(se.fit^2),
+            v_b     = sum(fit - fit_bar)^2 / (m - 1),
+            v_p     = v_w + v_b * (1 + (1 / m)),
+            se_p    = sqrt(v_p)) %&amp;gt;% 
+  # use the _p suffix to indicate these are pooled
+  mutate(lwr_p = fit_bar - se_p * 1.96,
+         upr_p = fit_bar + se_p * 1.96) 
+
+# what do we have?
+glimpse(fitted_lines)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Rows: 30
+## Columns: 8
+## $ ses     &amp;lt;dbl&amp;gt; -16.6666667, -15.4252874, -14.1839080, -12.9425287, -11.701149…
+## $ fit_bar &amp;lt;dbl&amp;gt; -2.06663732, -1.91265660, -1.75867587, -1.60469515, -1.4507144…
+## $ v_w     &amp;lt;dbl&amp;gt; 0.25989881, 0.23153126, 0.20555857, 0.18198075, 0.16079779, 0.…
+## $ v_b     &amp;lt;dbl&amp;gt; 2.684318e-31, 8.765121e-32, 4.930381e-32, 8.765121e-32, 4.9303…
+## $ v_p     &amp;lt;dbl&amp;gt; 0.25989881, 0.23153126, 0.20555857, 0.18198075, 0.16079779, 0.…
+## $ se_p    &amp;lt;dbl&amp;gt; 0.5098027, 0.4811770, 0.4533857, 0.4265920, 0.4009960, 0.37684…
+## $ lwr_p   &amp;lt;dbl&amp;gt; -3.06585065, -2.85576342, -2.64731180, -2.44081550, -2.2366665…
+## $ upr_p   &amp;lt;dbl&amp;gt; -1.06742400, -0.96954978, -0.87003995, -0.76857480, -0.6647622…&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;third-plot.&#34; class=&#34;section level4&#34;&gt;
+&lt;h4&gt;Third: plot.&lt;/h4&gt;
+&lt;p&gt;Now the hard part is over, we’re finally ready to plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fitted_lines %&amp;gt;% 
+  ggplot(aes(x = ses)) +
+  geom_ribbon(aes(ymin = lwr_p, ymax = upr_p),
+              alpha = 1/2) +
+  geom_line(aes(y = fit_bar), 
+            size = 1/2) +
+  # add the observed data for good measure
+  geom_point(data = b_small,
+             aes(y = iqv)) +
+  labs(title = &amp;quot;Pooled fitted line from a model fit to multiply-imputed data&amp;quot;,
+       subtitle = expression(&amp;quot;The pooled conditional mean line &amp;quot;*(bar(italic(p)))*&amp;quot; sits atop the pooled confidence interval &amp;quot;*(95*&amp;#39;%&amp;#39;*~CI[bar(italic(p))])*&amp;#39; band.&amp;#39;),
+       y = &amp;quot;iqv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-10-21-if-you-fit-a-model-with-multiply-imputed-data-you-can-still-plot-the-line/index_files/figure-html/unnamed-chunk-20-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;There it is, friends. We have the pooled fitted line and its pooled 95% confidence interval band from our model fit to multiply-imputed data. Until the day that Stef van Buuren and friends get around to building this functionality into &lt;strong&gt;mice&lt;/strong&gt;, our realization in &lt;strong&gt;R&lt;/strong&gt; code of Andrew Miles’s &lt;em&gt;Predict Then Combine&lt;/em&gt; (PC) approach has you covered.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-info&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.1.1 (2021-08-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] mice_3.13.0     GGally_2.1.2    forcats_0.5.1   stringr_1.4.0  
+##  [5] dplyr_1.0.7     purrr_0.3.4     readr_2.0.1     tidyr_1.1.3    
+##  [9] tibble_3.1.5    ggplot2_3.3.5   tidyverse_1.3.1
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.7         lattice_0.20-44    lubridate_1.7.10   assertthat_0.2.1  
+##  [5] digest_0.6.28      utf8_1.2.2         R6_2.5.1           cellranger_1.1.0  
+##  [9] plyr_1.8.6         backports_1.2.1    reprex_2.0.1       evaluate_0.14     
+## [13] highr_0.9          httr_1.4.2         blogdown_1.5       pillar_1.6.3      
+## [17] rlang_0.4.11       readxl_1.3.1       rstudioapi_0.13    jquerylib_0.1.4   
+## [21] rmarkdown_2.10     labeling_0.4.2     munsell_0.5.0      broom_0.7.9       
+## [25] compiler_4.1.1     modelr_0.1.8       xfun_0.25          pkgconfig_2.0.3   
+## [29] htmltools_0.5.2    tidyselect_1.1.1   bookdown_0.23      emo_0.0.0.9000    
+## [33] reshape_0.8.8      fansi_0.5.0        crayon_1.4.1       tzdb_0.1.2        
+## [37] dbplyr_2.1.1       withr_2.4.2        grid_4.1.1         jsonlite_1.7.2    
+## [41] gtable_0.3.0       lifecycle_1.0.1    DBI_1.1.1          magrittr_2.0.1    
+## [45] scales_1.1.1       cli_3.0.1          stringi_1.7.4      farver_2.1.0      
+## [49] fs_1.5.0           xml2_1.3.2         bslib_0.3.0        ellipsis_0.3.2    
+## [53] generics_0.1.0     vctrs_0.3.8        RColorBrewer_1.1-2 tools_4.1.1       
+## [57] glue_1.4.2         hms_1.1.0          fastmap_1.1.0      yaml_2.2.1        
+## [61] colorspace_2.0-2   rvest_1.0.1        knitr_1.33         haven_2.4.3       
+## [65] sass_0.4.0&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34; line-spacing=&#34;2&#34;&gt;
+&lt;div id=&#34;ref-brandsma1989effects&#34; class=&#34;csl-entry&#34;&gt;
+Brandsma, H., &amp;amp; Knuver, J. (1989). Effects of school and classroom characteristics on pupil progress in language and arithmetic. &lt;em&gt;International Journal of Educational Research&lt;/em&gt;, &lt;em&gt;13&lt;/em&gt;(7), 777–788. &lt;a href=&#34;https://doi.org/10.1016/0883-0355(89)90028-1&#34;&gt;https://doi.org/10.1016/0883-0355(89)90028-1&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-enders2010applied&#34; class=&#34;csl-entry&#34;&gt;
+Enders, C. K. (2010). &lt;em&gt;Applied missing data analysis&lt;/em&gt;. &lt;span&gt;Guilford press&lt;/span&gt;. &lt;a href=&#34;http://www.appliedmissingdata.com/&#34;&gt;http://www.appliedmissingdata.com/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-gelmanRegressionOtherStories2020&#34; class=&#34;csl-entry&#34;&gt;
+Gelman, A., Hill, J., &amp;amp; Vehtari, A. (2020). &lt;em&gt;Regression and other stories&lt;/em&gt;. &lt;span&gt;Cambridge University Press&lt;/span&gt;. &lt;a href=&#34;https://doi.org/10.1017/9781139161879&#34;&gt;https://doi.org/10.1017/9781139161879&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-james2021AnIntroduction&#34; class=&#34;csl-entry&#34;&gt;
+James, G., Witten, D., Hastie, T., &amp;amp; Tibshirani, R. (2021). &lt;em&gt;An introduction to statistical learning with applications in &lt;span&gt;R&lt;/span&gt;&lt;/em&gt; (Second Edition). &lt;span&gt;Springer&lt;/span&gt;. &lt;a href=&#34;https://web.stanford.edu/~hastie/ISLRv2_website.pdf&#34;&gt;https://web.stanford.edu/~hastie/ISLRv2_website.pdf&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kruschkeDoingBayesianData2015&#34; class=&#34;csl-entry&#34;&gt;
+Kruschke, J. K. (2015). &lt;em&gt;Doing &lt;span&gt;Bayesian&lt;/span&gt; data analysis: &lt;span&gt;A&lt;/span&gt; tutorial with &lt;span&gt;R&lt;/span&gt;, &lt;span&gt;JAGS&lt;/span&gt;, and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt;. &lt;span&gt;Academic Press&lt;/span&gt;. &lt;a href=&#34;https://sites.google.com/site/doingbayesiandataanalysis/&#34;&gt;https://sites.google.com/site/doingbayesiandataanalysis/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-little2019statistical&#34; class=&#34;csl-entry&#34;&gt;
+Little, R. J., &amp;amp; Rubin, D. B. (2019). &lt;em&gt;Statistical analysis with missing data&lt;/em&gt; (third, Vol. 793). &lt;span&gt;John Wiley &amp;amp; Sons&lt;/span&gt;. &lt;a href=&#34;https://www.wiley.com/en-us/Statistical+Analysis+with+Missing+Data%2C+3rd+Edition-p-9780470526798&#34;&gt;https://www.wiley.com/en-us/Statistical+Analysis+with+Missing+Data%2C+3rd+Edition-p-9780470526798&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mcelreathStatisticalRethinkingBayesian2020&#34; class=&#34;csl-entry&#34;&gt;
+McElreath, R. (2020). &lt;em&gt;Statistical rethinking: &lt;span&gt;A Bayesian&lt;/span&gt; course with examples in &lt;span&gt;R&lt;/span&gt; and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt; (Second Edition). &lt;span&gt;CRC Press&lt;/span&gt;. &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;https://xcelab.net/rm/statistical-rethinking/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mcelreathStatisticalRethinkingBayesian2015&#34; class=&#34;csl-entry&#34;&gt;
+McElreath, R. (2015). &lt;em&gt;Statistical rethinking: &lt;span&gt;A Bayesian&lt;/span&gt; course with examples in &lt;span&gt;R&lt;/span&gt; and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt;. &lt;span&gt;CRC press&lt;/span&gt;. &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;https://xcelab.net/rm/statistical-rethinking/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-miles2016obtaining&#34; class=&#34;csl-entry&#34;&gt;
+Miles, A. (2016). Obtaining predictions from models fit to multiply imputed data. &lt;em&gt;Sociological Methods &amp;amp; Research&lt;/em&gt;, &lt;em&gt;45&lt;/em&gt;(1), 175–185. &lt;a href=&#34;https://doi.org/10.1177/0049124115610345&#34;&gt;https://doi.org/10.1177/0049124115610345&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-base&#34; class=&#34;csl-entry&#34;&gt;
+R Core Team. (2020). &lt;em&gt;R: &lt;span&gt;A&lt;/span&gt; language and environment for statistical computing&lt;/em&gt;. &lt;span&gt;R Foundation for Statistical Computing&lt;/span&gt;. &lt;a href=&#34;https://www.R-project.org/&#34;&gt;https://www.R-project.org/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-roback2021beyond&#34; class=&#34;csl-entry&#34;&gt;
+Roback, P., &amp;amp; Legler, J. (2021). &lt;em&gt;Beyond multiple linear regression: &lt;span&gt;Applied&lt;/span&gt; generalized linear models and multilevel models in &lt;span&gt;R&lt;/span&gt;&lt;/em&gt;. &lt;span&gt;CRC Press&lt;/span&gt;. &lt;a href=&#34;https://bookdown.org/roback/bookdown-BeyondMLR/&#34;&gt;https://bookdown.org/roback/bookdown-BeyondMLR/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-GGally&#34; class=&#34;csl-entry&#34;&gt;
+Schloerke, B., Crowley, J., Di Cook, Briatte, F., Marbach, M., Thoen, E., Elberg, A., &amp;amp; Larmarange, J. (2021). &lt;em&gt;&lt;span&gt;GGally&lt;/span&gt;: &lt;span&gt;Extension&lt;/span&gt; to &lt;span class=&#34;nocase&#34;&gt;’ggplot2’&lt;/span&gt;&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=GGally&#34;&gt;https://CRAN.R-project.org/package=GGally&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-vanbuurenFlexibleImputationMissing2018&#34; class=&#34;csl-entry&#34;&gt;
+van Buuren, S. (2018). &lt;em&gt;Flexible imputation of missing data&lt;/em&gt; (Second Edition). &lt;span&gt;CRC Press&lt;/span&gt;. &lt;a href=&#34;https://stefvanbuuren.name/fimd/&#34;&gt;https://stefvanbuuren.name/fimd/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mice2011&#34; class=&#34;csl-entry&#34;&gt;
+van Buuren, S., &amp;amp; Groothuis-Oudshoorn, K. (2011). &lt;span class=&#34;nocase&#34;&gt;mice&lt;/span&gt;: &lt;span&gt;Multivariate&lt;/span&gt; imputation by chained equations in &lt;span&gt;R&lt;/span&gt;. &lt;em&gt;Journal of Statistical Software&lt;/em&gt;, &lt;em&gt;45&lt;/em&gt;(3), 1–67. &lt;a href=&#34;https://www.jstatsoft.org/v45/i03/&#34;&gt;https://www.jstatsoft.org/v45/i03/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-mice&#34; class=&#34;csl-entry&#34;&gt;
+van Buuren, S., &amp;amp; Groothuis-Oudshoorn, K. (2021). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;mice&lt;/span&gt;: &lt;span&gt;Multivariate&lt;/span&gt; imputation by chained equations&lt;/em&gt; [Manual]. &lt;a href=&#34;https://CRAN.R-project.org/package=mice&#34;&gt;https://CRAN.R-project.org/package=mice&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-tidyverse&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H. (2019). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;tidyverse&lt;/span&gt;: &lt;span&gt;Easily&lt;/span&gt; install and load the ’tidyverse’&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=tidyverse&#34;&gt;https://CRAN.R-project.org/package=tidyverse&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wickhamWelcomeTidyverse2019&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the tidyverse. &lt;em&gt;Journal of Open Source Software&lt;/em&gt;, &lt;em&gt;4&lt;/em&gt;(43), 1686. &lt;a href=&#34;https://doi.org/10.21105/joss.01686&#34;&gt;https://doi.org/10.21105/joss.01686&lt;/a&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;Be warned that “full-luxury Bayesian …” isn’t a real term. Rather, it’s a playful descriptor coined by the great Richard McElreath. To hear him use it in action, check out his &lt;a href=&#34;https://www.youtube.com/watch?v=KNPYUVmY3NM&#34;&gt;nifty talk&lt;/a&gt; on causal inference. One-step Bayesian imputation is a real thing, though. McElreath covered it in both editions of his text and I’ve even blogged about it &lt;a href=&#34;https://solomonkurz.netlify.app/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/&#34;&gt;here&lt;/a&gt;.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn2&#34;&gt;&lt;p&gt;When you do this on your own, you might instead name the &lt;code&gt;.imp&lt;/code&gt; column as &lt;code&gt;m&lt;/code&gt;, which goes nicely with Miles’s notation. In this post and in some of my personal work, I used &lt;code&gt;.imp&lt;/code&gt; because it lines up nicely with the output from some of the &lt;strong&gt;mice&lt;/strong&gt; functions.&lt;a href=&#34;#fnref2&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>One-step Bayesian imputation when you have dropout in your RCT</title>
+      <link>/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/</link>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/</guid>
+      <description>
+&lt;script src=&#34;/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;preamble&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Preamble&lt;/h2&gt;
+&lt;p&gt;Suppose you’ve got data from a randomized controlled trial (RCT) where participants received either treatment or control. Further suppose you only collected data at two time points, pre- and post-treatment. Even in the best of scenarios, you’ll probably have some dropout in those post-treatment data. To get the full benefit of your data, you can use one-step Bayesian imputation when you compute your effect sizes. In this post, I’ll show you how.&lt;/p&gt;
+&lt;div id=&#34;i-make-assumptions.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;I make assumptions.&lt;/h3&gt;
+&lt;p&gt;For this post, I’m presuming you have a passing familiarity with the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You should be familiar with effect sizes, particularly with standardized mean differences. If you need to brush up, consider Cohen’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-cohenStatisticalPowerAnalysis1988a&#34; role=&#34;doc-biblioref&#34;&gt;1988&lt;/a&gt;)&lt;/span&gt; authoritative text, or Cummings newer &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-cummingUnderstandingTheNewStatistics2012&#34; role=&#34;doc-biblioref&#34;&gt;2012&lt;/a&gt;)&lt;/span&gt; text. For nice conceptual overview, I also recommend Kelley and Preacher’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-kelley2012effect&#34; role=&#34;doc-biblioref&#34;&gt;2012&lt;/a&gt;)&lt;/span&gt; paper, &lt;a href=&#34;https://www3.nd.edu/~kkelley/publications/articles/Kelley_and_Preacher_Psychological_Methods_2012.pdf&#34;&gt;&lt;em&gt;On effect size&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You should be familiar with Bayesian regression. For thorough introductions, I recommend either edition of McElreath’s text &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;, &lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;; Kruschke’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-kruschkeDoingBayesianData2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt; text; or Gelman, Hill, and Vehtari’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-gelmanRegressionOtherStories2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;)&lt;/span&gt; text. If you go with McElreath, he has a fine series of freely-available lectures &lt;a href=&#34;https://www.youtube.com/channel/UCNJK6_DZvcMqNSzQdEkzvzA/playlists&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Though we won’t be diving deep into it, here, you’ll want to have some familiarity with contemporary missing data theory. You can find brief overviews in the texts by McElreath and Gelman et al, above. For a deeper dive, I recommend &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-enders2010applied&#34; role=&#34;doc-biblioref&#34;&gt;Enders&lt;/a&gt; (&lt;a href=&#34;#ref-enders2010applied&#34; role=&#34;doc-biblioref&#34;&gt;2010&lt;/a&gt;)&lt;/span&gt; or &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-little2019statistical&#34; role=&#34;doc-biblioref&#34;&gt;Little &amp;amp; Rubin&lt;/a&gt; (&lt;a href=&#34;#ref-little2019statistical&#34; role=&#34;doc-biblioref&#34;&gt;2019&lt;/a&gt;)&lt;/span&gt;. Also, heads up: &lt;a href=&#34;https://twitter.com/AmandaKMontoya/status/1341936335301406722&#34;&gt;word on the street&lt;/a&gt; is Enders is working on a second edition of his book.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;All code is in &lt;strong&gt;R&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-base&#34; role=&#34;doc-biblioref&#34;&gt;R Core Team, 2020&lt;/a&gt;)&lt;/span&gt;. Data wrangling and plotting were done with help from the &lt;strong&gt;tidyverse&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-tidyverse&#34; role=&#34;doc-biblioref&#34;&gt;Wickham, 2019&lt;/a&gt;; &lt;a href=&#34;#ref-wickhamWelcomeTidyverse2019&#34; role=&#34;doc-biblioref&#34;&gt;Wickham et al., 2019&lt;/a&gt;)&lt;/span&gt; and &lt;a href=&#34;https://mjskay.github.io/tidybayes/&#34;&gt;&lt;strong&gt;tidybayes&lt;/strong&gt;&lt;/a&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-tidybayes&#34; role=&#34;doc-biblioref&#34;&gt;Kay, 2020&lt;/a&gt;)&lt;/span&gt;. The data were simulated with help from the &lt;a href=&#34;https://github.com/debruine/faux&#34;&gt;&lt;strong&gt;faux&lt;/strong&gt; package&lt;/a&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-faux&#34; role=&#34;doc-biblioref&#34;&gt;DeBruine, 2021&lt;/a&gt;)&lt;/span&gt; and the Bayesian models were fit using &lt;a href=&#34;https://github.com/paul-buerkner/brms&#34;&gt;&lt;strong&gt;brms&lt;/strong&gt;&lt;/a&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-burknerBrmsPackageBayesian2017&#34; role=&#34;doc-biblioref&#34;&gt;Bürkner, 2017&lt;/a&gt;, &lt;a href=&#34;#ref-burknerAdvancedBayesianMultilevel2018&#34; role=&#34;doc-biblioref&#34;&gt;2018&lt;/a&gt;, &lt;a href=&#34;#ref-R-brms&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;)&lt;/span&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here we load our primary &lt;strong&gt;R&lt;/strong&gt; packages and adjust the global plotting theme defaults.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(faux)
+library(tidybayes)
+library(brms)
+
+# adjust the global plotting theme
+theme_set(
+  theme_tidybayes() +
+    theme(axis.line.x = element_blank(),
+          axis.line.y = element_blank(),
+          panel.border = element_rect(color = &amp;quot;grey85&amp;quot;, size = 1, fill = NA))
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;we-need-data.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;We need data.&lt;/h3&gt;
+&lt;p&gt;For this post, we’ll be simulating our data with help from the handy &lt;code&gt;faux::rnorm_multi()&lt;/code&gt; function. To start out, we’ll make two data sets, one for treatment (&lt;code&gt;d_treatment&lt;/code&gt;) and one for control (&lt;code&gt;d_control&lt;/code&gt;). Each will contain outcomes at &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; treatment, with the population parameters for both conditions at &lt;code&gt;pre&lt;/code&gt; being &lt;span class=&#34;math inline&#34;&gt;\(\operatorname{Normal}(5, 1)\)&lt;/span&gt;. Whereas those parameters stay the same at &lt;code&gt;post&lt;/code&gt; for those in the control condition, the population parameters for those in the treatment condition will raise at &lt;code&gt;post&lt;/code&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\operatorname{Normal}(5.7, 1)\)&lt;/span&gt;. Notice that not only did their mean value increase, but their standard deviation increased a bit, too, which is not uncommon in treatment data. Importantly, the correlation between &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; is &lt;span class=&#34;math inline&#34;&gt;\(.75\)&lt;/span&gt; for both conditions.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# how many per group?
+n &amp;lt;- 100
+
+set.seed(1)
+
+d_treatment &amp;lt;- rnorm_multi(
+  n = n,
+  mu = c(5, 5.7),
+  sd = c(1, 1.1), 
+  r = .75, 
+  varnames = list(&amp;quot;pre&amp;quot;, &amp;quot;post&amp;quot;)
+)
+
+d_control &amp;lt;- rnorm_multi(
+  n = n,
+  mu = c(5, 5),
+  sd = c(1, 1), 
+  r = .75, 
+  varnames = list(&amp;quot;pre&amp;quot;, &amp;quot;post&amp;quot;)
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next we combine the two data sets and make an explicit &lt;code&gt;tx&lt;/code&gt; variable to distinguish the conditions. Then we simulate missingness in the &lt;code&gt;post&lt;/code&gt; variable in two steps: We use the &lt;code&gt;rbinom()&lt;/code&gt; function to simulate whether a case will be missing and then use a little &lt;code&gt;ifelse()&lt;/code&gt; to make a &lt;code&gt;post_observed&lt;/code&gt; variable that is the same as &lt;code&gt;post&lt;/code&gt; except that the vales are missing in every row for which &lt;code&gt;missing == 1&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1)
+
+d &amp;lt;- bind_rows(
+  d_control,
+  d_treatment
+) %&amp;gt;% 
+  mutate(tx = rep(c(&amp;quot;control&amp;quot;, &amp;quot;treatment&amp;quot;), each = n)) %&amp;gt;% 
+  mutate(tx = factor(tx, levels = c(&amp;quot;treatment&amp;quot;, &amp;quot;control&amp;quot;))) %&amp;gt;% 
+  mutate(missing = rbinom(n(), size = 1, prob = 0.3)) %&amp;gt;%
+  mutate(post_observed = ifelse(missing == 1, NA, post))
+
+head(d)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        pre     post      tx missing post_observed
+## 1 5.066999 5.698922 control       0      5.698922
+## 2 6.950072 6.209520 control       0      6.209520
+## 3 5.787145 7.181091 control       0      7.181091
+## 4 4.826099 4.554830 control       1            NA
+## 5 2.277529 3.447187 control       0      3.447187
+## 6 6.801701 7.870996 control       1            NA&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To get a sense for the data, here’s a scatter plot of &lt;code&gt;pre&lt;/code&gt; versus &lt;code&gt;post&lt;/code&gt;, by &lt;code&gt;tx&lt;/code&gt; and &lt;code&gt;missing&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  mutate(missing = factor(missing,
+                          levels = 1:0,
+                          labels = c(&amp;quot;yes&amp;quot;, &amp;quot;no&amp;quot;))) %&amp;gt;% 
+  
+  ggplot(aes(x = pre, y = post, color = missing, shape = missing)) +
+  geom_point() +
+  scale_color_viridis_d(option = &amp;quot;D&amp;quot;, begin = .35, end = .75, direction = -1) +
+  scale_shape_manual(values = 17:16) +
+  coord_equal(xlim = c(1.5, 8.5),
+              ylim = c(1.5, 8.5)) +
+  facet_wrap(~ tx)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/index_files/figure-html/geom_point-1.png&#34; width=&#34;672&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;You can see that high correlation between &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; in the shapes of the data clouds. To look at the data in another way, here are a few summary statistics.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  pivot_longer(starts_with(&amp;quot;p&amp;quot;), names_to = &amp;quot;time&amp;quot;) %&amp;gt;% 
+  mutate(time = factor(time, levels = c(&amp;quot;pre&amp;quot;, &amp;quot;post&amp;quot;, &amp;quot;post_observed&amp;quot;))) %&amp;gt;% 
+  group_by(tx, time) %&amp;gt;% 
+  summarise(mean = mean(value, na.rm = T),
+            sd = sd(value, na.rm = T),
+            min = min(value, na.rm = T),
+            max = max(value, na.rm = T)) %&amp;gt;% 
+  mutate_if(is.double, round, digits = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 6
+## # Groups:   tx [2]
+##   tx        time           mean    sd   min   max
+##   &amp;lt;fct&amp;gt;     &amp;lt;fct&amp;gt;         &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+## 1 treatment pre            5.11  0.91  3.22  7.24
+## 2 treatment post           5.8   0.99  3.16  8.35
+## 3 treatment post_observed  5.74  1.05  3.16  8.35
+## 4 control   pre            5.01  0.99  2.28  7.5 
+## 5 control   post           5.05  1.06  1.74  7.87
+## 6 control   post_observed  5.1   1.04  1.74  7.45&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;statistical-models&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Statistical models&lt;/h2&gt;
+&lt;p&gt;We’ll be analyzing the RCT data in two ways. First, we’ll fit a model on the version of the data with no missingness in &lt;code&gt;post&lt;/code&gt;. That will be our benchmark. Then we’ll practice fitting the model with one-step Bayesian imputation and the &lt;code&gt;post_observed&lt;/code&gt; variable. Once we’ve fit and evaluated our models, we’ll then walk out how to compute the effect sizes.&lt;/p&gt;
+&lt;div id=&#34;fit-the-models.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Fit the models.&lt;/h3&gt;
+&lt;p&gt;There are a lot of ways to analyze pre/post RCT data. To get a sense of the various strategies, see &lt;a href=&#34;https://www.middleprofessor.com/files/applied-biostatistics_bookdown/_book/models-for-longitudinal-experiments-pre-post-designs.html&#34;&gt;this chapter&lt;/a&gt; in Jeffrey Walker’s free &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-walkerElementsOfStatisticalModeling2018&#34; role=&#34;doc-biblioref&#34;&gt;2018&lt;/a&gt;)&lt;/span&gt; text and my &lt;a href=&#34;https://solomonkurz.netlify.app/post/2020-12-29-regression-models-for-2-timepoint-non-experimental-data/&#34;&gt;complimentary blog post&lt;/a&gt; on pre/post non-experimental data. In this post, we’ll be taking the multivariate approach where we simultaneously model &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; as bivariate normal, such that both the mean and standard deviation parameters for both vary depending on the experimental condition (&lt;code&gt;tx&lt;/code&gt;). Importantly, the correlation between &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; is captured in the correlation between the two residual standard deviation parameters.&lt;/p&gt;
+&lt;p&gt;Here’s how to fit the model to the full data with &lt;strong&gt;brms&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit1 &amp;lt;- brm(
+  data = d,
+  family = gaussian,
+  bf(pre ~ 0 + tx, sigma ~ 0 + tx) +
+    bf(post ~ 0 + tx, sigma ~ 0 + tx) +
+    set_rescor(rescor = TRUE),
+  prior = c(prior(normal(5, 1), class = b, resp = pre),
+            prior(normal(5, 1), class = b, resp = post),
+            prior(normal(log(1), 1), class = b, dpar = sigma, resp = pre),
+            prior(normal(log(1), 1), class = b, dpar = sigma, resp = post),
+            prior(lkj(2), class = rescor)),
+  cores = 4,
+  seed = 1
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The priors in this post follow the weakly-regularizing approach McElreath advocated for in the second edition of this text. Also note that because we are allowing the residual standard deviation parameter to vary by &lt;code&gt;tx&lt;/code&gt;, the &lt;strong&gt;brms&lt;/strong&gt; default is to use the log link, which will become important for interpretation and post processing. Here’s the parameter summary.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(fit1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Family: MV(gaussian, gaussian) 
+##   Links: mu = identity; sigma = log
+##          mu = identity; sigma = log 
+## Formula: pre ~ 0 + tx 
+##          sigma ~ 0 + tx
+##          post ~ 0 + tx 
+##          sigma ~ 0 + tx
+##    Data: d (Number of observations: 200) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## pre_txtreatment            5.00      0.10     4.81     5.19 1.00     2802     3091
+## pre_txcontrol              5.11      0.09     4.93     5.29 1.00     3300     2885
+## sigma_pre_txtreatment     -0.03      0.06    -0.15     0.09 1.00     3700     3273
+## sigma_pre_txcontrol       -0.08      0.07    -0.21     0.06 1.00     3536     3105
+## post_txtreatment           5.74      0.11     5.52     5.96 1.00     3027     2940
+## post_txcontrol             5.08      0.09     4.90     5.26 1.00     3305     2758
+## sigma_post_txtreatment     0.14      0.06     0.02     0.27 1.00     3555     3230
+## sigma_post_txcontrol      -0.08      0.07    -0.21     0.05 1.00     3607     2764
+## 
+## Residual Correlations: 
+##                  Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## rescor(pre,post)     0.73      0.03     0.67     0.79 1.00     3475     3305
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After exponentiating the standard deviations, all the parameter summaries look close to the data generating values from our &lt;code&gt;faux::rnorm_multi()&lt;/code&gt; code. This, however, is all just a warm-up. Our goal was to use one-step Bayesian imputation for when we have missing data at post-intervention time point. From a syntax perspective, that involves a few minor changes to our &lt;code&gt;fit1&lt;/code&gt; code. First, we replace the &lt;code&gt;post&lt;/code&gt; variable with &lt;code&gt;post_observed&lt;/code&gt;, which had about &lt;span class=&#34;math inline&#34;&gt;\(30\%\)&lt;/span&gt; of the values missing. In a similar way, we have to adjust a few of the &lt;code&gt;resp&lt;/code&gt; arguments within the &lt;code&gt;prior()&lt;/code&gt; statements. Finally and most crucially, we have to include the &lt;code&gt;| mi()&lt;/code&gt; syntax when defining the linear model for &lt;code&gt;post_observed&lt;/code&gt;. Otherwise, &lt;strong&gt;brms&lt;/strong&gt; will simply drop all the cases with missingness on &lt;code&gt;post_observed&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here’s the code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fit2 &amp;lt;- brm(
+  data = d,
+  family = gaussian,
+  bf(pre ~ 0 + tx,
+     sigma ~ 0 + tx) +
+    # notice the changes in this line
+    bf(post_observed | mi() ~ 0 + tx,
+       sigma ~ 0 + tx) +
+    set_rescor(rescor = TRUE),
+  prior = c(prior(normal(5, 1), class = b, resp = pre),
+            # notice the changes in the `resp` argument
+            prior(normal(5, 1), class = b, resp = postobserved),
+            prior(normal(log(1), 1), class = b, dpar = sigma, resp = pre),
+            # notice the changes in the `resp` argument
+            prior(normal(log(1), 1), class = b, dpar = sigma, resp = postobserved),
+            prior(lkj(2), class = rescor)),
+  cores = 4,
+  seed = 1
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Instead of looking at the &lt;code&gt;print()&lt;/code&gt; output, it might be more informative if we compare the results of our two models in a coefficient plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# define the parameter names
+parameters &amp;lt;- c(
+  &amp;quot;mu[treatment]^pre&amp;quot;, &amp;quot;mu[control]^pre&amp;quot;, &amp;quot;sigma[treatment]^pre&amp;quot;, &amp;quot;sigma[control]^pre&amp;quot;,
+  &amp;quot;mu[treatment]^post&amp;quot;, &amp;quot;mu[control]^post&amp;quot;, &amp;quot;sigma[treatment]^post&amp;quot;, &amp;quot;sigma[control]^post&amp;quot;, 
+  &amp;quot;rho&amp;quot;
+  )
+
+# define the deisred order for the parameter names
+levels &amp;lt;- c(
+  &amp;quot;mu[treatment]^pre&amp;quot;, &amp;quot;mu[control]^pre&amp;quot;, &amp;quot;mu[treatment]^post&amp;quot;, &amp;quot;mu[control]^post&amp;quot;, 
+  &amp;quot;sigma[treatment]^pre&amp;quot;, &amp;quot;sigma[control]^pre&amp;quot;, &amp;quot;sigma[treatment]^post&amp;quot;, &amp;quot;sigma[control]^post&amp;quot;, 
+  &amp;quot;rho&amp;quot;
+  )
+
+# combine the posterior summaries for the two models
+rbind(
+  posterior_summary(fit1)[1:9, -2],
+  posterior_summary(fit2)[1:9, -2]
+  ) %&amp;gt;% 
+  # wrangle
+  data.frame() %&amp;gt;% 
+  mutate(data = rep(c(&amp;quot;complete data&amp;quot;, &amp;quot;30% missing&amp;quot;), each = n() / 2),
+         par  = rep(parameters, times = 2)) %&amp;gt;% 
+  mutate(par      = factor(par, levels = levels),
+         Estimate = ifelse(str_detect(par, &amp;quot;sigma&amp;quot;), exp(Estimate), Estimate),
+         Q2.5     = ifelse(str_detect(par, &amp;quot;sigma&amp;quot;), exp(Q2.5), Q2.5),
+         Q97.5    = ifelse(str_detect(par, &amp;quot;sigma&amp;quot;), exp(Q97.5), Q97.5)) %&amp;gt;% 
+  
+  # plot!
+  ggplot(aes(x = Estimate, xmin = Q2.5, xmax = Q97.5, y = data)) +
+  geom_pointrange(fatten = 1.1) +
+  labs(x = &amp;quot;marginal posterior&amp;quot;,
+       y = NULL) +
+  xlim(0, NA) +
+  facet_wrap(~ par, labeller = label_parsed, ncol = 1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/index_files/figure-html/coefficient_plot-1.png&#34; width=&#34;576&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since the &lt;code&gt;post_observed&lt;/code&gt; data were missing completely at random (MCAR&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;), it should be no surprise the coefficients are nearly the same between the two models. This, however, will not always (ever?) be the case with your real-world RCT data. Friends, don’t let your friends drop cases or carry the last value forward. Use the &lt;strong&gt;brms&lt;/strong&gt; &lt;code&gt;mi()&lt;/code&gt; syntax, instead.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;effect-sizes.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Effect sizes.&lt;/h3&gt;
+&lt;p&gt;At this point, you may be wondering why I didn’t use the familiar dummy-variable approach in either of the models and you might be further wondering why I bothered to allow the standard deviation parameters to vary. One of the sub-goals of this post is to show how to compute the model output into standardized effect sizes. My go-to standardized effect size is good old Cohen’s &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt;, of which there are many variations. In the case of our pre/post RCT with two conditions, we actually have three &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt;’s of interest:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the standardized mean difference for the treatment condition (which we hope is large),&lt;/li&gt;
+&lt;li&gt;the standardized mean difference for the control condition (which we hope is near zero), and&lt;/li&gt;
+&lt;li&gt;the difference in those first two standardized mean differences (which we also hope is large).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As with all standardized mean differences, it’s a big deal to choose a good value to standardize with. With data like ours, a good default choice is the pooled standard deviation between the two conditions at baseline, which we might define as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\sigma_p^\text{pre} = \sqrt{\frac{ \left (\sigma_\text{treatment}^\text{pre} \right )^2 + \left (\sigma_\text{control}^\text{pre} \right)^2}{2}},\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where the notation is admittedly a little verbose. My hope, however, is this notation will make it easier to map the terms onto the model parameters from above. Anyway, with our definition of &lt;span class=&#34;math inline&#34;&gt;\(\sigma_p^\text{pre}\)&lt;/span&gt; in hand, we’re in good shape to define our three effect sizes of interest as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{align*}
+d_\text{treatment} &amp;amp; = \frac{\mu_\text{treatment}^\text{post} - \mu_\text{treatment}^\text{pre}}{\sigma_p^\text{pre}}, \\
+d_\text{control}   &amp;amp; = \frac{\mu_\text{control}^\text{post} - \mu_\text{control}^\text{pre}}{\sigma_p^\text{pre}}, \; \text{and} \\
+d_\text{treatment - control} &amp;amp; = \frac{\left ( \mu_\text{treatment}^\text{post} - \mu_\text{treatment}^\text{pre} \right ) - \left ( \mu_\text{control}^\text{post} - \mu_\text{control}^\text{pre} \right )}{\sigma_p^\text{pre}} \\
+&amp;amp; = \left (\frac{\mu_\text{treatment}^\text{post} - \mu_\text{treatment}^\text{pre}}{\sigma_p^\text{pre}} \right ) - \left ( \frac{\mu_\text{control}^\text{post} - \mu_\text{control}^\text{pre}}{\sigma_p^\text{pre}} \right ) \\
+&amp;amp; = \left ( d_\text{treatment} \right ) - \left ( d_\text{control} \right ).
+\end{align*}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The reason we analyzed the RCT data with a bivariate model with varying means and standard deviations was because the parameter values from that model correspond directly with the various &lt;span class=&#34;math inline&#34;&gt;\(\mu\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma\)&lt;/span&gt; terms in the equations for &lt;span class=&#34;math inline&#34;&gt;\(\sigma_p^\text{pre}\)&lt;/span&gt; and our three &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt;’s. This insight comes from &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-kruschkeDoingBayesianData2015&#34; role=&#34;doc-biblioref&#34;&gt;Kruschke&lt;/a&gt; (&lt;a href=&#34;#ref-kruschkeDoingBayesianData2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;, particularly Section 16.3. For a walk-through of that section with a &lt;strong&gt;brms&lt;/strong&gt; + &lt;strong&gt;tidyverse&lt;/strong&gt; workflow, see &lt;a href=&#34;https://bookdown.org/content/3686/metric-predicted-variable-on-one-or-two-groups.html#two-groups&#34;&gt;this section&lt;/a&gt; of my ebook translation of his text &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-kurzDoingBayesianData2021&#34; role=&#34;doc-biblioref&#34;&gt;Kurz, 2020a&lt;/a&gt;)&lt;/span&gt;. The approach we’re taking, here, is a direct bivariate generalization of the material in Kruschke’s text.&lt;/p&gt;
+&lt;p&gt;Okay, here’s how to work with the posterior samples from our missing-data model, &lt;code&gt;fit2&lt;/code&gt;, to compute those effects.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;post &amp;lt;- posterior_samples(fit2) %&amp;gt;% 
+  # exponentiate the log sd parameters
+  mutate(`sigma[treatment]^pre` = exp(b_sigma_pre_txtreatment),
+         `sigma[control]^pre`   = exp(b_sigma_pre_txcontrol)) %&amp;gt;% 
+  # pooled standard deviation (at pre)
+  mutate(`sigma[italic(p)]^pre` = sqrt((`sigma[treatment]^pre`^2 + `sigma[control]^pre`^2) / 2)) %&amp;gt;% 
+  # within-condition pre/post effect sizes
+  mutate(`italic(d)[treatment]` = (b_postobserved_txtreatment - b_pre_txtreatment) / `sigma[italic(p)]^pre`,
+         `italic(d)[control]`   = (b_postobserved_txcontrol   - b_pre_txcontrol)   / `sigma[italic(p)]^pre`) %&amp;gt;%
+  # between-condition effect size (i.e., difference in differences)
+  mutate(`italic(d)[&amp;#39;treatment - control&amp;#39;]` = `italic(d)[treatment]` - `italic(d)[control]`) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now inspect the posteriors for our three &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt;’s and the &lt;span class=&#34;math inline&#34;&gt;\(\sigma_p^\text{pre}\)&lt;/span&gt; in a coefficient plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;levels &amp;lt;- c(
+  &amp;quot;sigma[italic(p)]^pre&amp;quot;, &amp;quot;italic(d)[&amp;#39;treatment - control&amp;#39;]&amp;quot;, 
+  &amp;quot;italic(d)[control]&amp;quot;, &amp;quot;italic(d)[treatment]&amp;quot;
+  )
+
+post %&amp;gt;% 
+  # wrangle
+  pivot_longer(`sigma[italic(p)]^pre`:`italic(d)[&amp;#39;treatment - control&amp;#39;]`) %&amp;gt;% 
+  mutate(parameter = factor(name, levels = levels)) %&amp;gt;% 
+  
+  # plot
+ggplot(aes(x = value, y = parameter)) +
+  stat_pointinterval(.width = .95, size = 1/2) +
+  scale_y_discrete(labels = ggplot2:::parse_safe) +
+  labs(x = &amp;quot;marginal posterior&amp;quot;,
+       y = NULL) +
+  theme(axis.text.y = element_text(hjust = 0),
+        axis.ticks.y = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/index_files/figure-html/d_plot-1.png&#34; width=&#34;576&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;If you look back at the data-generating values from above, our effect sizes are about where we’d hope them to be.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;but-what-about-that-one-step-imputation&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;But what about that one-step imputation?&lt;/h3&gt;
+&lt;p&gt;From a practical standpoint, one-step Bayesian imputation is a lot like full-information maximum likelihood or multiple imputation–it’s a way to use all of your data that allows you to avoid the biases that come with older methods such as mean imputation or last observation carried forward. In short, one-step Bayesian imputation fits a joint model that expresses both the uncertainty in the model parameters and the uncertainty in the missing data. When we use MCMC methods, the uncertainty in our model parameters is expressed in the samples from the posterior. We worked with those with our &lt;code&gt;posterior_samples()&lt;/code&gt; code, above. In the same way, one-step Bayesian imputation with MCMC also gives us posterior samples for the missing data, too.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior_samples(fit2) %&amp;gt;% 
+  glimpse()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For the sake of space, I’m not going to show the results of the code block, above. If you were to execute it yourself, you’d see there were a bunch of &lt;code&gt;Ymi_postobserved[i]&lt;/code&gt; columns. Those columns contain the posterior samples for the missing values. The &lt;code&gt;i&lt;/code&gt; part of their names indexes the row number from the original data which had the missing &lt;code&gt;post_observed&lt;/code&gt; value. Just like with the posterior samples of our parameters, we can examine the posterior samples for our missing data with plots, summaries, and so on. Here instead of using the &lt;code&gt;posterior_samples()&lt;/code&gt; output, we’ll use the &lt;code&gt;posterior_summary()&lt;/code&gt; function, instead. This will summarize each parameter and imputed value by its mean, standard deviation, and percentile-based 95% interval. After a little wrangling, we’ll display the results in a plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior_summary(fit2) %&amp;gt;% 
+  data.frame() %&amp;gt;% 
+  rownames_to_column(&amp;quot;par&amp;quot;) %&amp;gt;% 
+  # isolate the imputed values
+  filter(str_detect(par, &amp;quot;Ymi&amp;quot;)) %&amp;gt;% 
+  mutate(row = str_extract(par, &amp;quot;\\d+&amp;quot;) %&amp;gt;% as.integer()) %&amp;gt;% 
+  # join the original data
+  left_join(
+    d %&amp;gt;% mutate(row = 1:n()),
+    by = &amp;quot;row&amp;quot;
+  ) %&amp;gt;% 
+
+  # plot!
+  ggplot(aes(x = pre, y = Estimate, ymin = Q2.5, ymax = Q97.5, color = tx)) +
+  geom_pointrange(fatten = 1, size = 1/4) +
+  scale_color_viridis_d(NULL, option = &amp;quot;F&amp;quot;, begin = .2, end = .6, direction = -1) +
+  ylab(&amp;quot;post (imputed)&amp;quot;) +
+  coord_equal(xlim = c(1.5, 8.5),
+              ylim = c(1.5, 8.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-07-27-one-step-bayesian-imputation-when-you-have-dropout-in-your-rct/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We ended up with something of a mash-up of a scatter plot and a coefficient plot. The &lt;span class=&#34;math inline&#34;&gt;\(y\)&lt;/span&gt;-axis shows the summaries for the imputed values, summarized by their posterior means (dots) and 95% intervals (vertical lines). In the &lt;span class=&#34;math inline&#34;&gt;\(x\)&lt;/span&gt;-axis, we’ve connected them with their original &lt;code&gt;pre&lt;/code&gt; values. Notice the strong correlation between the two axes. That’s the consequence of fitting a bivariate model where &lt;code&gt;pre&lt;/code&gt; has a residual correlation with &lt;code&gt;post_observed&lt;/code&gt;. That original data-generating value, recall, was &lt;span class=&#34;math inline&#34;&gt;\(.75\)&lt;/span&gt;. Here’s the summary of the residual correlation from &lt;code&gt;fit2&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior_summary(fit2)[&amp;quot;rescor__pre__postobserved&amp;quot;, ] %&amp;gt;% 
+  round(digits = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Estimate Est.Error      Q2.5     Q97.5 
+##      0.71      0.04      0.63      0.78&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Using language perhaps more familiar to those from a structural equation modeling background, the &lt;code&gt;pre&lt;/code&gt; values acted like a missing data covariate for the missing &lt;code&gt;post_observed&lt;/code&gt; values. Had that residual correlation been lower, the relation in the two axes of our plot would have been less impressive, too. Anyway, the point is that one-step Bayesian imputation gives users a nice way to explore the missing data assumptions they’ve imposed in their models, which I think is pretty cool.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;would-you-like-more&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Would you like more?&lt;/h2&gt;
+&lt;p&gt;To my knowledge, the introductory material on applied missing data analysis seems awash with full-information maximum likelihood and multiple imputation. One-step Bayesian imputation methods haven’t made it into the mainstream, yet. McElreath covered the one-step approach in both editions of his text and since the way he covered the material was quite different in the two editions, I really recommend you check out both &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2020&#34; role=&#34;doc-biblioref&#34;&gt;McElreath, 2020&lt;/a&gt;, &lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2015&#34; role=&#34;doc-biblioref&#34;&gt;2015&lt;/a&gt;)&lt;/span&gt;. My ebook translations of McElreath’s texts covered that material from a &lt;strong&gt;brms&lt;/strong&gt; + &lt;strong&gt;tidyverse&lt;/strong&gt; perspective &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-kurzStatisticalRethinkingSecondEd2021&#34; role=&#34;doc-biblioref&#34;&gt;Kurz, 2021&lt;/a&gt;, &lt;a href=&#34;#ref-kurzStatisticalRethinkingBrms2020&#34; role=&#34;doc-biblioref&#34;&gt;2020b&lt;/a&gt;)&lt;/span&gt;. Otherwise, you should check out Bürkner’s &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-Bürkner2021HandleMissingValues&#34; role=&#34;doc-biblioref&#34;&gt;2021&lt;/a&gt;)&lt;/span&gt; vignette, &lt;a href=&#34;https://CRAN.R-project.org/package=brms/vignettes/brms_missings.html&#34;&gt;&lt;em&gt;Handle missing values with brms&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you are aware of any other applied text books covering one-step Bayesian imputation, please drop a comment on this tweet.&lt;/p&gt;
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;New blog up!&lt;a href=&#34;https://t.co/Drxd9jrdp1&#34;&gt;https://t.co/Drxd9jrdp1&lt;/a&gt;&lt;br&gt;&lt;br&gt;This time we explore how to handle missing data in a 2-timepoint RCT with the one-step Bayesian imputation approach. It’s slick and simple and another reason to love &lt;a href=&#34;https://twitter.com/hashtag/brms?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#brms&lt;/a&gt;.&lt;/p&gt;&amp;mdash; Solomon Kurz (@SolomonKurz) &lt;a href=&#34;https://twitter.com/SolomonKurz/status/1420434272142434304?ref_src=twsrc%5Etfw&#34;&gt;July 28, 2021&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-info&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.0.4 (2021-02-15)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] brms_2.15.0     Rcpp_1.0.6      tidybayes_3.0.0 faux_1.0.0      forcats_0.5.1   stringr_1.4.0   dplyr_1.0.6    
+##  [8] purrr_0.3.4     readr_1.4.0     tidyr_1.1.3     tibble_3.1.2    ggplot2_3.3.5   tidyverse_1.3.1
+## 
+## loaded via a namespace (and not attached):
+##   [1] readxl_1.3.1         backports_1.2.1      plyr_1.8.6           igraph_1.2.6         svUnit_1.0.3        
+##   [6] splines_4.0.4        crosstalk_1.1.0.1    TH.data_1.0-10       rstantools_2.1.1     inline_0.3.17       
+##  [11] digest_0.6.27        htmltools_0.5.1.1    rsconnect_0.8.16     fansi_0.4.2          checkmate_2.0.0     
+##  [16] magrittr_2.0.1       modelr_0.1.8         RcppParallel_5.0.2   matrixStats_0.57.0   xts_0.12.1          
+##  [21] sandwich_3.0-0       prettyunits_1.1.1    colorspace_2.0-0     rvest_1.0.1          ggdist_3.0.0        
+##  [26] haven_2.3.1          xfun_0.23            callr_3.7.0          crayon_1.4.1         jsonlite_1.7.2      
+##  [31] lme4_1.1-25          survival_3.2-10      zoo_1.8-8            glue_1.4.2           gtable_0.3.0        
+##  [36] emmeans_1.5.2-1      V8_3.4.0             distributional_0.2.2 pkgbuild_1.2.0       rstan_2.21.2        
+##  [41] abind_1.4-5          scales_1.1.1         mvtnorm_1.1-1        DBI_1.1.0            miniUI_0.1.1.1      
+##  [46] viridisLite_0.4.0    xtable_1.8-4         stats4_4.0.4         StanHeaders_2.21.0-7 DT_0.16             
+##  [51] htmlwidgets_1.5.3    httr_1.4.2           threejs_0.3.3        arrayhelpers_1.1-0   posterior_1.0.1     
+##  [56] ellipsis_0.3.2       farver_2.1.0         pkgconfig_2.0.3      loo_2.4.1            sass_0.3.1          
+##  [61] dbplyr_2.1.1         utf8_1.2.1           labeling_0.4.2       tidyselect_1.1.1     rlang_0.4.11        
+##  [66] reshape2_1.4.4       later_1.2.0          munsell_0.5.0        cellranger_1.1.0     tools_4.0.4         
+##  [71] cli_3.0.1            generics_0.1.0       broom_0.7.6          ggridges_0.5.3       evaluate_0.14       
+##  [76] fastmap_1.1.0        yaml_2.2.1           fs_1.5.0             processx_3.5.2       knitr_1.33          
+##  [81] nlme_3.1-152         mime_0.10            projpred_2.0.2       xml2_1.3.2           compiler_4.0.4      
+##  [86] bayesplot_1.8.0      shinythemes_1.1.2    rstudioapi_0.13      curl_4.3             gamm4_0.2-6         
+##  [91] reprex_2.0.0         statmod_1.4.35       bslib_0.2.4          stringi_1.6.2        highr_0.9           
+##  [96] ps_1.6.0             blogdown_1.3         Brobdingnag_1.2-6    lattice_0.20-41      Matrix_1.3-2        
+## [101] nloptr_1.2.2.2       markdown_1.1         tensorA_0.36.2       shinyjs_2.0.0        vctrs_0.3.8         
+## [106] pillar_1.6.1         lifecycle_1.0.0      jquerylib_0.1.4      bridgesampling_1.0-0 estimability_1.3    
+## [111] httpuv_1.6.0         R6_2.5.0             bookdown_0.22        promises_1.2.0.1     gridExtra_2.3       
+## [116] codetools_0.2-18     boot_1.3-26          colourpicker_1.1.0   MASS_7.3-53          gtools_3.8.2        
+## [121] assertthat_0.2.1     withr_2.4.2          shinystan_2.5.0      multcomp_1.4-16      mgcv_1.8-33         
+## [126] parallel_4.0.4       hms_1.1.0            grid_4.0.4           coda_0.19-4          minqa_1.2.4         
+## [131] rmarkdown_2.8        shiny_1.6.0          lubridate_1.7.10     base64enc_0.1-3      dygraphs_1.1.1.6&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34; line-spacing=&#34;2&#34;&gt;
+&lt;div id=&#34;ref-Bürkner2021HandleMissingValues&#34; class=&#34;csl-entry&#34;&gt;
+Bürkner, P.-C. (2021). &lt;em&gt;Handle missing values with brms&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=brms/vignettes/brms_missings.html&#34;&gt;https://CRAN.R-project.org/package=brms/vignettes/brms_missings.html&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-burknerBrmsPackageBayesian2017&#34; class=&#34;csl-entry&#34;&gt;
+Bürkner, P.-C. (2017). &lt;span class=&#34;nocase&#34;&gt;brms&lt;/span&gt;: &lt;span&gt;An R&lt;/span&gt; package for &lt;span&gt;Bayesian&lt;/span&gt; multilevel models using &lt;span&gt;Stan&lt;/span&gt;. &lt;em&gt;Journal of Statistical Software&lt;/em&gt;, &lt;em&gt;80&lt;/em&gt;(1), 1–28. &lt;a href=&#34;https://doi.org/10.18637/jss.v080.i01&#34;&gt;https://doi.org/10.18637/jss.v080.i01&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-burknerAdvancedBayesianMultilevel2018&#34; class=&#34;csl-entry&#34;&gt;
+Bürkner, P.-C. (2018). Advanced &lt;span&gt;Bayesian&lt;/span&gt; multilevel modeling with the &lt;span&gt;R&lt;/span&gt; package brms. &lt;em&gt;The R Journal&lt;/em&gt;, &lt;em&gt;10&lt;/em&gt;(1), 395–411. &lt;a href=&#34;https://doi.org/10.32614/RJ-2018-017&#34;&gt;https://doi.org/10.32614/RJ-2018-017&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-brms&#34; class=&#34;csl-entry&#34;&gt;
+Bürkner, P.-C. (2020). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;brms&lt;/span&gt;: &lt;span&gt;Bayesian&lt;/span&gt; regression models using ’&lt;span&gt;Stan&lt;/span&gt;’&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=brms&#34;&gt;https://CRAN.R-project.org/package=brms&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-cohenStatisticalPowerAnalysis1988a&#34; class=&#34;csl-entry&#34;&gt;
+Cohen, J. (1988). &lt;em&gt;Statistical power analysis for the behavioral sciences&lt;/em&gt;. &lt;span&gt;L. Erlbaum Associates&lt;/span&gt;. &lt;a href=&#34;https://www.worldcat.org/title/statistical-power-analysis-for-the-behavioral-sciences/oclc/17877467&#34;&gt;https://www.worldcat.org/title/statistical-power-analysis-for-the-behavioral-sciences/oclc/17877467&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-cummingUnderstandingTheNewStatistics2012&#34; class=&#34;csl-entry&#34;&gt;
+Cumming, G. (2012). &lt;em&gt;Understanding the new statistics: &lt;span&gt;Effect&lt;/span&gt; sizes, confidence intervals, and meta-analysis&lt;/em&gt;. &lt;span&gt;Routledge&lt;/span&gt;. &lt;a href=&#34;https://www.routledge.com/Understanding-The-New-Statistics-Effect-Sizes-Confidence-Intervals-and/Cumming/p/book/9780415879682&#34;&gt;https://www.routledge.com/Understanding-The-New-Statistics-Effect-Sizes-Confidence-Intervals-and/Cumming/p/book/9780415879682&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-faux&#34; class=&#34;csl-entry&#34;&gt;
+DeBruine, L. (2021). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;faux&lt;/span&gt;: &lt;span&gt;Simulation&lt;/span&gt; for factorial designs&lt;/em&gt; [Manual]. &lt;a href=&#34;https://github.com/debruine/faux&#34;&gt;https://github.com/debruine/faux&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-enders2010applied&#34; class=&#34;csl-entry&#34;&gt;
+Enders, C. K. (2010). &lt;em&gt;Applied missing data analysis&lt;/em&gt;. &lt;span&gt;Guilford press&lt;/span&gt;. &lt;a href=&#34;http://www.appliedmissingdata.com/&#34;&gt;http://www.appliedmissingdata.com/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-gelmanRegressionOtherStories2020&#34; class=&#34;csl-entry&#34;&gt;
+Gelman, A., Hill, J., &amp;amp; Vehtari, A. (2020). &lt;em&gt;Regression and other stories&lt;/em&gt;. &lt;span&gt;Cambridge University Press&lt;/span&gt;. &lt;a href=&#34;https://doi.org/10.1017/9781139161879&#34;&gt;https://doi.org/10.1017/9781139161879&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-tidybayes&#34; class=&#34;csl-entry&#34;&gt;
+Kay, M. (2020). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;tidybayes&lt;/span&gt;: &lt;span&gt;Tidy&lt;/span&gt; data and ’geoms’ for &lt;span&gt;Bayesian&lt;/span&gt; models&lt;/em&gt;. &lt;a href=&#34;https://mjskay.github.io/tidybayes/&#34;&gt;https://mjskay.github.io/tidybayes/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kelley2012effect&#34; class=&#34;csl-entry&#34;&gt;
+Kelley, K., &amp;amp; Preacher, K. J. (2012). On effect size. &lt;em&gt;Psychological Methods&lt;/em&gt;, &lt;em&gt;17&lt;/em&gt;(2), 137. &lt;a href=&#34;https://doi.org/10.1037/a0028086&#34;&gt;https://doi.org/10.1037/a0028086&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kruschkeDoingBayesianData2015&#34; class=&#34;csl-entry&#34;&gt;
+Kruschke, J. K. (2015). &lt;em&gt;Doing &lt;span&gt;Bayesian&lt;/span&gt; data analysis: &lt;span&gt;A&lt;/span&gt; tutorial with &lt;span&gt;R&lt;/span&gt;, &lt;span&gt;JAGS&lt;/span&gt;, and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt;. &lt;span&gt;Academic Press&lt;/span&gt;. &lt;a href=&#34;https://sites.google.com/site/doingbayesiandataanalysis/&#34;&gt;https://sites.google.com/site/doingbayesiandataanalysis/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kurzStatisticalRethinkingSecondEd2021&#34; class=&#34;csl-entry&#34;&gt;
+Kurz, A. S. (2021). &lt;em&gt;Statistical rethinking with brms, &lt;span class=&#34;nocase&#34;&gt;ggplot2&lt;/span&gt;, and the tidyverse: &lt;span&gt;Second Edition&lt;/span&gt;&lt;/em&gt; (version 0.2.0). &lt;a href=&#34;https://bookdown.org/content/4857/&#34;&gt;https://bookdown.org/content/4857/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kurzDoingBayesianData2021&#34; class=&#34;csl-entry&#34;&gt;
+Kurz, A. S. (2020a). &lt;em&gt;Doing &lt;span&gt;Bayesian&lt;/span&gt; data analysis in brms and the tidyverse&lt;/em&gt; (version 0.4.0). &lt;a href=&#34;https://bookdown.org/content/3686/&#34;&gt;https://bookdown.org/content/3686/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kurzStatisticalRethinkingBrms2020&#34; class=&#34;csl-entry&#34;&gt;
+Kurz, A. S. (2020b). &lt;em&gt;Statistical rethinking with brms, &lt;span class=&#34;nocase&#34;&gt;ggplot2&lt;/span&gt;, and the tidyverse&lt;/em&gt; (version 1.2.0). &lt;a href=&#34;https://doi.org/10.5281/zenodo.3693202&#34;&gt;https://doi.org/10.5281/zenodo.3693202&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-little2019statistical&#34; class=&#34;csl-entry&#34;&gt;
+Little, R. J., &amp;amp; Rubin, D. B. (2019). &lt;em&gt;Statistical analysis with missing data&lt;/em&gt; (third, Vol. 793). &lt;span&gt;John Wiley &amp;amp; Sons&lt;/span&gt;. &lt;a href=&#34;https://www.wiley.com/en-us/Statistical+Analysis+with+Missing+Data%2C+3rd+Edition-p-9780470526798&#34;&gt;https://www.wiley.com/en-us/Statistical+Analysis+with+Missing+Data%2C+3rd+Edition-p-9780470526798&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mcelreathStatisticalRethinkingBayesian2020&#34; class=&#34;csl-entry&#34;&gt;
+McElreath, R. (2020). &lt;em&gt;Statistical rethinking: &lt;span&gt;A Bayesian&lt;/span&gt; course with examples in &lt;span&gt;R&lt;/span&gt; and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt; (Second Edition). &lt;span&gt;CRC Press&lt;/span&gt;. &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;https://xcelab.net/rm/statistical-rethinking/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mcelreathStatisticalRethinkingBayesian2015&#34; class=&#34;csl-entry&#34;&gt;
+McElreath, R. (2015). &lt;em&gt;Statistical rethinking: &lt;span&gt;A Bayesian&lt;/span&gt; course with examples in &lt;span&gt;R&lt;/span&gt; and &lt;span&gt;Stan&lt;/span&gt;&lt;/em&gt;. &lt;span&gt;CRC press&lt;/span&gt;. &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;https://xcelab.net/rm/statistical-rethinking/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-base&#34; class=&#34;csl-entry&#34;&gt;
+R Core Team. (2020). &lt;em&gt;R: &lt;span&gt;A&lt;/span&gt; language and environment for statistical computing&lt;/em&gt;. &lt;span&gt;R Foundation for Statistical Computing&lt;/span&gt;. &lt;a href=&#34;https://www.R-project.org/&#34;&gt;https://www.R-project.org/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-walkerElementsOfStatisticalModeling2018&#34; class=&#34;csl-entry&#34;&gt;
+Walker, J. A. (2018). &lt;em&gt;Elements of statistical modeling for experimental biology&lt;/em&gt; (&#34;2020–11th–22&#34; ed.). &lt;a href=&#34;https://www.middleprofessor.com/files/applied-biostatistics_bookdown/_book/&#34;&gt;https://www.middleprofessor.com/files/applied-biostatistics_bookdown/_book/&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-tidyverse&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H. (2019). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;tidyverse&lt;/span&gt;: &lt;span&gt;Easily&lt;/span&gt; install and load the ’tidyverse’&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=tidyverse&#34;&gt;https://CRAN.R-project.org/package=tidyverse&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wickhamWelcomeTidyverse2019&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the tidyverse. &lt;em&gt;Journal of Open Source Software&lt;/em&gt;, &lt;em&gt;4&lt;/em&gt;(43), 1686. &lt;a href=&#34;https://doi.org/10.21105/joss.01686&#34;&gt;https://doi.org/10.21105/joss.01686&lt;/a&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;As has been noted by others &lt;span class=&#34;citation&#34;&gt;(e.g., &lt;a href=&#34;#ref-mcelreathStatisticalRethinkingBayesian2020&#34; role=&#34;doc-biblioref&#34;&gt;McElreath, 2020&lt;/a&gt;)&lt;/span&gt; missing-data jargon is generally awful. I’m so sorry you have to contend with acronyms like MCAR, MAR (missing at random) and MNAR (missing not at random), but that’s just the way it is. If you’re not sure about the difference between the three, do consider spending some time with one of the missing data texts I recommended, above.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

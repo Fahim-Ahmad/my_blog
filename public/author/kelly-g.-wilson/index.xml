@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kelly G. Wilson | Fahim Ahmad</title>
+    <link>/author/kelly-g.-wilson/</link>
+      <atom:link href="/author/kelly-g.-wilson/index.xml" rel="self" type="application/rss+xml" />
+    <description>Kelly G. Wilson</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Mon, 01 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Kelly G. Wilson</title>
+      <link>/author/kelly-g.-wilson/</link>
+    </image>
+    
+    <item>
+      <title>How can process-based researchers bridge the gap between individuals and groups? Discover the dynamic p-technique</title>
+      <link>/publication/kurz-et-al-2019/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/kurz-et-al-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Examining self-compassion in romantic relationships</title>
+      <link>/publication/jacobson-et-al-2018/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/jacobson-et-al-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Acceptance and Commitment Therapy for Addiction</title>
+      <link>/publication/wilson-et-al-2012/</link>
+      <pubDate>Thu, 01 Nov 2012 00:00:00 +0000</pubDate>
+      <guid>/publication/wilson-et-al-2012/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

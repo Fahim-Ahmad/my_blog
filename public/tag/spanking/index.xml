@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spanking | Fahim Ahmad</title>
+    <link>/tag/spanking/</link>
+      <atom:link href="/tag/spanking/index.xml" rel="self" type="application/rss+xml" />
+    <description>spanking</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Sun, 14 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>spanking</title>
+      <link>/tag/spanking/</link>
+    </image>
+    
+    <item>
+      <title>Bayesian meta-analysis in brms</title>
+      <link>/post/bayesian-meta-analysis/</link>
+      <pubDate>Sun, 14 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>/post/bayesian-meta-analysis/</guid>
+      <description>
+&lt;script src=&#34;/post/bayesian-meta-analysis/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;[edited Apr 21, 2021]&lt;/p&gt;
+&lt;div id=&#34;preamble&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Preamble&lt;/h2&gt;
+&lt;p&gt;I released the first &lt;a href=&#34;https://bookdown.org&#34;&gt;bookdown&lt;/a&gt; version of my &lt;a href=&#34;https://bookdown.org/content/3890/&#34;&gt;&lt;em&gt;Statistical Rethinking&lt;/em&gt; with brms, ggplot2, and the tidyverse&lt;/a&gt; project a couple weeks ago. I consider it the 0.9.0 version&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;. I wanted a little time to step back from the project before giving it a final edit for the first major edition. I also wanted to give others a little time to take a look and suggest edits, which some thankfully have.&lt;/p&gt;
+&lt;p&gt;Now some time has passed, it’s become clear I’d like to add a bonus section on Bayesian meta-analysis. IMO, this is a natural extension of the hierarchical models McElreath introduced in chapter’s 12 and 13 of &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;his text&lt;/a&gt; and of the measurement-error models he introduced in chapter 14. So the purpose of this post is to present a rough draft of how I’d like to introduce fitting meta-analyses with Bürkner’s great brms package.&lt;/p&gt;
+&lt;p&gt;I intend to tack this section onto the end of chapter 14. If you have any &lt;a href=&#34;https://github.com/ASKurz/Statistical_Rethinking_with_brms_ggplot2_and_the_tidyverse/issues&#34;&gt;constrictive criticisms, please pass them along&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here’s the rough draft (which I updated on 2018-11-12):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rough-draft-meta-analysis&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Rough draft: Meta-analysis&lt;/h2&gt;
+&lt;p&gt;If your mind isn’t fully blown by those measurement-error and missing-data models, let’s keep building. As it turns out, meta-analyses are often just special kinds of multilevel measurement-error models. Thus, you can use &lt;code&gt;brms::brm()&lt;/code&gt; to fit Bayesian meta-analyses, too.&lt;/p&gt;
+&lt;p&gt;Before we proceed, I should acknowledge that this section is heavily influenced by Matti Vourre’s great blog post, &lt;a href=&#34;https://mvuorre.github.io/blog/posts/2016-09-29-bayesian-meta-analysis/&#34;&gt;&lt;em&gt;Meta-analysis is a special case of Bayesian multilevel modeling&lt;/em&gt;&lt;/a&gt;. And since McElreath’s text doesn’t directly address meta-analyses, we’ll take further inspiration from Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin’s &lt;a href=&#34;http://www.stat.columbia.edu/~gelman/book/&#34;&gt;&lt;em&gt;Bayesian data analysis, Third edition&lt;/em&gt;&lt;/a&gt;. We’ll let Gelman and colleagues introduce the topic:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Discussions of meta-analysis are sometimes imprecise about the estimands of interest in the analysis, especially when the primary focus is on testing the null hypothesis of no effect in any of the studies to be combined. Our focus is on estimating meaningful parameters, and for this objective there appear to be three possibilities, accepting the overarching assumption that the studies are comparable in some broad sense. The first possibility is that we view the studies as identical replications of each other, in the sense we regard the individuals in all the studies as independent samples from a common population, with the same outcome measures and so on. A second possibility is that the studies are so different that the results of any one study provide no information about the results of any of the others. A third, more general, possibility is that we regard the studies as exchangeable but not necessarily either identical or completely unrelated; in other words we allow differences from study to study, but such that the differences are not expected &lt;em&gt;a priori&lt;/em&gt; to have predictable effects favoring one study over another.… This third possibility represents a continuum between the two extremes, and it is this exchangeable model (with unknown hyperparameters characterizing the population distribution) that forms the basis of our Bayesian analysis…&lt;/p&gt;
+&lt;p&gt;The first potential estimand of a meta-analysis, or a hierarchically structured problem in general, is the mean of the distribution of effect sizes, since this represents the overall ‘average’ effect across all studies that could be regarded as exchangeable with the observed studies. Other possible estimands are the effect size in any of the observed studies and the effect size in another, comparable (exchangeable) unobserved study. (pp. 125–126, &lt;em&gt;emphasis&lt;/em&gt; in the original)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The basic version of a Bayesian meta-analysis follows the form&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y_i \sim \text{Normal}(\theta_i, \sigma_i)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(y_i\)&lt;/span&gt; = the point estimate for the effect size of a single study, &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt;, which is presumed to have been a draw from a Normal distribution centered on &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;. The data in meta-analyses are typically statistical summaries from individual studies. The one clear lesson from this chapter is that those estimates themselves come with error and those errors should be fully expressed in the meta-analytic model. Which we do. The standard error from study &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; is specified &lt;span class=&#34;math inline&#34;&gt;\(\sigma_i\)&lt;/span&gt;, which is also a stand-in for the standard deviation of the Normal distribution from which the point estimate was drawn. Do note, we’re not estimating &lt;span class=&#34;math inline&#34;&gt;\(\sigma_i\)&lt;/span&gt;, here. Those values we take directly from the original studies.&lt;/p&gt;
+&lt;p&gt;Building on the model, we further presume that study &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; is itself just one draw from a population of related studies, each of which have their own effect sizes. As such. we presume &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; itself has a distribution following the form&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\theta_i \sim \text{Normal} (\mu, \tau)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\mu\)&lt;/span&gt; is the meta-analytic effect (i.e., the population mean) and &lt;span class=&#34;math inline&#34;&gt;\(\tau\)&lt;/span&gt; is the variation around that mean, what you might also think of as &lt;span class=&#34;math inline&#34;&gt;\(\sigma_\tau\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Since there’s no example of a meta-analysis in the text, we’ll have to look elsewhere. We’ll focus on Gershoff and Grogan-Kaylor’s (2016) paper, &lt;a href=&#34;https://pdfs.semanticscholar.org/0d03/a2e9f085f0a268b4c0a52f5ac31c17a3e5f3.pdf&#34;&gt;&lt;em&gt;Spanking and Child Outcomes: Old Controversies and New Meta-Analyses&lt;/em&gt;&lt;/a&gt;. From their introduction, we read:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Around the world, most children (80%) are spanked or otherwise physically punished by their parents (&lt;a href=&#34;https://www.unicef.org/publications/index_74865.html&#34;&gt;UNICEF, 2014&lt;/a&gt;). The question of whether parents should spank their children to correct misbehaviors sits at a nexus of arguments from ethical, religious, and human rights perspectives both in the U.S. and around the world (&lt;a href=&#34;https://onlinelibrary.wiley.com/doi/abs/10.1111/cdep.12038&#34;&gt;Gershoff, 2013&lt;/a&gt;). Several hundred studies have been conducted on the associations between parents’ use of spanking or physical punishment and children’s behavioral, emotional, cognitive, and physical outcomes, making spanking one of the most studied aspects of parenting. What has been learned from these hundreds of studies? (p. 453)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Our goal will be to learn Bayesian meta-analysis by answering part of that question. I’ve transcribed the values directly from Gershoff and Grogan-Kaylor’s paper and saved them as a file called &lt;code&gt;spank.xlsx&lt;/code&gt;.
+You can find the data in &lt;a href=&#34;https://github.com/ASKurz/Statistical_Rethinking_with_brms_ggplot2_and_the_tidyverse&#34;&gt;this project’s GitHub repository&lt;/a&gt;. Let’s load them and &lt;code&gt;glimpse()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spank &amp;lt;- readxl::read_excel(&amp;quot;spank.xlsx&amp;quot;)
+
+library(tidyverse)
+glimpse(spank)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Rows: 111
+## Columns: 8
+## $ study   &amp;lt;chr&amp;gt; &amp;quot;Bean and Roberts (1981)&amp;quot;, &amp;quot;Day and Roberts (1983)&amp;quot;, &amp;quot;Minton, …
+## $ year    &amp;lt;dbl&amp;gt; 1981, 1983, 1971, 1988, 1990, 1961, 1962, 1990, 2002, 2005, 19…
+## $ outcome &amp;lt;chr&amp;gt; &amp;quot;Immediate defiance&amp;quot;, &amp;quot;Immediate defiance&amp;quot;, &amp;quot;Immediate defianc…
+## $ between &amp;lt;dbl&amp;gt; 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,…
+## $ within  &amp;lt;dbl&amp;gt; 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1,…
+## $ d       &amp;lt;dbl&amp;gt; -0.74, 0.36, 0.34, -0.08, 0.10, 0.63, 0.19, 0.47, 0.14, -0.18,…
+## $ ll      &amp;lt;dbl&amp;gt; -1.76, -1.04, -0.09, -1.01, -0.82, 0.16, -0.14, 0.20, -0.42, -…
+## $ ul      &amp;lt;dbl&amp;gt; 0.28, 1.77, 0.76, 0.84, 1.03, 1.10, 0.53, 0.74, 0.70, 0.13, 2.…&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this paper, the effect size of interest is a &lt;em&gt;Cohen’s d&lt;/em&gt;, derived from the formula&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[d = \frac{\mu_\text{treatment} - \mu_\text{comparison}}{\sigma_{pooled}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\sigma_{pooled} = \sqrt{\frac{((n_1 - 1) \sigma_1^2) + ((n_2 - 1) \sigma_2^2)}{n_1 + n_2 -2}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;To help make the equation for &lt;span class=&#34;math inline&#34;&gt;\(d\)&lt;/span&gt; clearer for our example, we might re-express it as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[d = \frac{\mu_\text{spanked} - \mu_\text{not spanked}}{\sigma_{pooled}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;McElreath didn’t really focus on effect sizes in his text. If you need a refresher, you might check out Kelley and Preacher’s &lt;a href=&#34;https://www.researchgate.net/profile/Ken_Kelley/publication/270757972_On_Effect_Size/links/0046351b0cd48217ce000000/On-Effect-Size.pdf&#34;&gt;&lt;em&gt;On effect size&lt;/em&gt;&lt;/a&gt;. But in words, &lt;em&gt;Cohen’s d&lt;/em&gt; is a standardized mean difference between two groups.&lt;/p&gt;
+&lt;p&gt;So if you look back up at the results of &lt;code&gt;glimpse(spank)&lt;/code&gt;, you’ll notice the column &lt;code&gt;d&lt;/code&gt;, which is indeed a vector of &lt;em&gt;Cohen’s d&lt;/em&gt; effect sizes. The last two columns, &lt;code&gt;ll&lt;/code&gt; and &lt;code&gt;ul&lt;/code&gt; are the lower and upper limits of the associated 95% frequentist confidence intervals. But we don’t want confidence intervals for our &lt;code&gt;d&lt;/code&gt;-values; we want their standard errors. Fortunately, we can compute those with the following formula&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[SE = \frac{\text{upper limit } – \text{lower limit}}{3.92}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here it is in code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spank &amp;lt;-
+  spank %&amp;gt;% 
+  mutate(se = (ul - ll) / 3.92)
+
+glimpse(spank)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Rows: 111
+## Columns: 9
+## $ study   &amp;lt;chr&amp;gt; &amp;quot;Bean and Roberts (1981)&amp;quot;, &amp;quot;Day and Roberts (1983)&amp;quot;, &amp;quot;Minton, …
+## $ year    &amp;lt;dbl&amp;gt; 1981, 1983, 1971, 1988, 1990, 1961, 1962, 1990, 2002, 2005, 19…
+## $ outcome &amp;lt;chr&amp;gt; &amp;quot;Immediate defiance&amp;quot;, &amp;quot;Immediate defiance&amp;quot;, &amp;quot;Immediate defianc…
+## $ between &amp;lt;dbl&amp;gt; 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,…
+## $ within  &amp;lt;dbl&amp;gt; 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1,…
+## $ d       &amp;lt;dbl&amp;gt; -0.74, 0.36, 0.34, -0.08, 0.10, 0.63, 0.19, 0.47, 0.14, -0.18,…
+## $ ll      &amp;lt;dbl&amp;gt; -1.76, -1.04, -0.09, -1.01, -0.82, 0.16, -0.14, 0.20, -0.42, -…
+## $ ul      &amp;lt;dbl&amp;gt; 0.28, 1.77, 0.76, 0.84, 1.03, 1.10, 0.53, 0.74, 0.70, 0.13, 2.…
+## $ se      &amp;lt;dbl&amp;gt; 0.52040816, 0.71683673, 0.21683673, 0.47193878, 0.47193878, 0.…&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now our data are ready, we can express our first Bayesian meta-analysis with the formula&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{eqnarray}
+\text{d}_i &amp;amp; \sim &amp;amp; \text{Normal}(\theta_i, \sigma_i = \text{se}_i) \\
+\theta_i &amp;amp; \sim &amp;amp; \text{Normal} (\mu, \tau) \\
+\mu &amp;amp; \sim &amp;amp; \text{Normal} (0, 1) \\
+\tau &amp;amp; \sim &amp;amp; \text{HalfCauchy} (0, 1)
+\end{eqnarray}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The last two lines, of course, spell out our priors. In psychology, it’s pretty rare to see &lt;em&gt;Cohen’s d&lt;/em&gt;-values greater than the absolute value of &lt;span class=&#34;math inline&#34;&gt;\(\pm 1\)&lt;/span&gt;. So in the absence of more specific domain knowledge–which I don’t have–, it seems like &lt;span class=&#34;math inline&#34;&gt;\(\text{Normal} (0, 1)\)&lt;/span&gt; is a reasonable place to start. And just like McElreath used &lt;span class=&#34;math inline&#34;&gt;\(\text{HalfCauchy} (0, 1)\)&lt;/span&gt; as the default prior for the group-level standard deviations, &lt;a href=&#34;https://psyarxiv.com/7tbrm/&#34;&gt;it makes sense to use it here&lt;/a&gt; for our meta-analytic &lt;span class=&#34;math inline&#34;&gt;\(\tau\)&lt;/span&gt; parameter.&lt;/p&gt;
+&lt;p&gt;Let’s load brms.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(brms)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here’s the code for the first model.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;b14.5 &amp;lt;- 
+  brm(data = spank, family = gaussian,
+      d | se(se) ~ 1 + (1 | study),
+      prior = c(prior(normal(0, 1), class = Intercept),
+                prior(cauchy(0, 1), class = sd)),
+      iter = 2000, warmup = 1000, cores = 4, chains = 4,
+      seed = 14)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;One thing you might notice is our &lt;code&gt;se(se)&lt;/code&gt; function excluded the &lt;code&gt;sigma&lt;/code&gt; argument. If you recall from section 14.1, we specified &lt;code&gt;sigma = T&lt;/code&gt; in our measurement-error models. The brms default is that within &lt;code&gt;se()&lt;/code&gt;, &lt;code&gt;sigma = FALSE&lt;/code&gt;. As such, we have no estimate for sigma the way we would if we were doing this analysis with the raw data from the studies. Hopefully this makes sense. The uncertainty around the &lt;code&gt;d&lt;/code&gt;-value for each study &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; has already been encoded in the data as &lt;code&gt;se&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This brings us to another point. We typically perform meta-analyses on data summaries. In my field and perhaps in yours, this is due to the historical accident that it has not been the norm among researchers to make their data publicly available. So effect size summaries were the best we typically had. However, times are changing (e.g., &lt;a href=&#34;https://www.apa.org/monitor/2017/11/trends-open-science.aspx&#34;&gt;here&lt;/a&gt;, &lt;a href=&#34;https://www.blog.google/products/search/making-it-easier-discover-datasets/&#34;&gt;here&lt;/a&gt;). If the raw data from all the studies for your meta-analysis are available, you can just fit a multilevel model in which the data are nested in the studies. Heck, you could even allow the studies to vary by &lt;span class=&#34;math inline&#34;&gt;\(\sigma\)&lt;/span&gt; by taking the &lt;a href=&#34;https://cran.r-project.org/web/packages/brms/vignettes/brms_distreg.html#a-simple-distributional-model&#34;&gt;distributional modeling approach&lt;/a&gt; and specify something like &lt;code&gt;sigma ~ 0 + study&lt;/code&gt; or even &lt;code&gt;sigma ~ 1 + (1 | study)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But enough technical talk. Let’s look at the model results.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(b14.5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: d | se(se) ~ 1 + (1 | study) 
+##    Data: spank (Number of observations: 111) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~study (Number of levels: 76) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     0.26      0.03     0.21     0.33 1.01      754     1582
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept     0.38      0.04     0.31     0.45 1.00      605     1021
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     0.00      0.00     0.00     0.00 1.00     4000     4000
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Thus, in our simple Bayesian meta-analysis, we have a population &lt;em&gt;Cohen’s d&lt;/em&gt; of about 0.38. Our estimate for &lt;span class=&#34;math inline&#34;&gt;\(\tau\)&lt;/span&gt;, 0.26, suggests we have quite a bit of between-study variability. One question you might ask is: &lt;em&gt;What exactly are these&lt;/em&gt; Cohen’s d&lt;em&gt;s measuring, anyways?&lt;/em&gt; We’ve encoded that in the &lt;code&gt;outcome&lt;/code&gt; vector of the &lt;code&gt;spank&lt;/code&gt; data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spank %&amp;gt;% 
+  distinct(outcome) %&amp;gt;% 
+  knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;outcome&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Immediate defiance&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Low moral internalization&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child aggression&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child antisocial behavior&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child externalizing behavior problems&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child internalizing behavior problems&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child mental health problems&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Child alcohol or substance abuse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Negative parent–child relationship&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Impaired cognitive ability&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Low self-esteem&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Low self-regulation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Victim of physical abuse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Adult antisocial behavior&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Adult mental health problems&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Adult alcohol or substance abuse&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Adult support for physical punishment&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;There are a few things to note. First, with the possible exception of &lt;code&gt;Adult support for physical punishment&lt;/code&gt;, all of the outcomes are negative. We prefer conditions associated with lower values for things like &lt;code&gt;Child aggression&lt;/code&gt; and &lt;code&gt;Adult mental health problems&lt;/code&gt;. Second, the way the data are coded, larger effect sizes are interpreted as more negative outcomes associated with children having been spanked. That is, our analysis suggests spanking children is associated with worse outcomes. What might not be immediately apparent is that even though there are 111 cases in the data, there are only 76 distinct studies.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spank %&amp;gt;% 
+  distinct(study) %&amp;gt;% 
+  count()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 1
+##       n
+##   &amp;lt;int&amp;gt;
+## 1    76&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In other words, some studies have multiple outcomes. In order to better accommodate the &lt;code&gt;study&lt;/code&gt;- and &lt;code&gt;outcome&lt;/code&gt;-level variances, let’s fit a cross-classified Bayesian meta-analysis reminiscent of the cross-classified chimp model from Chapter 13.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;b14.6 &amp;lt;- 
+  brm(data = spank, family = gaussian,
+      d | se(se) ~ 1 + (1 | study) + (1 | outcome),
+      prior = c(prior(normal(0, 1), class = Intercept),
+                prior(cauchy(0, 1), class = sd)),
+      iter = 2000, warmup = 1000, cores = 4, chains = 4,
+      seed = 14)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(b14.6)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: d | se(se) ~ 1 + (1 | study) + (1 | outcome) 
+##    Data: spank (Number of observations: 111) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~outcome (Number of levels: 17) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     0.08      0.03     0.04     0.14 1.00     1018     1756
+## 
+## ~study (Number of levels: 76) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     0.25      0.03     0.20     0.31 1.00      827     1571
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept     0.36      0.04     0.28     0.43 1.01      664     1562
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     0.00      0.00     0.00     0.00 1.00     4000     4000
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we have two &lt;span class=&#34;math inline&#34;&gt;\(\tau\)&lt;/span&gt; parameters. We might plot them to get a sense of where the variance is at.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior_samples(b14.6) %&amp;gt;% 
+  select(starts_with(&amp;quot;sd&amp;quot;)) %&amp;gt;% 
+  gather(key, tau) %&amp;gt;% 
+  mutate(key = str_remove(key, &amp;quot;sd_&amp;quot;) %&amp;gt;% str_remove(., &amp;quot;__Intercept&amp;quot;)) %&amp;gt;% 
+  
+  ggplot(aes(x = tau, fill = key)) +
+  geom_density(color = &amp;quot;transparent&amp;quot;, alpha = 2/3) +
+  scale_fill_viridis_d(NULL, end = .85) +
+  scale_y_continuous(NULL, breaks = NULL) +
+  xlab(expression(tau)) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/bayesian-meta-analysis/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;So at this point, the big story is there’s more variability between the studies than there is the outcomes. But I still want to get a sense of the individual outcomes. Here we’ll use &lt;code&gt;tidybayes::stat_halfeye()&lt;/code&gt; to help us make our version of a &lt;a href=&#34;https://cran.r-project.org/web/packages/forestplot/vignettes/forestplot.html&#34;&gt;forest plot&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# load tidybayes
+library(tidybayes)
+
+b14.6 %&amp;gt;%
+  spread_draws(b_Intercept, r_outcome[outcome,]) %&amp;gt;%
+  # add the grand mean to the group-specific deviations
+  mutate(mu = b_Intercept + r_outcome) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(outcome = str_replace_all(outcome, &amp;quot;[.]&amp;quot;, &amp;quot; &amp;quot;)) %&amp;gt;% 
+
+  # plot
+  ggplot(aes(x = mu, y = reorder(outcome, mu))) +
+  geom_vline(xintercept = fixef(b14.6)[1, 1], color = &amp;quot;white&amp;quot;, size = 1) +
+  geom_vline(xintercept = fixef(b14.6)[1, 3:4], color = &amp;quot;white&amp;quot;, linetype = 2) +
+  stat_halfeye(.width = .95, size = 2/3) +
+  labs(x = expression(italic(&amp;quot;Cohen&amp;#39;s d&amp;quot;)),
+       y = NULL) +
+  theme(panel.grid   = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y  = element_text(hjust = 0))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/bayesian-meta-analysis/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;480&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The solid and dashed vertical white lines in the background mark off the grand mean (i.e., the meta-analytic effect) and its 95% intervals. But anyway, there’s not a lot of variability across the outcomes. Let’s go one step further with the model. Doubling back to Gelman and colleagues, we read:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When assuming exchangeability we assume there are no important covariates that might form the basis of a more complex model, and this assumption (perhaps misguidedly) is widely adopted in meta-analysis. What if other information (in addition to the data &lt;span class=&#34;math inline&#34;&gt;\((n, y)\)&lt;/span&gt;) is available to distinguish among the &lt;span class=&#34;math inline&#34;&gt;\(J\)&lt;/span&gt; studies in a meta-analysis, so that an exchangeable model is inappropriate? In this situation, we can expand the framework of the model to be exchangeable in the observed data and covariates, for example using a hierarchical regression model. (p. 126)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;One important covariate Gershoff and Grogan-Kaylor addressed in their meta-analysis was the type of study. The 76 papers they based their meta-analysis on contained both between- and within-participants designs. In the &lt;code&gt;spank&lt;/code&gt; data, we’ve dummy coded that information with the &lt;code&gt;between&lt;/code&gt; and &lt;code&gt;within&lt;/code&gt; vectors. Both are dummy variables and &lt;code&gt;within&lt;/code&gt; = 1 - &lt;code&gt;between&lt;/code&gt;. Here are the counts.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spank %&amp;gt;% 
+  count(between)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 x 2
+##   between     n
+##     &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;
+## 1       0    71
+## 2       1    40&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When I use dummies in my models, I prefer to have the majority group stand as the reference category. As such, I typically name those variables by the minority group. In this case, most occasions are based on within-participant designs. Thus, we’ll go ahead and add the &lt;code&gt;between&lt;/code&gt; variable to the model. While we’re at it, we’ll practice using the &lt;code&gt;0 + intercept&lt;/code&gt; syntax.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;b14.7 &amp;lt;- 
+  brm(data = spank, family = gaussian,
+      d | se(se) ~ 0 + intercept + between + (1 | study) + (1 | outcome),
+      prior = c(prior(normal(0, 1), class = b),
+                prior(cauchy(0, 1), class = sd)),
+      iter = 2000, warmup = 1000, cores = 4, chains = 4,
+      seed = 14)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(b14.7)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: d | se(se) ~ 0 + intercept + between + (1 | study) + (1 | outcome) 
+##    Data: spank (Number of observations: 111) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~outcome (Number of levels: 17) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     0.08      0.03     0.04     0.14 1.00     1490     2304
+## 
+## ~study (Number of levels: 76) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     0.25      0.03     0.20     0.31 1.01      820     2203
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## intercept     0.38      0.05     0.29     0.48 1.01      925     1662
+## between      -0.07      0.07    -0.21     0.07 1.00      891     1645
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     0.00      0.00     0.00     0.00 1.00     4000     4000
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a closer look at &lt;code&gt;b_between&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior_samples(b14.7) %&amp;gt;% 
+  
+  ggplot(aes(x = b_between, y = 0)) +
+  stat_halfeye(point_interval = median_qi, .width = c(.5, .95)) +
+  labs(x = &amp;quot;Overall difference for between- vs within-participant designs&amp;quot;,
+       y = NULL) +
+  scale_y_continuous(NULL, breaks = NULL) +
+  theme(panel.grid   = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/bayesian-meta-analysis/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;432&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;That difference isn’t as large I’d expect it to be. But then again, I’m no spanking researcher. So what do I know?&lt;/p&gt;
+&lt;p&gt;There are other things you might do with these data. For example, you might check for trends by year or, as the authors did in their manuscript, distinguish among different severities of corporal punishment. But I think we’ve gone far enough to get you started.&lt;/p&gt;
+&lt;p&gt;If you’d like to learn more about these methods, do check out Vourre’s &lt;a href=&#34;https://mvuorre.github.io/blog/posts/2016-09-29-bayesian-meta-analysis/&#34;&gt;&lt;em&gt;Meta-analysis is a special case of Bayesian multilevel modeling&lt;/em&gt;&lt;/a&gt;. From his blog, you’ll learn additional tricks, like making a more traditional-looking forest plot with the &lt;code&gt;brmstools::forest()&lt;/code&gt; function and how our Bayesian brms method compares with frequentist meta-analyses via the &lt;a href=&#34;https://CRAN.R-project.org/package=metafor&#34;&gt;metafor package&lt;/a&gt;. You might also check out Williams, Rast, and Bürkner’s manuscript, &lt;a href=&#34;https://psyarxiv.com/7tbrm/&#34;&gt;&lt;em&gt;Bayesian Meta-Analysis with Weakly Informative Prior Distributions&lt;/em&gt;&lt;/a&gt; to give you an empirical justification for using a half-Cauchy prior for your meta-analysis &lt;span class=&#34;math inline&#34;&gt;\(\tau\)&lt;/span&gt; parameters.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-info&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.0.4 (2021-02-15)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] tidybayes_2.3.1 brms_2.15.0     Rcpp_1.0.6      forcats_0.5.1  
+##  [5] stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4     readr_1.4.0    
+##  [9] tidyr_1.1.3     tibble_3.1.0    ggplot2_3.3.3   tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##   [1] readxl_1.3.1         backports_1.2.1      plyr_1.8.6          
+##   [4] igraph_1.2.6         svUnit_1.0.3         splines_4.0.4       
+##   [7] crosstalk_1.1.0.1    TH.data_1.0-10       rstantools_2.1.1    
+##  [10] inline_0.3.17        digest_0.6.27        htmltools_0.5.1.1   
+##  [13] rsconnect_0.8.16     fansi_0.4.2          magrittr_2.0.1      
+##  [16] modelr_0.1.8         RcppParallel_5.0.2   matrixStats_0.57.0  
+##  [19] xts_0.12.1           sandwich_3.0-0       prettyunits_1.1.1   
+##  [22] colorspace_2.0-0     rvest_0.3.6          ggdist_2.4.0.9000   
+##  [25] haven_2.3.1          xfun_0.22            callr_3.5.1         
+##  [28] crayon_1.4.1         jsonlite_1.7.2       lme4_1.1-25         
+##  [31] survival_3.2-10      zoo_1.8-8            glue_1.4.2          
+##  [34] gtable_0.3.0         emmeans_1.5.2-1      V8_3.4.0            
+##  [37] distributional_0.2.2 pkgbuild_1.2.0       rstan_2.21.2        
+##  [40] abind_1.4-5          scales_1.1.1         mvtnorm_1.1-1       
+##  [43] DBI_1.1.0            miniUI_0.1.1.1       viridisLite_0.3.0   
+##  [46] xtable_1.8-4         stats4_4.0.4         StanHeaders_2.21.0-7
+##  [49] DT_0.16              htmlwidgets_1.5.2    httr_1.4.2          
+##  [52] threejs_0.3.3        arrayhelpers_1.1-0   ellipsis_0.3.1      
+##  [55] farver_2.0.3         pkgconfig_2.0.3      loo_2.4.1           
+##  [58] dbplyr_2.0.0         utf8_1.1.4           tidyselect_1.1.0    
+##  [61] labeling_0.4.2       rlang_0.4.10         reshape2_1.4.4      
+##  [64] later_1.1.0.1        munsell_0.5.0        cellranger_1.1.0    
+##  [67] tools_4.0.4          cli_2.3.1            generics_0.1.0      
+##  [70] broom_0.7.5          ggridges_0.5.2       evaluate_0.14       
+##  [73] fastmap_1.0.1        yaml_2.2.1           processx_3.4.5      
+##  [76] knitr_1.31           fs_1.5.0             nlme_3.1-152        
+##  [79] mime_0.10            projpred_2.0.2       xml2_1.3.2          
+##  [82] compiler_4.0.4       bayesplot_1.8.0      shinythemes_1.1.2   
+##  [85] rstudioapi_0.13      gamm4_0.2-6          curl_4.3            
+##  [88] reprex_0.3.0         statmod_1.4.35       stringi_1.5.3       
+##  [91] highr_0.8            ps_1.6.0             blogdown_1.3        
+##  [94] Brobdingnag_1.2-6    lattice_0.20-41      Matrix_1.3-2        
+##  [97] nloptr_1.2.2.2       markdown_1.1         shinyjs_2.0.0       
+## [100] vctrs_0.3.6          pillar_1.5.1         lifecycle_1.0.0     
+## [103] bridgesampling_1.0-0 estimability_1.3     httpuv_1.5.4        
+## [106] R6_2.5.0             bookdown_0.21        promises_1.1.1      
+## [109] gridExtra_2.3        codetools_0.2-18     boot_1.3-26         
+## [112] colourpicker_1.1.0   MASS_7.3-53          gtools_3.8.2        
+## [115] assertthat_0.2.1     withr_2.4.1          shinystan_2.5.0     
+## [118] multcomp_1.4-16      mgcv_1.8-33          parallel_4.0.4      
+## [121] hms_0.5.3            grid_4.0.4           coda_0.19-4         
+## [124] minqa_1.2.4          rmarkdown_2.7        shiny_1.5.0         
+## [127] lubridate_1.7.9.2    base64enc_0.1-3      dygraphs_1.1.1.6&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;At the time of this revision (2021-04-21), this ebook is now in &lt;a href=&#34;https://github.com/ASKurz/Statistical_Rethinking_with_brms_ggplot2_and_the_tidyverse/releases/tag/1.2.0&#34;&gt;version 1.2.0&lt;/a&gt;. The revision of this post includes fixes to a couple code breaks and a few updated hyperlinks. If you’d like to see the current version of this meta-analysis material, you can find it &lt;a href=&#34;https://bookdown.org/content/3890/missing-data-and-other-opportunities.html#summary-bonus-meta-analysis&#34;&gt;here&lt;/a&gt;.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

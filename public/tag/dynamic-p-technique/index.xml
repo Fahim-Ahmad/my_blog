@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dynamic p-technique | Fahim Ahmad</title>
+    <link>/tag/dynamic-p-technique/</link>
+      <atom:link href="/tag/dynamic-p-technique/index.xml" rel="self" type="application/rss+xml" />
+    <description>dynamic p-technique</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Mon, 14 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>dynamic p-technique</title>
+      <link>/tag/dynamic-p-technique/</link>
+    </image>
+    
+    <item>
+      <title>Individuals are not small groups, II: The ecological fallacy</title>
+      <link>/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/</link>
+      <pubDate>Mon, 14 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/</guid>
+      <description>
+&lt;script src=&#34;/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;tldr&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;tl;dr&lt;/h2&gt;
+&lt;p&gt;When people conclude results from group-level data will tell you about individual-level processes, they commit the &lt;em&gt;ecological fallacy&lt;/em&gt;. This is true even of the individuals whose data contributed to those group-level results. This phenomenon can seem odd and counterintuitive. Keep reading to improve your intuition.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;we-need-history.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;We need history.&lt;/h2&gt;
+&lt;p&gt;The ecological fallacy is closely related to Simpson’s paradox&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;. It is often attributed to sociologist William S. Robinson’s (1950) paper &lt;a href=&#34;https://www.jstor.org/stable/2087176?origin=crossref&amp;amp;seq=1#page_scan_tab_contents&#34;&gt;&lt;em&gt;Ecological Correlations and the Behavior of Individuals&lt;/em&gt;&lt;/a&gt;. My fellow psychologists might be happy to learn the idea goes back at least as far as E. L. Thorndike’s (1939) paper, &lt;a href=&#34;https://www.jstor.org/stable/1416673?seq=1#page_scan_tab_contents&#34;&gt;&lt;em&gt;On the fallacy of imputing the correlations found for groups to the individuals or smaller groups composing them&lt;/em&gt;&lt;/a&gt;. Yet as far as I can tell, the term “ecological fallacy” itself first appeared in sociologist Hanan C. Selvin’s (1958) paper, &lt;a href=&#34;https://s3.amazonaws.com/academia.edu.documents/33024288/Durkheim-suicide_empirical-research-problems.pdf?response-content-disposition=inline%3B%20filename%3DDurkheims_Suicide_and_Problems_of_Empiri.pdf&amp;amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAIWOWYYGZ2Y53UL3A%2F20191014%2Fus-east-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20191014T151247Z&amp;amp;X-Amz-Expires=3600&amp;amp;X-Amz-SignedHeaders=host&amp;amp;X-Amz-Signature=4e9eeb342fa0332cd0f7ed00a4769661cb7c6921e07dd19a763595f037d35dae&#34;&gt;&lt;em&gt;Durkheim’s suicide and problems of empirical research&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The central point of Robinson’s seminal paper can be summed up in this quote: “&lt;em&gt;There need be no correspondence between the individual correlation and the ecological correlation&lt;/em&gt;” (p. 339, &lt;em&gt;emphasis&lt;/em&gt; added)&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;. Both Robinson and Thorndike framed their arguments in terms of correlations. In more general and contemporary terms, their insight was that results from between-person analyses will not necessarily match up with results from within-person analyses. When we assume the results from a between-person analysis will tell us about within-person processes, we commit the ecological fallacy.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;an-example-might-help.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;An example might help.&lt;/h2&gt;
+&lt;p&gt;Though Thorndike, Robinson, and Selvin all worked through examples of the ecological fallacy, I’m a fan of contemporary methodologist Ellen L. Hamaker’s way of explaining it. We’ll quote from her (2012) chapter, &lt;a href=&#34;https://www.researchgate.net/publication/266896375_Why_researchers_should_think_within-person_A_paradigmatic_rationale&#34;&gt;&lt;em&gt;Why researchers should think “within-person”: A paradigmatic rationale&lt;/em&gt;&lt;/a&gt;, in bulk:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Suppose we are interested in the relationship between typing speed (i.e., number of words typed per minute) and the percentage of typos that are made. If we look at the cross-sectional relationship (i.e., the population level), we may well find a negative relationship, in that people who type faster make fewer mistakes (this may be reflective of the fact that people with better developed typing skills and more experience both type faster and make fewer mistakes). (p. 44)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Based on a figure in Hamaker’s chapter, that cross-sectional relationship might look something like this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+d %&amp;gt;% 
+  filter(j == 1) %&amp;gt;% 
+  
+  ggplot(aes(x = x, y = y)) +
+  geom_point(alpha = 2/3) +
+  stat_ellipse(size = 1/4) +
+  scale_x_continuous(&amp;quot;typing speed&amp;quot;, breaks = NULL, limits = c(-3, 3)) +
+  scale_y_continuous(&amp;quot;number of typos&amp;quot;, breaks = NULL, limits = c(-3, 3)) +
+  coord_equal() +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since these data were from one time point, they only allow us to make a between-person analysis.&lt;/p&gt;
+&lt;p&gt;[I’m not going to show you how I made these data just yet. It’d break up the flow. For the curious, the statistical formula and code are at the end of the post. I should point out, though, that the scale is arbitrary.]&lt;/p&gt;
+&lt;p&gt;Anyway, here’s that cross-sectional correlation.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  filter(j == 1) %&amp;gt;% 
+  summarise(correlation_between_participants = cor(x, y))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 1
+##   correlation_between_participants
+##                              &amp;lt;dbl&amp;gt;
+## 1                           -0.696&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Like Hamaker suggested, it’s large and negative. Hamaker continued:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If we were to generalize this result to the within-person level, we would conclude that if a particular person types faster, he or she will make fewer mistakes. Clearly, this is not what we expect: In fact, we are fairly certain that for any particular individual, the number of typos will increase if he or she tries to type faster. This implies a positive–rather than a negative–relationship at the within-person level. (p. 44)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The simulated data I just showed were from 50 participants at one measurement occasion. However, the full data set contains 50 measurement occasions for each of the 50 participants. In the next plot, we’ll show all 50 measurement occasions for just 5 participants. The &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; is reduced in the plot to avoid cluttering.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  filter(i %in% c(1, 10, 25, 47, 50)) %&amp;gt;% 
+  mutate(i = factor(i)) %&amp;gt;% 
+  
+  ggplot() +
+  geom_point(aes(x = x, y = y, color = i),
+             size = 1/3) +
+  stat_ellipse(aes(x = x, y = y, color = i),
+               size = 1/5) +
+  geom_point(data = d %&amp;gt;% 
+               filter(j == 1 &amp;amp;
+                        i %in% c(1, 10, 25, 47, 50)),
+             aes(x = x0, y = y0),
+             size = 2, color = &amp;quot;grey50&amp;quot;) +
+  scale_color_viridis_d(option = &amp;quot;B&amp;quot;, begin = .25, end = .85) +
+  scale_x_continuous(&amp;quot;typing speed&amp;quot;, breaks = NULL, limits = c(-3, 3)) +
+  scale_y_continuous(&amp;quot;number of typos&amp;quot;, breaks = NULL, limits = c(-3, 3)) +
+  coord_equal() +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The points are colored by participant. The gray points in each data cloud are the participant-level means. Although we still see a clear negative relationship between participants, we now also see a mild positive relationship within participants. If we compute the correlation separately for each of our 50 participants, we can summarize the results in a histogram.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  group_by(i) %&amp;gt;% 
+  summarise(r = cor(x, y) %&amp;gt;% round(digits = 2)) %&amp;gt;% 
+  
+  ggplot(aes(x = r)) +
+  geom_histogram(binwidth = .1) +
+  xlab(&amp;quot;correlations within participants&amp;quot;) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-14-individuals-are-not-small-groups-ii-the-ecological-fallacy/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;288&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;In this case, the within-person correlations all clustered together around .3. That won’t necessarily be the case in other contexts.&lt;/p&gt;
+&lt;p&gt;Hopefully this gives you a sense of how meaningless a question like &lt;em&gt;What is the correlation between typing speed and typo rates?&lt;/em&gt; is. The question is poorly specified because it makes no distinction between the between- and within-person frameworks. As it turns out, the answer could well be different depending on which one you care about and which one you end up studying. I suspect poorly-specified questions of this kind are scattered throughout the literature. For example, I’m a clinical psychologist. Have you ever heard a clinical psychologist talk about how highly anxiety is correlated with depression? And yet much of that evidence is from cross-sectional data (e.g., correlations between the anxiety and depression subscales of the DASS; &lt;a href=&#34;https://www.womenshealthapta.org/wp-content/uploads/2013/12/DASS-Lovibond.pdf&#34;&gt;Lovibond &amp;amp; Lovibond, 1995&lt;/a&gt;). But what about &lt;em&gt;within&lt;/em&gt; specific people? Do you really believe anxiety and depression are highly-correlated in all people? Maybe. But more cross-sectional analyses will not answer that question.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;robinson-finished-with-a-bang.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Robinson finished with a bang.&lt;/h2&gt;
+&lt;p&gt;Our typing data are just one example of how between- and within-person analyses can differ. To see Hamaker walk out the example herself, check out her &lt;a href=&#34;https://www.youtube.com/watch?v=RnbsXfE2R9g&#34;&gt;talk on the subject&lt;/a&gt; from a few years ago. I think you’ll find her an engaging speaker. But to sum this topic up, it’s worth considering the Conclusion section from Robinson’s (1950) paper in full:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The relation between ecological and individual correlations which is discussed in this paper provides a definite answer as to whether ecological correlations can validly be used as substitutes for individual correlations. They cannot. While it is theoretically possible for the two to be equal, the conditions under which this can happen are far removed from those ordinarily encountered in data. From a practical standpoint, therefore, the only reasonable assumption is that an ecological correlation is almost certainly not equal to its corresponding individual correlation.&lt;/p&gt;
+&lt;p&gt;I am aware that this conclusion has serious consequences, and that its effect appears wholly negative because it throws serious doubt upon the validity of a number of important studies made in recent years. The purpose of this paper will have been accomplished, however, if it prevents the future computation of meaningless correlations and stimulates the study of similar problems with the use of meaningful correlations between the properties of individuals. (pp. 340–341)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;
+&lt;div id=&#34;regroup-and-look-ahead.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Regroup and look ahead.&lt;/h2&gt;
+&lt;p&gt;Let’s review what we’ve covered so far. With Simpson’s paradox, we learned that the apparent association between two variables can be attenuated after conditioning on a relevant third variable. In the literature, that third variable is often a grouping variable like gender or college department.&lt;/p&gt;
+&lt;p&gt;The ecological fallacy demonstrated something similar, but from a different angle. That literature showed us that the results from a between-person analysis will not necessarily inform us of within-person processes. The converse is true, too. Indeed, the ecological fallacy is something of a special case of Simpson’s paradox. With the ecological fallacy, the grouping variable is participant id which, when accounted for, yields a different level of analysis&lt;a href=&#34;#fn3&#34; class=&#34;footnote-ref&#34; id=&#34;fnref3&#34;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;With both validity threats, the results of a given analysis can attenuate, go to zero, or even switch sign. With the Berkeley example in the &lt;a href=&#34;https://solomonkurz.netlify.com/post/individuals-are-not-small-groups-i-simpson-s-paradox/&#34;&gt;previous post&lt;/a&gt;, the relation went to zero. With our simulated data inspired by Hamaker’s example, the effect size went from a large negative cross-sectional correlation to a bundle of small/medium &lt;em&gt;positive&lt;/em&gt; within-person correlations. These are non-trivial changes.&lt;/p&gt;
+&lt;p&gt;If at this point you find yourself fatigued and your head hurts a little, don’t worry. You’re probably normal. In a series of experiments, &lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.839.8878&amp;amp;rep=rep1&amp;amp;type=pdf&#34;&gt;Fiedler, Walther, Freytag, and Nickel (2003)&lt;/a&gt; showed it’s quite normal to struggle with these concepts. For more practice, check out Kievit, Frankenhuis, Waldorp, and Borsboom’s nice (2013) paper, &lt;a href=&#34;https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00513&#34;&gt;&lt;em&gt;Simpson’s paradox in psychological science: a practical guide&lt;/em&gt;&lt;/a&gt;. Kuppens and Pollet (2014) covered more examples of the ecological fallacy in their &lt;a href=&#34;https://www.frontiersin.org/articles/10.3389/fpsyg.2014.01110/full#h5&#34;&gt;&lt;em&gt;Mind the level: problems with two recent nation-level analyses in psychology&lt;/em&gt;&lt;/a&gt;. I’ve also worked out and posted the example of the ecological fallacy from Thorndike’s (1939) paper, which you can find &lt;a href=&#34;https://github.com/ASKurz/ecological_fallacy_Thorndike/tree/master&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In the next post, we’ll continue developing this material with a discussion of traits versus states.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;afterward-how-might-one-simulate-those-typing-speed-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Afterward: How might one simulate those typing speed data?&lt;/h2&gt;
+&lt;p&gt;In those simulated data, we generically named the “typing speed” variable &lt;code&gt;x&lt;/code&gt; and the “error count” variable &lt;code&gt;y&lt;/code&gt;. If you let the index &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; stand for the &lt;span class=&#34;math inline&#34;&gt;\(i^\text{th}\)&lt;/span&gt; case and &lt;span class=&#34;math inline&#34;&gt;\(j\)&lt;/span&gt; stand for the &lt;span class=&#34;math inline&#34;&gt;\(j^\text{th}\)&lt;/span&gt; measurement occasion, the data-generating formula is as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align*}
+\text x_{ij} &amp;amp; = \gamma_{00}^\text x + \zeta_{0i}^\text x + \epsilon_{ij}^\text x \\
+\text y_{ij} &amp;amp; = \gamma_{00}^\text y + \zeta_{0i}^\text y + \epsilon_{ij}^\text y, \text{where} \\
+
+\begin{bmatrix} 
+\zeta_{0_i}^\text x \\ \zeta_{0_i}^\text y
+\end{bmatrix} &amp;amp; \sim \text{MVNormal}
+
+\begin{pmatrix} 
+\begin{bmatrix} 
+0 \\ 0
+\end{bmatrix}, 
+
+\begin{bmatrix} 
+1 &amp;amp; -0.8 \\ -0.8 &amp;amp; 1
+\end{bmatrix}
+
+\end{pmatrix} \text{and} \\
+
+\begin{bmatrix} 
+\epsilon_{ij}^\text x \\ \epsilon_{ij}^\text y
+\end{bmatrix} &amp;amp; \sim \text{MVNormal}
+
+\begin{pmatrix} 
+\begin{bmatrix} 
+0 \\ 0
+\end{bmatrix}, 
+
+\begin{bmatrix} 
+0.625 &amp;amp; 0.019 \\ 0.019 &amp;amp; 0.625
+\end{bmatrix}
+
+\end{pmatrix}.
+
+\end{align*}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Because the variances for the &lt;span class=&#34;math inline&#34;&gt;\(\zeta\)&lt;/span&gt;s were 1, that put them in a standardized metric. As such &lt;span class=&#34;math inline&#34;&gt;\(-0.8\)&lt;/span&gt; is both a covariance and a correlation. I came to the values in the variance/covariance matrix for the &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt;s by trial and error, which I cover in more detail, below. In words, this model is a bivariate intercepts-only multilevel model. For an introduction to these kinds of models, check out &lt;a href=&#34;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4119868/&#34;&gt;Baldwin, Imel, Braithwaite, and Atkins (2014)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The approach I used to generate the data is an extension of the one I used in chapter 13 of my project recoding McElreath’s (2015) text. You can find that code, &lt;a href=&#34;https://bookdown.org/content/1850/adventures-in-covariance.html#varying-slopes-by-construction&#34;&gt;here&lt;/a&gt;. There are two big changes to the original. First, setting the random effects for the mean structure to a &lt;span class=&#34;math inline&#34;&gt;\(z\)&lt;/span&gt;-score metric simplified that part of the code quite a bit. Second, I defined the residuals, which were correlated, in a separate data object from the one containing the mean structure. In the final step, we combined the two and simulated the &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; values.&lt;/p&gt;
+&lt;p&gt;First, define the mean structure.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n     &amp;lt;- 50  # choose the n
+x0   &amp;lt;-  0   # population mean for x
+y0   &amp;lt;-  0   # population mean for x
+v_x0 &amp;lt;-  1   # variance around x
+v_y0 &amp;lt;-  1   # variance around y
+cov  &amp;lt;- -.8  # covariance for the variances
+
+# the next three lines of code simply combine the terms, above
+mu     &amp;lt;- c(x0, y0)
+sigma  &amp;lt;- matrix(c(v_x0, cov, 
+                   cov, v_y0), ncol = 2)
+set.seed(1)
+m &amp;lt;-
+  MASS::mvrnorm(n, mu, sigma) %&amp;gt;% 
+  data.frame() %&amp;gt;% 
+  set_names(&amp;quot;x0&amp;quot;, &amp;quot;y0&amp;quot;) %&amp;gt;% 
+  arrange(x0) %&amp;gt;% 
+  mutate(i = 1:n) %&amp;gt;% 
+  expand(nesting(i, x0, y0),
+         j = 1:n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Second, define the residual structure.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# note how these values initially place the epsilons in a standardized metric
+sigma  &amp;lt;- matrix(c(v_x0, .3, 
+                   .3, v_y0), ncol = 2)
+set.seed(1)
+r &amp;lt;-
+  MASS::mvrnorm(n * n, mu, sigma) %&amp;gt;% 
+  data.frame() %&amp;gt;% 
+  set_names(&amp;quot;e_x&amp;quot;, &amp;quot;e_y&amp;quot;) %&amp;gt;% 
+  # you do not need this step. 
+  # it&amp;#39;s something I experimented with to rescale
+  # the residual variances to a workable level for the plots.
+  mutate_all(.funs = ~. * .25)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Combine the two data structures and save.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d &amp;lt;-
+  bind_cols(m, r) %&amp;gt;% 
+  mutate(x = x0 + e_x,
+         y = y0 + e_y) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because we used the &lt;code&gt;set.seed()&lt;/code&gt; function before each simulation step, you will be able to reproduce the results exactly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-info&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.0.4 (2021-02-15)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] forcats_0.5.1   stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4    
+## [5] readr_1.4.0     tidyr_1.1.3     tibble_3.1.0    ggplot2_3.3.3  
+## [9] tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.0  xfun_0.22         haven_2.3.1       colorspace_2.0-0 
+##  [5] vctrs_0.3.6       generics_0.1.0    viridisLite_0.3.0 htmltools_0.5.1.1
+##  [9] yaml_2.2.1        utf8_1.1.4        rlang_0.4.10      pillar_1.5.1     
+## [13] withr_2.4.1       glue_1.4.2        DBI_1.1.0         dbplyr_2.0.0     
+## [17] modelr_0.1.8      readxl_1.3.1      lifecycle_1.0.0   munsell_0.5.0    
+## [21] blogdown_1.3      gtable_0.3.0      cellranger_1.1.0  rvest_0.3.6      
+## [25] evaluate_0.14     labeling_0.4.2    knitr_1.31        fansi_0.4.2      
+## [29] highr_0.8         broom_0.7.5       Rcpp_1.0.6        scales_1.1.1     
+## [33] backports_1.2.1   jsonlite_1.7.2    farver_2.0.3      fs_1.5.0         
+## [37] hms_0.5.3         digest_0.6.27     stringi_1.5.3     bookdown_0.21    
+## [41] grid_4.0.4        cli_2.3.1         tools_4.0.4       magrittr_2.0.1   
+## [45] crayon_1.4.1      pkgconfig_2.0.3   MASS_7.3-53       ellipsis_0.3.1   
+## [49] xml2_1.3.2        reprex_0.3.0      lubridate_1.7.9.2 assertthat_0.2.1 
+## [53] rmarkdown_2.7     httr_1.4.2        rstudioapi_0.13   R6_2.5.0         
+## [57] compiler_4.0.4&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;footnotes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Footnotes&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;Do you need a refresher on Simpson’s paradox? Click &lt;a href=&#34;https://solomonkurz.netlify.com/post/individuals-are-not-small-groups-i-simpson-s-paradox/&#34;&gt;here&lt;/a&gt;.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn2&#34;&gt;&lt;p&gt;The page numbers in this section might could use some clarifications. It’s a bit of a pain to locate a PDF of Robinson’s original 1950 paper. If you do a casual online search, it’s more likely you’ll come across &lt;a href=&#34;https://academic.oup.com/ije/article/38/2/337/658252&#34;&gt;this 2009 reprint of the paper&lt;/a&gt;. To the best of my knowledge, the reprint is faithful. For all the Robinson quotes in this post, the page numbers are based on the 2009 reprint.&lt;a href=&#34;#fnref2&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn3&#34;&gt;&lt;p&gt;Some readers may see the multilevel model lurking in the shadows, here. You’re right. When we think of the relationship between Simpson’s paradox and the ecological fallacy, I find it particularly instructive to recall how the multilevel model can be thought of as a high-rent interaction model. I’m not making that point directly in the prose, yet, for the sake of keeping the content more general and conceptual. But yes, the multilevel model will move out of the shadows into the light of day as we press forward in this series.&lt;a href=&#34;#fnref3&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Individuals are not small groups, I: Simpson&#39;s paradox</title>
+      <link>/post/2019-10-09-individuals-are-not-small-groups-i-simpson-s-paradox/</link>
+      <pubDate>Wed, 09 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>/post/2019-10-09-individuals-are-not-small-groups-i-simpson-s-paradox/</guid>
+      <description>
+&lt;script src=&#34;/post/2019-10-09-individuals-are-not-small-groups-i-simpson-s-paradox/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;tldr&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;tl;dr&lt;/h2&gt;
+&lt;p&gt;If you are under the impression group-level data and group-based data analysis will inform you about within-person processes, you would be wrong. Stick around to learn why.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;this-is-gonna-be-a-long-car-ride.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;This is gonna be a long car ride.&lt;/h2&gt;
+&lt;p&gt;Earlier this year I published &lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/S2212144718301807?via%3Dihub&#34;&gt;a tutorial&lt;/a&gt;&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; on a statistical technique that will allow you to analyze the multivariate time series data of a single individual. It’s called the dynamic p-technique. The method has been around since at least the 80s (&lt;a href=&#34;https://link.springer.com/article/10.1007/BF02294246&#34;&gt;Molenaar, 1985&lt;/a&gt;) and its precursors date back to at least the 40s (&lt;a href=&#34;https://link.springer.com/article/10.1007/BF02288941&#34;&gt;Cattell, Cattell, &amp;amp; Rhymer, 1947&lt;/a&gt;). In the age where it’s increasingly cheap and easy to collect data from large groups, on both one measurement occasion or over many, you might wonder why you should learn about a single-case statistical technique. Isn’t such a thing unneeded?&lt;/p&gt;
+&lt;p&gt;No. It is indeed needed. Unfortunately for me, the reasons we need it aren’t intuitive or well understood. Luckily for us all, I’m a patient man. We’ll be covering the reasons step by step. Once we’re done covering reasons, we’ll switch into full-blown tutorial mode. In this first blog on the topic, we’ll cover reason #1: Simpson’s paradox is a thing and it’ll bite you hard it you’re not looking for it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simpsons-paradox&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simpson’s paradox&lt;/h2&gt;
+&lt;p&gt;Simpson’s paradox officially made its way into the literature in &lt;a href=&#34;http://math.bme.hu/~marib/bsmeur/simpson.pdf&#34;&gt;this 1951 paper&lt;/a&gt; by Simpson. Rather than define the paradox outright, I’m going to demonstrate it with a classic example. The data come from the 1973 University of California, Berkeley, graduate admissions. Based on a simple breakdown of the admission rates, 44% of the men who applied were admitted. In contrast, only 35% of the women who applied were admitted. The university was accused of sexism and the issue made its way into the courts.&lt;/p&gt;
+&lt;p&gt;However, when statisticians looked more closely at the data, it became apparent those data were not the compelling evidence of sexism they were initially made out to be. To see why, we’ll want to get into the data, ourselves. The admissions rates for the six largest departments have made their way into the peer-reviewed literature (&lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.394.9241&amp;amp;rep=rep1&amp;amp;type=pdf&#34;&gt;Bickel, Hammel, &amp;amp; O’Connell, 1975&lt;/a&gt;), into many textbooks (e.g., Danielle Navarro’s &lt;a href=&#34;https://learningstatisticswithr.com/lsr-0.6.pdf&#34;&gt;&lt;em&gt;Learning statistics with R&lt;/em&gt;&lt;/a&gt;), and are available in &lt;strong&gt;R&lt;/strong&gt; as the built-in data set &lt;code&gt;UCBAdmissions&lt;/code&gt;. Here we’ll call them, convert the data into a tidy format&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;, and add a variable.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+d &amp;lt;-
+  UCBAdmissions %&amp;gt;% 
+  as_tibble() %&amp;gt;% 
+  pivot_wider(id_cols = c(Dept, Gender),
+              names_from = Admit, 
+              values_from = n) %&amp;gt;% 
+  mutate(total = Admitted + Rejected)
+
+head(d)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 5
+##   Dept  Gender Admitted Rejected total
+##   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;     &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+## 1 A     Male        512      313   825
+## 2 A     Female       89       19   108
+## 3 B     Male        353      207   560
+## 4 B     Female       17        8    25
+## 5 C     Male        120      205   325
+## 6 C     Female      202      391   593&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The identities of the departments have been anonymized, so we’re stuck with referring to them as A through F. Much like with the overall rates for graduate admissions, it appears that the admission rates for the six anonymized departments in the &lt;code&gt;UCBAdmissions&lt;/code&gt; data show higher a admission rate for men.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  group_by(Gender) %&amp;gt;% 
+  summarise(percent_admitted = (100 * sum(Admitted) / sum(total)) %&amp;gt;% round(digits = 1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 x 2
+##   Gender percent_admitted
+##   &amp;lt;chr&amp;gt;             &amp;lt;dbl&amp;gt;
+## 1 Female             30.4
+## 2 Male               44.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A 14% difference seems large enough to justify a stink. However, the plot thickens when we break the data down by department. For that, we’ll make a visual.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;%  
+  mutate(dept = str_c(&amp;quot;department &amp;quot;, Dept)) %&amp;gt;% 
+  pivot_longer(cols = Admitted:Rejected,
+               names_to = &amp;quot;admit&amp;quot;,
+               values_to = &amp;quot;n&amp;quot;) %&amp;gt;% 
+  
+  ggplot(aes(x = Gender, y = n, fill = admit)) +
+  geom_col(position = &amp;quot;dodge&amp;quot;) +
+  scale_fill_viridis_d(NULL, option = &amp;quot;A&amp;quot;, end = .6) +
+  xlab(NULL) +
+  theme(panel.grid = element_blank()) +
+  facet_wrap(~dept)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-09-individuals-are-not-small-groups-i-simpson-s-paradox/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;768&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The problem with our initial analysis is it didn’t take into account how different departments might admit men/women at different rates. We also failed to consider whether men and women applied to those different departments at different rates. Take departments A and B. Both admitted the majority of applicants, regardless of gender. Now look at departments E and F. The supermajorities of applicants were rejected, both for men and women Also notice that whereas the departments where the supermajority of applicants were men (i.e., departments A and B) had generous admission rates, the departments with the largest proportion of women applicants (i.e., departments C and E) had rather high rejection rates.&lt;/p&gt;
+&lt;p&gt;It can be hard to juggle all this in your head at once, even with the aid of our figure. Let’s look at the data in a different way. This time we’ll summarize the admission rates in a probability metric where the probability of admission is &lt;code&gt;n / total&lt;/code&gt; (i.e., the number of successes divided by the total number of trials). We’ll compute those probabilities while grouping by &lt;code&gt;Gender&lt;/code&gt; and &lt;code&gt;Dept&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;%
+  mutate(p = Admitted / total) %&amp;gt;% 
+  
+  ggplot(aes(x = Dept, y = p)) +
+  geom_hline(yintercept = .5, color = &amp;quot;white&amp;quot;) +
+  geom_point(aes(color = Gender, size = total),
+             position = position_dodge(width = 0.3)) +
+  scale_color_manual(NULL, values = c(&amp;quot;red3&amp;quot;, &amp;quot;blue3&amp;quot;)) +
+  scale_y_continuous(&amp;quot;admission probability&amp;quot;, limits = 0:1) +
+  xlab(&amp;quot;department&amp;quot;) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-10-09-individuals-are-not-small-groups-i-simpson-s-paradox/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;576&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Several things pop out. For &lt;span class=&#34;math inline&#34;&gt;\(5/6\)&lt;/span&gt; of the departments (i.e., all but A), the admission probabilities were very similar for men and women–sometimes slightly higher for women, sometimes slightly higher for men. We also see a broad range overall admission rates across departments. Note how the dots are sized based on the &lt;code&gt;total&lt;/code&gt; number of applications, by &lt;code&gt;Gender&lt;/code&gt; and &lt;code&gt;Dept&lt;/code&gt;. Hopefully those sizes help show how women disproportionately applied to departments with low overall admission probabilities. Interestingly, the department with the largest gender bias was A, which showed a bias towards admitting women at &lt;em&gt;higher&lt;/em&gt; rates than men.&lt;/p&gt;
+&lt;p&gt;Let’s get formal. The paradox Simpson wrote about is that the simple association between two variables can disappear or even change sign when it is conditioned on a relevant third variable. The relevant third variable is typically a grouping variable. In the Berkeley admissions example, the seemingly alarming association between graduate admissions and gender disappeared when conditioned on department. If you’re still jarred by this, Navarro covered this in the opening chapter of her text. Richard McElreath covered it more extensively in chapters 10 and 13 of his (2015) text, &lt;a href=&#34;https://xcelab.net/rm/statistical-rethinking/&#34;&gt;&lt;em&gt;Statistical Rethinking&lt;/em&gt;&lt;/a&gt;. I’ve also worked through a similar example of Simpson’s paradox from the more recent literature, &lt;a href=&#34;https://bookdown.org/content/1850/adventures-in-covariance.html#summary-bonus-another-berkley-admissions-data-like-example&#34;&gt;here&lt;/a&gt;. Kievit, Frankenhuis, Waldorp, and Borsboom (2013) wrote a &lt;a href=&#34;https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00513/full&#34;&gt;fine primer on the topic&lt;/a&gt;, too.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wait.-what&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Wait. What?&lt;/h2&gt;
+&lt;p&gt;At this point you might be wondering what this has to do with the difference between groups and individuals. We’re slowly building a case step by step, remember? For this first installment, just notice how a simple bivariate analysis fell apart once we took an important third variable into account. In this case and in many others, it so happened that third variable was a grouping variable.&lt;/p&gt;
+&lt;p&gt;Stay tuned for the next post where well build on this with a related phenomenon: the ecological fallacy.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-info&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session info&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.0.4 (2021-02-15)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] forcats_0.5.1   stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4    
+## [5] readr_1.4.0     tidyr_1.1.3     tibble_3.1.0    ggplot2_3.3.3  
+## [9] tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.0  xfun_0.22         haven_2.3.1       colorspace_2.0-0 
+##  [5] vctrs_0.3.6       generics_0.1.0    viridisLite_0.3.0 htmltools_0.5.1.1
+##  [9] yaml_2.2.1        utf8_1.1.4        rlang_0.4.10      pillar_1.5.1     
+## [13] withr_2.4.1       glue_1.4.2        DBI_1.1.0         dbplyr_2.0.0     
+## [17] modelr_0.1.8      readxl_1.3.1      lifecycle_1.0.0   munsell_0.5.0    
+## [21] blogdown_1.3      gtable_0.3.0      cellranger_1.1.0  rvest_0.3.6      
+## [25] evaluate_0.14     labeling_0.4.2    knitr_1.31        fansi_0.4.2      
+## [29] highr_0.8         broom_0.7.5       Rcpp_1.0.6        scales_1.1.1     
+## [33] backports_1.2.1   jsonlite_1.7.2    farver_2.0.3      fs_1.5.0         
+## [37] hms_0.5.3         digest_0.6.27     stringi_1.5.3     bookdown_0.21    
+## [41] grid_4.0.4        cli_2.3.1         tools_4.0.4       magrittr_2.0.1   
+## [45] crayon_1.4.1      pkgconfig_2.0.3   ellipsis_0.3.1    xml2_1.3.2       
+## [49] reprex_0.3.0      lubridate_1.7.9.2 assertthat_0.2.1  rmarkdown_2.7    
+## [53] httr_1.4.2        rstudioapi_0.13   R6_2.5.0          compiler_4.0.4&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;footnotes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Footnotes&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;You can find the preprint and supporting documents, including the data and code, &lt;a href=&#34;https://osf.io/cbyj3/&#34;&gt;here&lt;/a&gt;.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn2&#34;&gt;&lt;p&gt;Walking out the definition of &lt;em&gt;tidy data&lt;/em&gt; is beyond the scope of this post. It’s connected to the work of data scientist &lt;a href=&#34;http://hadley.nz&#34;&gt;Hadley Wickham&lt;/a&gt;, in particular, and the ethos behind the collection of &lt;strong&gt;R&lt;/strong&gt; packages called the &lt;a href=&#34;https://www.tidyverse.org&#34;&gt;&lt;strong&gt;tidyverse&lt;/strong&gt;&lt;/a&gt;, more generally. My &lt;strong&gt;R&lt;/strong&gt; code tends to follow the &lt;a href=&#34;https://style.tidyverse.org&#34;&gt;tidyverse style&lt;/a&gt;. If you’re new these ideas, it’ll help if you familiarize yourself with them a bit. For an introduction to the notion of tidy data, Wickham’s recent talk, &lt;a href=&#34;https://www.youtube.com/watch?v=9YTNYT1maa4&#34;&gt;&lt;em&gt;Data visualization and data science&lt;/em&gt;&lt;/a&gt;, is a fine place to start.&lt;a href=&#34;#fnref2&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

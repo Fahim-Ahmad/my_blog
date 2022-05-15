@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lavaan | Fahim Ahmad</title>
+    <link>/tag/lavaan/</link>
+      <atom:link href="/tag/lavaan/index.xml" rel="self" type="application/rss+xml" />
+    <description>lavaan</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Tue, 11 May 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>lavaan</title>
+      <link>/tag/lavaan/</link>
+    </image>
+    
+    <item>
+      <title>Yes, you can fit an exploratory factor analysis with lavaan</title>
+      <link>/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/</link>
+      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
+      <guid>/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/</guid>
+      <description>
+&lt;script src=&#34;/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;purpose&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Purpose&lt;/h2&gt;
+&lt;p&gt;Just this past week, I learned that, &lt;em&gt;Yes&lt;/em&gt;, you can fit an exploratory factor analysis (EFA) with &lt;strong&gt;lavaan&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-rosseellavaan2012&#34; role=&#34;doc-biblioref&#34;&gt;Rosseel, 2012&lt;/a&gt;; &lt;a href=&#34;#ref-R-lavaan&#34; role=&#34;doc-biblioref&#34;&gt;Rosseel &amp;amp; Jorgensen, 2019&lt;/a&gt;)&lt;/span&gt;. At the moment, this functionality is only unofficially supported, which is likely why many don’t know about it, yet. You can get the [un]official details at &lt;a href=&#34;https://github.com/yrosseel/lavaan/issues/112&#34;&gt;issue #112&lt;/a&gt; on the &lt;strong&gt;lavaan&lt;/strong&gt; GitHub repository (&lt;a href=&#34;https://github.com/yrosseel/lavaan&#34;&gt;https://github.com/yrosseel/lavaan&lt;/a&gt;). The purpose of this blog post is to make EFAs with &lt;strong&gt;lavaan&lt;/strong&gt; even more accessible and web searchable by walking through a quick example.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;set-up&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Set up&lt;/h2&gt;
+&lt;p&gt;First, load our focal package, &lt;strong&gt;lavaan&lt;/strong&gt;, along with the &lt;strong&gt;tidyverse&lt;/strong&gt; &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-tidyverse&#34; role=&#34;doc-biblioref&#34;&gt;Wickham, 2019&lt;/a&gt;; &lt;a href=&#34;#ref-wickhamWelcomeTidyverse2019&#34; role=&#34;doc-biblioref&#34;&gt;Wickham et al., 2019&lt;/a&gt;)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(lavaan)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The data are a subset of the data from &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-arrudaPsychometricProperties2020&#34; role=&#34;doc-biblioref&#34;&gt;Arruda et al.&lt;/a&gt; (&lt;a href=&#34;#ref-arrudaPsychometricProperties2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;)&lt;/span&gt;. You can find various supporting materials for their paper on the &lt;a href=&#34;https://osf.io&#34;&gt;OSF&lt;/a&gt; at &lt;a href=&#34;https://osf.io/kx2ym/&#34;&gt;https://osf.io/kx2ym/&lt;/a&gt;. We will load&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; a subset of the data saved in their &lt;code&gt;Base R - EFICA (manuscript and book chapter).RData&lt;/code&gt; file (available at &lt;a href=&#34;https://osf.io/p3fs6/&#34;&gt;https://osf.io/p3fs6/&lt;/a&gt;) called &lt;code&gt;ds&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;load(&amp;quot;data/ds.rda&amp;quot;)
+
+# what is this?
+dim(ds)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 3284  540&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here we extract a subset of the columns, rename them, and save the reduced data frame as &lt;code&gt;d&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d &amp;lt;-
+  ds %&amp;gt;% 
+  select(ife_1:ife_65) %&amp;gt;% 
+  set_names(str_c(&amp;quot;y&amp;quot;, 1:65))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Participants were &lt;span class=&#34;math inline&#34;&gt;\(N = 3{,}284\)&lt;/span&gt; parents of children or adolescents, in Brazil. The columns in our &lt;code&gt;d&lt;/code&gt; data are responses to 65 items from the parent version of an “assessment tool developed to comprehensively assess dysfunctional behaviors related to” executive functioning, called the Executive function inventory for children and adolescents (EFICA; p. 5). On each item, the parents rated their kids on a 3-point Likert-type scale ranging from 0 (&lt;em&gt;never&lt;/em&gt;) to 2 (&lt;em&gt;always/almost always&lt;/em&gt;). To give a better sense of the items:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The Parents’ version (EFICA-P) encompassed behaviors especially performed at home, such as “Leaves the light on, door open or wet towels on top of the bed, even after being told several times,” “Explodes or gets angry when he/she is contradicted” and/or “Interrupts others, doesn’t know how to wait for his/her turn to talk.” (p. 5)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We won’t be diving into the substance of the paper, here. For that, see &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-arrudaPsychometricProperties2020&#34; role=&#34;doc-biblioref&#34;&gt;Arruda et al.&lt;/a&gt; (&lt;a href=&#34;#ref-arrudaPsychometricProperties2020&#34; role=&#34;doc-biblioref&#34;&gt;2020&lt;/a&gt;)&lt;/span&gt;. But for data validation purposes, the items should only take on integers 0 through 2. Turns out that the data did contain a few coding errors, which we will convert to missing data, here.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d &amp;lt;-
+  d %&amp;gt;% 
+  mutate_at(vars(y1:y65), ~ifelse(. %in% c(0:2), ., NA))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here are the overall distributions, collapsing across items.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  pivot_longer(everything()) %&amp;gt;% 
+  count(value) %&amp;gt;% 
+  mutate(percent = (100 * n / sum(n)) %&amp;gt;% round(digits = 1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 4 x 3
+##   value     n percent
+##   &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;   &amp;lt;dbl&amp;gt;
+## 1     0 85480    40  
+## 2     1 94490    44.3
+## 3     2 32276    15.1
+## 4    NA  1214     0.6&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We might make a tile plot to get a sense high-level sense of the distributions across the items.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;d %&amp;gt;% 
+  pivot_longer(everything()) %&amp;gt;% 
+  mutate(item = factor(name, 
+                       levels = str_c(&amp;quot;y&amp;quot;, 1:65),
+                       labels = 1:65)) %&amp;gt;% 
+  count(item, value) %&amp;gt;% 
+  
+  ggplot(aes(x = value, y = item, fill = n)) +
+  geom_tile() +
+  scale_fill_viridis_c(expression(italic(n)), limits = c(0, NA)) +
+  scale_x_continuous(&amp;quot;Likert rating&amp;quot;, expand = c(0, 0), breaks = 0:2) +
+  ggtitle(&amp;quot;EFICA-P items&amp;quot;) +
+  theme(axis.text.x = element_text(size = 6))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;336&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;efa-in-lavaan&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;EFA in &lt;strong&gt;lavaan&lt;/strong&gt;&lt;/h2&gt;
+&lt;div id=&#34;consider-your-estimation-method.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Consider your estimation method.&lt;/h3&gt;
+&lt;p&gt;An important preliminary step before fitting an EFA is getting a good sense of the data. In the last section, we learned the data are composed of three ordinal categories, which means that conventional estimators, such as maximum likelihood, won’t be the best of choices. Happily, &lt;strong&gt;lavaan&lt;/strong&gt; offers several good options for ordinal data, which you can learn more about at &lt;a href=&#34;https://lavaan.ugent.be/tutorial/cat.html&#34;&gt;https://lavaan.ugent.be/tutorial/cat.html&lt;/a&gt; and &lt;a href=&#34;https://lavaan.ugent.be/tutorial/est.html&#34;&gt;https://lavaan.ugent.be/tutorial/est.html&lt;/a&gt;. The default is the WLSMV estimator (i.e., &lt;code&gt;estimator = &#34;WLSMV&#34;&lt;/code&gt;), which our friends in quantitative methodology have shown is generally a good choice &lt;span class=&#34;citation&#34;&gt;(e.g., &lt;a href=&#34;#ref-flora2004empirical&#34; role=&#34;doc-biblioref&#34;&gt;Flora &amp;amp; Curran, 2004&lt;/a&gt;; &lt;a href=&#34;#ref-liCFAWithOrdinalData2016&#34; role=&#34;doc-biblioref&#34;&gt;Li, 2016&lt;/a&gt;)&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-many-factors-should-we-consider&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;How many factors should we consider?&lt;/h3&gt;
+&lt;p&gt;In the paper, Arruda and colleagues considered models with up to five factors. Here we’re going to keep things simple and consider between one and three. However, I’d be remiss not to mention that for real-world analyses, this step is important and possibly underappreciated. Decades of methodological work suggest that some of the widely-used heuristics for deciding on the number of factors (e.g., scree plots and the Kaiser criterion) aren’t as good as the lesser-used parallel analysis approach. For a gentle introduction to the topic, check out &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-schmittCurrentMethodologicalConsiderations2011&#34; role=&#34;doc-biblioref&#34;&gt;Schmitt&lt;/a&gt; (&lt;a href=&#34;#ref-schmittCurrentMethodologicalConsiderations2011&#34; role=&#34;doc-biblioref&#34;&gt;2011&lt;/a&gt;)&lt;/span&gt;. Though we won’t make use of it, here, the &lt;strong&gt;psych&lt;/strong&gt; package &lt;span class=&#34;citation&#34;&gt;(&lt;a href=&#34;#ref-R-psych&#34; role=&#34;doc-biblioref&#34;&gt;Revelle, 2021&lt;/a&gt;)&lt;/span&gt; offers some nice options for parallel analysis by way of the &lt;code&gt;fa.parallel()&lt;/code&gt; function.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;finally-we-fit-a-few-efas.&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Finally, we fit a few EFAs.&lt;/h3&gt;
+&lt;p&gt;It’s time to fit our three EFAs. When defining the EFA models within &lt;strong&gt;lavaan&lt;/strong&gt;, the critical features are how one defines the factors on the left-hand side of the equations. Here we define the models for all 65 items.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 1-factor model
+f1 &amp;lt;- &amp;#39;
+efa(&amp;quot;efa&amp;quot;)*f1 =~ y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8 + y9 + y10 +
+                   y11 + y12 + y13 + y14 + y15 + y16 + y17 + y18 + y19 + y20 + 
+                   y21 + y22 + y23 + y24 + y25 + y26 + y27 + y28 + y29 + y30 +
+                   y31 + y32 + y33 + y34 + y35 + y36 + y37 + y38 + y39 + y40 +
+                   y41 + y42 + y43 + y44 + y45 + y46 + y47 + y48 + y49 + y50 +
+                   y51 + y52 + y53 + y54 + y55 + y56 + y57 + y58 + y59 + y60 +
+                   y61 + y62 + y63 + y64 + y65
+&amp;#39;
+
+# 2-factor model
+f2 &amp;lt;- &amp;#39;
+efa(&amp;quot;efa&amp;quot;)*f1 +
+efa(&amp;quot;efa&amp;quot;)*f2 =~ y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8 + y9 + y10 +
+                   y11 + y12 + y13 + y14 + y15 + y16 + y17 + y18 + y19 + y20 + 
+                   y21 + y22 + y23 + y24 + y25 + y26 + y27 + y28 + y29 + y30 +
+                   y31 + y32 + y33 + y34 + y35 + y36 + y37 + y38 + y39 + y40 +
+                   y41 + y42 + y43 + y44 + y45 + y46 + y47 + y48 + y49 + y50 +
+                   y51 + y52 + y53 + y54 + y55 + y56 + y57 + y58 + y59 + y60 +
+                   y61 + y62 + y63 + y64 + y65
+&amp;#39;
+
+# 3-factor model
+f3 &amp;lt;- &amp;#39;
+efa(&amp;quot;efa&amp;quot;)*f1 +
+efa(&amp;quot;efa&amp;quot;)*f2 +
+efa(&amp;quot;efa&amp;quot;)*f3 =~ y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8 + y9 + y10 +
+                   y11 + y12 + y13 + y14 + y15 + y16 + y17 + y18 + y19 + y20 + 
+                   y21 + y22 + y23 + y24 + y25 + y26 + y27 + y28 + y29 + y30 +
+                   y31 + y32 + y33 + y34 + y35 + y36 + y37 + y38 + y39 + y40 +
+                   y41 + y42 + y43 + y44 + y45 + y46 + y47 + y48 + y49 + y50 +
+                   y51 + y52 + y53 + y54 + y55 + y56 + y57 + y58 + y59 + y60 +
+                   y61 + y62 + y63 + y64 + y65
+&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we’ve defined the three EFA models, we can fit the actual EFAs. One can currently do so with either the &lt;code&gt;cfa()&lt;/code&gt; or &lt;code&gt;sem()&lt;/code&gt; functions. The default rotation method is oblique Geomin. If you’re not up on rotation methods, you might check out &lt;span class=&#34;citation&#34;&gt;&lt;a href=&#34;#ref-sass2010comparative&#34; role=&#34;doc-biblioref&#34;&gt;Sass &amp;amp; Schmitt&lt;/a&gt; (&lt;a href=&#34;#ref-sass2010comparative&#34; role=&#34;doc-biblioref&#34;&gt;2010&lt;/a&gt;)&lt;/span&gt;. Here we’ll give a nod to tradition and use oblique Oblimin by setting &lt;code&gt;rotation = &#34;oblimin&#34;&lt;/code&gt;. Also, note our use of &lt;code&gt;ordered = TRUE&lt;/code&gt;, which explicitly tells &lt;code&gt;lavaan::cfa()&lt;/code&gt; to treat all 65 of our items as ordinal.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;efa_f1 &amp;lt;- 
+  cfa(model = f1,
+      data = d,
+      rotation = &amp;quot;oblimin&amp;quot;,
+      estimator = &amp;quot;WLSMV&amp;quot;,
+      ordered = TRUE)
+
+efa_f2 &amp;lt;- 
+  cfa(model = f2,
+      data = d,
+      rotation = &amp;quot;oblimin&amp;quot;,
+      estimator = &amp;quot;WLSMV&amp;quot;,
+      ordered = TRUE)
+
+efa_f3 &amp;lt;- 
+  cfa(model = f3,
+      data = d,
+      rotation = &amp;quot;oblimin&amp;quot;,
+      estimator = &amp;quot;WLSMV&amp;quot;,
+      ordered = TRUE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For the sake of space, I’m not going to show the output, here. But if you want the verbose &lt;strong&gt;lavaan&lt;/strong&gt;-style model summary for your EFA, you can use &lt;code&gt;summary()&lt;/code&gt; function just the same way you would for a CFA.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(efa_f1, fit.measures = TRUE)
+summary(efa_f2, fit.measures = TRUE)
+summary(efa_f3, fit.measures = TRUE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What we will focus on, though, is how one might compare the EFAs by some of their fit statistics.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# define the fit measures
+fit_measures_robust &amp;lt;- c(&amp;quot;chisq.scaled&amp;quot;, &amp;quot;df&amp;quot;, &amp;quot;pvalue.scaled&amp;quot;, 
+                         &amp;quot;cfi.scaled&amp;quot;, &amp;quot;rmsea.scaled&amp;quot;, &amp;quot;srmr&amp;quot;)
+
+# collect them for each model
+rbind(
+  fitmeasures(efa_f1, fit_measures_robust),
+  fitmeasures(efa_f2, fit_measures_robust),
+  fitmeasures(efa_f3, fit_measures_robust)) %&amp;gt;% 
+  # wrangle
+  data.frame() %&amp;gt;% 
+  mutate(chisq.scaled  = round(chisq.scaled, digits = 0),
+         df            = as.integer(df),
+         pvalue.scaled = ifelse(pvalue.scaled == 0, &amp;quot;&amp;lt; .001&amp;quot;, pvalue.scaled)) %&amp;gt;% 
+  mutate_at(vars(cfi.scaled:srmr), ~round(., digits =  3))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   chisq.scaled   df pvalue.scaled cfi.scaled rmsea.scaled  srmr
+## 1        20136 2015        &amp;lt; .001      0.825         0.06 0.070
+## 2        13946 1951        &amp;lt; .001      0.884         0.05 0.054
+## 3         9505 1888        &amp;lt; .001      0.926         0.04 0.043&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As is often the case, the fit got steadily better with each added factor. Here’s how one might work with the output from the &lt;code&gt;standardizedsolution()&lt;/code&gt; function to plot the &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt;’s for the 3-factor solution.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# wrangle
+standardizedsolution(efa_f3) %&amp;gt;% 
+  filter(op == &amp;quot;=~&amp;quot;) %&amp;gt;% 
+  mutate(item  = str_remove(rhs, &amp;quot;y&amp;quot;) %&amp;gt;% as.double(),
+         factor = str_remove(lhs, &amp;quot;f&amp;quot;)) %&amp;gt;% 
+  
+  # plot
+  ggplot(aes(x = est.std, xmin = ci.lower, xmax = ci.upper, y = item)) +
+  annotate(geom = &amp;quot;rect&amp;quot;,
+           xmin = -1, xmax = 1,
+           ymin = -Inf, ymax = Inf,
+           fill = &amp;quot;grey90&amp;quot;) +
+  annotate(geom = &amp;quot;rect&amp;quot;,
+           xmin = -0.7, xmax = 0.7,
+           ymin = -Inf, ymax = Inf,
+           fill = &amp;quot;grey93&amp;quot;) +
+  annotate(geom = &amp;quot;rect&amp;quot;,
+           xmin = -0.4, xmax = 0.4,
+           ymin = -Inf, ymax = Inf,
+           fill = &amp;quot;grey96&amp;quot;) +
+  geom_vline(xintercept = 0, color = &amp;quot;white&amp;quot;) +
+  geom_pointrange(aes(alpha = abs(est.std) &amp;lt; 0.4),
+                  fatten = 5) +
+  geom_text(aes(label = item, color = abs(est.std) &amp;lt; 0.4),
+            size = 2) +
+  scale_color_manual(values = c(&amp;quot;white&amp;quot;, &amp;quot;transparent&amp;quot;)) +
+  scale_alpha_manual(values = c(1, 1/3)) +
+  scale_x_continuous(expression(lambda[standardized]), 
+                     expand = c(0, 0), limits = c(-1, 1),
+                     breaks = c(-1, -0.7, -0.4, 0, 0.4, 0.7, 1),
+                     labels = c(&amp;quot;-1&amp;quot;, &amp;quot;-.7&amp;quot;, &amp;quot;-.4&amp;quot;, &amp;quot;0&amp;quot;, &amp;quot;.4&amp;quot;, &amp;quot;.7&amp;quot;, &amp;quot;1&amp;quot;)) +
+  scale_y_continuous(breaks = 1:65, sec.axis = sec_axis(~ . * 1, breaks = 1:65)) +
+  ggtitle(&amp;quot;EFICA-P loadings for the 3-factor model&amp;quot;) +
+  theme(legend.position = &amp;quot;none&amp;quot;) +
+  facet_wrap(~ factor, labeller = label_both)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;624&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;To reduce visual complexity, &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt;’s less than the conventional 0.4 threshold are semitransparent. Those above the threshold have the item number in the dot. I’m not going to offer an interpretation, here, since that’s not really the point of this post. But hopefully this will get you started fitting all the &lt;strong&gt;lavaan&lt;/strong&gt;-based EFAs your heart desires.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-about-esem&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;How about ESEM?&lt;/h2&gt;
+&lt;p&gt;If one can fit EFAs in &lt;strong&gt;lavaan&lt;/strong&gt;, how about exploratory structural equation models &lt;span class=&#34;citation&#34;&gt;(ESEM, &lt;a href=&#34;#ref-asparouhovESEM2009&#34; role=&#34;doc-biblioref&#34;&gt;Asparouhov &amp;amp; Muthén, 2009&lt;/a&gt;)&lt;/span&gt;? Yes, I believe one can. To get a sense, check out my search results at &lt;a href=&#34;https://github.com/yrosseel/lavaan/search?q=esem&#34;&gt;https://github.com/yrosseel/lavaan/search?q=esem&lt;/a&gt;. I haven’t had a reason to explore this for any of my projects, but it looks promising. If you master the &lt;strong&gt;lavaan&lt;/strong&gt; ESEM method, maybe you could write a blog post of your own. Also, check out the blog post by &lt;a href=&#34;https://twitter.com/MateusPsi&#34;&gt;Mateus Silvestrin&lt;/a&gt;, &lt;a href=&#34;https://msilvestrin.me/post/esem/#ref-asparouhov_exploratory_2009&#34;&gt;&lt;em&gt;Exploratory Structural Equation Modeling in R&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;session-information&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Session information&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.0.4 (2021-02-15)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.7
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] lavaan_0.6-7    forcats_0.5.1   stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4     readr_1.4.0     tidyr_1.1.3    
+##  [8] tibble_3.1.1    ggplot2_3.3.3   tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.6          lubridate_1.7.9.2   assertthat_0.2.1    digest_0.6.27       utf8_1.2.1         
+##  [6] R6_2.5.0            cellranger_1.1.0    backports_1.2.1     reprex_0.3.0        stats4_4.0.4       
+## [11] evaluate_0.14       highr_0.9           httr_1.4.2          blogdown_1.3        pillar_1.6.0       
+## [16] rlang_0.4.11        readxl_1.3.1        rstudioapi_0.13     jquerylib_0.1.4     pbivnorm_0.6.0     
+## [21] rmarkdown_2.7       labeling_0.4.2      munsell_0.5.0       broom_0.7.5         numDeriv_2016.8-1.1
+## [26] compiler_4.0.4      modelr_0.1.8        xfun_0.22           pkgconfig_2.0.3     mnormt_2.0.2       
+## [31] tmvnsim_1.0-2       htmltools_0.5.1.1   tidyselect_1.1.0    bookdown_0.21       fansi_0.4.2        
+## [36] viridisLite_0.4.0   crayon_1.4.1        dbplyr_2.0.0        withr_2.4.2         grid_4.0.4         
+## [41] jsonlite_1.7.2      gtable_0.3.0        lifecycle_1.0.0     DBI_1.1.0           magrittr_2.0.1     
+## [46] scales_1.1.1        cli_2.5.0           stringi_1.5.3       farver_2.1.0        fs_1.5.0           
+## [51] xml2_1.3.2          bslib_0.2.4         ellipsis_0.3.2      generics_0.1.0      vctrs_0.3.8        
+## [56] tools_4.0.4         glue_1.4.2          hms_0.5.3           yaml_2.2.1          colorspace_2.0-0   
+## [61] rvest_0.3.6         knitr_1.33          haven_2.3.1         sass_0.3.1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body hanging-indent&#34; line-spacing=&#34;2&#34;&gt;
+&lt;div id=&#34;ref-arrudaPsychometricProperties2020&#34; class=&#34;csl-entry&#34;&gt;
+Arruda, M. A., Arruda, R., &amp;amp; Anunciação, L. (2020). Psychometric properties and clinical utility of the executive function inventory for children and adolescents: A large multistage populational study including children with &lt;span&gt;ADHD&lt;/span&gt;. &lt;em&gt;Applied Neuropsychology: Child&lt;/em&gt;, 1–17. &lt;a href=&#34;https://doi.org/10.1080/21622965.2020.1726353&#34;&gt;https://doi.org/10.1080/21622965.2020.1726353&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-asparouhovESEM2009&#34; class=&#34;csl-entry&#34;&gt;
+Asparouhov, T., &amp;amp; Muthén, B. (2009). Exploratory structural equation modeling. &lt;em&gt;Structural Equation Modeling: A Multidisciplinary Journal&lt;/em&gt;, &lt;em&gt;16&lt;/em&gt;(3), 397–438. &lt;a href=&#34;https://doi.org/10.1080/10705510903008204&#34;&gt;https://doi.org/10.1080/10705510903008204&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-flora2004empirical&#34; class=&#34;csl-entry&#34;&gt;
+Flora, D. B., &amp;amp; Curran, P. J. (2004). An empirical evaluation of alternative methods of estimation for confirmatory factor analysis with ordinal data. &lt;em&gt;Psychological Methods&lt;/em&gt;, &lt;em&gt;9&lt;/em&gt;(4), 466. &lt;a href=&#34;https://doi.org/10.1037/1082-989X.9.4.466&#34;&gt;https://doi.org/10.1037/1082-989X.9.4.466&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-liCFAWithOrdinalData2016&#34; class=&#34;csl-entry&#34;&gt;
+Li, C.-H. (2016). Confirmatory factor analysis with ordinal data: &lt;span&gt;Comparing&lt;/span&gt; robust maximum likelihood and diagonally weighted least squares. &lt;em&gt;Behavior Research Methods&lt;/em&gt;, &lt;em&gt;48&lt;/em&gt;(3), 936–949. &lt;a href=&#34;https://doi.org/10.3758/s13428-015-0619-7&#34;&gt;https://doi.org/10.3758/s13428-015-0619-7&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-psych&#34; class=&#34;csl-entry&#34;&gt;
+Revelle, W. (2021). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;psych&lt;/span&gt;: &lt;span&gt;Procedures&lt;/span&gt; for psychological, psychometric, and personality research&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=psych&#34;&gt;https://CRAN.R-project.org/package=psych&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-rosseellavaan2012&#34; class=&#34;csl-entry&#34;&gt;
+Rosseel, Y. (2012). &lt;span class=&#34;nocase&#34;&gt;lavaan&lt;/span&gt;: &lt;span&gt;An R&lt;/span&gt; package for structural equation modeling. &lt;em&gt;Journal of Statistical Software&lt;/em&gt;, &lt;em&gt;48&lt;/em&gt;(2), 1–36. &lt;a href=&#34;https://doi.org/10.18637/jss.v048.i02&#34;&gt;https://doi.org/10.18637/jss.v048.i02&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-lavaan&#34; class=&#34;csl-entry&#34;&gt;
+Rosseel, Y., &amp;amp; Jorgensen, T. D. (2019). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;lavaan&lt;/span&gt;: &lt;span&gt;Latent&lt;/span&gt; variable analysis&lt;/em&gt; [Manual]. &lt;a href=&#34;https://lavaan.org&#34;&gt;https://lavaan.org&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-sass2010comparative&#34; class=&#34;csl-entry&#34;&gt;
+Sass, D. A., &amp;amp; Schmitt, T. A. (2010). A comparative investigation of rotation criteria within exploratory factor analysis. &lt;em&gt;Multivariate Behavioral Research&lt;/em&gt;, &lt;em&gt;45&lt;/em&gt;(1), 73–103. &lt;a href=&#34;https://doi.org/10.1080/00273170903504810&#34;&gt;https://doi.org/10.1080/00273170903504810&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-schmittCurrentMethodologicalConsiderations2011&#34; class=&#34;csl-entry&#34;&gt;
+Schmitt, T. A. (2011). Current methodological considerations in exploratory and confirmatory factor analysis. &lt;em&gt;Journal of Psychoeducational Assessment&lt;/em&gt;, &lt;em&gt;29&lt;/em&gt;(4), 304–321. &lt;a href=&#34;https://doi.org/10.1177/0734282911406653&#34;&gt;https://doi.org/10.1177/0734282911406653&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R-tidyverse&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H. (2019). &lt;em&gt;&lt;span class=&#34;nocase&#34;&gt;tidyverse&lt;/span&gt;: &lt;span&gt;Easily&lt;/span&gt; install and load the ’tidyverse’&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=tidyverse&#34;&gt;https://CRAN.R-project.org/package=tidyverse&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wickhamWelcomeTidyverse2019&#34; class=&#34;csl-entry&#34;&gt;
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the tidyverse. &lt;em&gt;Journal of Open Source Software&lt;/em&gt;, &lt;em&gt;4&lt;/em&gt;(43), 1686. &lt;a href=&#34;https://doi.org/10.21105/joss.01686&#34;&gt;https://doi.org/10.21105/joss.01686&lt;/a&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;You can download the &lt;code&gt;ds.rda&lt;/code&gt; file from my GitHub, &lt;a href=&#34;https://github.com/ASKurz/blogdown/blob/main/content/post/2021-05-11-yes-you-can-fit-an-exploratory-factor-analysis-with-lavaan/data/ds.rda&#34;&gt;here&lt;/a&gt;.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

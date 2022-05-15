@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fahim Ahmad</title>
+    <link>/</link>
+      <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <description>Fahim Ahmad</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Sat, 14 May 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Fahim Ahmad</title>
+      <link>/</link>
+    </image>
+    
+    <item>
+      <title>Using Survey Weight</title>
+      <link>/post/using-survey-weight-in-r/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      <guid>/post/using-survey-weight-in-r/</guid>
+      <description>
+
+
+&lt;p&gt;In R working with survey weight is made possible using &lt;code&gt;survey&lt;/code&gt; package. Let’s use below data frame as an exmaple here:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1000)
+age &amp;lt;- c(18:100)
+age &amp;lt;- sample(age, 100, replace = TRUE)
+gender &amp;lt;- c(&amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;)
+gender &amp;lt;- sample(gender, 100, replace = TRUE)
+country &amp;lt;- c(&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;)
+country &amp;lt;- sample(country, 100, replace = TRUE)
+
+df &amp;lt;- data.frame(age, gender, country)
+
+df$weight[df$gender==&amp;quot;Female&amp;quot;] &amp;lt;-50/sum(df$gender==&amp;quot;Female&amp;quot;)
+df$weight[df$gender==&amp;quot;Male&amp;quot;] &amp;lt;-50/sum(df$gender==&amp;quot;Male&amp;quot;)
+
+# summary of data
+summary(df)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##       age           gender            country              weight      
+##  Min.   :18.00   Length:100         Length:100         Min.   :0.8929  
+##  1st Qu.:38.75   Class :character   Class :character   1st Qu.:0.8929  
+##  Median :54.50   Mode  :character   Mode  :character   Median :0.8929  
+##  Mean   :55.79                                         Mean   :1.0000  
+##  3rd Qu.:73.25                                         3rd Qu.:1.1364  
+##  Max.   :97.00                                         Max.   :1.1364&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The most important variable here is the &lt;em&gt;weight&lt;/em&gt; variable which is constructed to balance the sex ratio.&lt;/p&gt;
+&lt;p&gt;Inside the &lt;code&gt;survey&lt;/code&gt; package, there is &lt;code&gt;svydesign()&lt;/code&gt; function that can be used to link a data frame with a weight.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;survey&amp;quot;)
+library(survey)
+df.w &amp;lt;- svydesign(ids = ~1, data = df, weights = ~weight)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The resulting object is not a data frame anymore, but is a list of different objects that can be seen using &lt;code&gt;attributes()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;attributes(df.w)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $names
+## [1] &amp;quot;cluster&amp;quot;    &amp;quot;strata&amp;quot;     &amp;quot;has.strata&amp;quot; &amp;quot;prob&amp;quot;       &amp;quot;allprob&amp;quot;   
+## [6] &amp;quot;call&amp;quot;       &amp;quot;variables&amp;quot;  &amp;quot;fpc&amp;quot;        &amp;quot;pps&amp;quot;       
+## 
+## $class
+## [1] &amp;quot;survey.design2&amp;quot; &amp;quot;survey.design&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Therefore, we need to use &lt;code&gt;survey&lt;/code&gt;’s own analytical functions. For example, here is a comparison of unweighted and weighted sex ratio.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# unweighted
+df %&amp;gt;%
+{table(.$gender)} %&amp;gt;%
+  prop.table()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Female   Male 
+##   0.44   0.56&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# weighted
+df.w %&amp;gt;%
+  svytable(~gender, .) %&amp;gt;%
+  prop.table()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## gender
+## Female   Male 
+##    0.5    0.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;svytable()&lt;/code&gt; can be used to create more than one-way frequency/percentage tables as well. For example, let’s create contingency table of &lt;code&gt;gender&lt;/code&gt; and &lt;code&gt;country&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df.w %&amp;gt;%
+svytable(~gender+country, .) %&amp;gt;%
+  prop.table(2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##         country
+## gender           A         B
+##   Female 0.5600000 0.4329897
+##   Male   0.4400000 0.5670103&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Below are other useful functions of &lt;code&gt;survey&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# to compute weighted mean
+svymean(~age, df.w)
+# to compute weighted quantiles
+svyquantile(~age, df.w, c(.25, .50, .75))
+# to compute weigted variance
+svyvar(~age, df.w)
+# to perform t-test
+svyttest(age~gender, df.w)&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Combining Multiple Plots using Patchwork</title>
+      <link>/post/combining-multiple-plots-using-patchwork/</link>
+      <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>/post/combining-multiple-plots-using-patchwork/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#loading-required-packages&#34;&gt;loading required packages&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#creating-example-plots&#34;&gt;creating example plots&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#combining-plots-using-the-patchwork-package&#34;&gt;Combining plots using the patchwork package&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#combining-plots-beside-or-on-top-of-each-other&#34;&gt;Combining plots beside or on top of each other&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#controlling-the-legend&#34;&gt;Controlling the legend&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#adding-an-empty-area&#34;&gt;Adding an empty area&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#combining-plot-and-table&#34;&gt;Combining plot and table&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#annotation&#34;&gt;Annotation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#modifying-the-result-of-the-patchwork&#34;&gt;Modifying the result of the patchwork&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Data is just a collection of numbers until it is turned into a story. Sometimes, the combination of several plots is required for telling a great data-driven story.&lt;/p&gt;
+&lt;p&gt;It is a while that I am using &lt;strong&gt;R&lt;/strong&gt; for data analysis and visualization and I have been using several packages for combining multiple plots. During this period, I found the &lt;strong&gt;patchwork&lt;/strong&gt; package the most straightforward way of combining multiple ggplot plots which I will explore it in this post.&lt;/p&gt;
+&lt;div id=&#34;loading-required-packages&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;loading required packages&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;patchwork&amp;quot;)
+library(patchwork)
+# install.packages(&amp;quot;gapminder&amp;quot;)
+library(gapminder)
+# install.packages(&amp;quot;dplyr&amp;quot;)
+library(dplyr)
+# install.packages()
+library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;creating-example-plots&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;creating example plots&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gdpPercap_lifeExpt &amp;lt;- gapminder %&amp;gt;% 
+  ggplot(aes(x=gdpPercap, y=lifeExp, col = continent)) +
+  geom_point() + theme_bw() +
+   labs(x = NULL, y = NULL)
+
+lifeExpt_densityPlot &amp;lt;- gapminder %&amp;gt;%
+  ggplot(aes(x=lifeExp, fill=continent)) +
+  geom_density(alpha=0.4) + theme_bw() +
+   labs(x = NULL, y = NULL)
+
+lifeExpt_boxPlot &amp;lt;- gapminder %&amp;gt;% 
+  ggplot(aes(x=continent, y=lifeExp, col=continent)) +
+  geom_boxplot() +
+  geom_jitter(width=0.2, alpha=0.4) + theme_bw() +
+    labs(x = NULL, y = NULL)
+
+gdpPercap_densityPlot &amp;lt;- gapminder %&amp;gt;%
+  ggplot(aes(x = gdpPercap, fill = continent)) +
+  geom_density(alpha = 0.4) + theme_bw() +
+  labs(x = NULL, y = NULL)
+
+gdpPercap_boxPlot &amp;lt;- gapminder %&amp;gt;% 
+  ggplot(aes(x=continent, y=gdpPercap, col=continent)) +
+  geom_boxplot() +
+  geom_jitter(width=0.2, alpha=0.4) + theme_bw() +
+    labs(x = NULL, y = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;combining-plots-using-the-patchwork-package&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Combining plots using the patchwork package&lt;/h1&gt;
+&lt;p&gt;Them most simple and straightforward way to combine plots is to use the &lt;code&gt;+&lt;/code&gt; operator.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;combining-plots-beside-or-on-top-of-each-other&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Combining plots beside or on top of each other&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;+&lt;/code&gt; operator combines plots without indicating anything about the desired layout. By default, the &lt;strong&gt;patchwork&lt;/strong&gt; package keeps the grid square and fill the grid in row order. This can be controlled by &lt;code&gt;plot_layout()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot +
+  plot_layout(nrow = 3, byrow = F)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;By having a one-row layout &lt;code&gt;plot_layout(nrow = 1)&lt;/code&gt; or one-column layout &lt;code&gt;plotlayout(ncol = 1)&lt;/code&gt;, plots can be placed on top of each other or beside each other.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Likewise, &lt;strong&gt;patchwork&lt;/strong&gt; provides two more operators. &lt;code&gt;|&lt;/code&gt; and &lt;code&gt;/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;|&lt;/code&gt; will place the plots beside each other, while &lt;code&gt;/&lt;/code&gt; will stack them.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;controlling-the-legend&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Controlling the legend&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;plotlayout()&lt;/code&gt; function can also be used to place the legends in a common place instead of next to each plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot +
+  plot_layout(nrow = 3, byrow = F, guides = &amp;#39;collect&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gdpPercap_lifeExpt / ((lifeExpt_densityPlot / lifeExpt_boxPlot) | (gdpPercap_densityPlot / gdpPercap_boxPlot)) +
+  plot_layout(guides = &amp;#39;collect&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;adding-an-empty-area&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Adding an empty area&lt;/h1&gt;
+&lt;p&gt;It is also possible to add an empty area between the plots by creating an empty &lt;em&gt;ggplot&lt;/em&gt; object using the &lt;code&gt;plot_spacer()&lt;/code&gt; and adding it to the patchwork.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / plot_spacer() / gdpPercap_lifeExpt&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;combining-plot-and-table&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Combining plot and table&lt;/h1&gt;
+&lt;p&gt;Sometimes you may want to combine a non-ggplot content with a &lt;em&gt;ggplot&lt;/em&gt; plot. For instance, let’s combine the correlation table between life expectancy, GDP per capita, and population with the GDP per capita and life expectancy scatter plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;gridExtra&amp;quot;)
+library(gridExtra)
+
+correlation &amp;lt;- cor(gapminder[,c(4:6)], method = &amp;#39;pearson&amp;#39;) %&amp;gt;% round(digits = 3)
+gdpPercap_lifeExpt / tableGrob(correlation)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;annotation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Annotation&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;plot_annotation()&lt;/code&gt; function can be used to control different aspects of the annotation of the final plot such as title, subtitle, and caption.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt + 
+  plot_layout(guides = &amp;#39;collect&amp;#39;) +
+  plot_annotation(title = &amp;#39;THIS IS TITLE&amp;#39;, subtitle = &amp;#39;this is subtitle&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;plot_annotation()&lt;/code&gt; function also provide the &lt;code&gt;tag_levels&lt;/code&gt;, &lt;code&gt;tag_prefix&lt;/code&gt;, and &lt;code&gt;tag_suffix&lt;/code&gt; arguments for auto-tagging to identify the subplots in text.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;tag_levels&lt;/strong&gt; = A character vector defining the enumeration format to use at each level. Possible values are ‘a’ for lowercase letters, ‘A’ for uppercase letters, ‘1’ for numbers, ‘i’ for lowercase Roman numerals, and ‘I’ for uppercase Roman numerals.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;tag_prefix&lt;/strong&gt; = String that should appear before the tag.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;tag_suffix&lt;/strong&gt; = String that should appear after the tag.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
+  plot_layout(guides = &amp;#39;collect&amp;#39;) +
+  plot_annotation(tag_levels = &amp;quot;I&amp;quot;, tag_prefix = &amp;quot;Plot &amp;quot;, tag_suffix = &amp;quot; :&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modifying-the-result-of-the-patchwork&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Modifying the result of the patchwork&lt;/h1&gt;
+&lt;p&gt;The resulting object of the patchwork is a ggplot object. Which means if you continue adding objects such as geoms, scales, etc. it will be referenced to the last added plot. For example, let’s italicize the x-axis text and set the angle to 45.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
+  plot_layout(guides = &amp;#39;collect&amp;#39;) +
+  plot_annotation(tag_levels = &amp;quot;I&amp;quot;, tag_prefix = &amp;quot;Plot &amp;quot;, tag_suffix = &amp;quot; :&amp;quot;) +
+  theme(axis.text.x = element_text(angle = -45, face = &amp;#39;italic&amp;#39;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Often when it comes to modifying the plot it is more reasonable to modify everything at once. To do so, instead of the &lt;code&gt;+&lt;/code&gt; operator, the &lt;code&gt;&amp;amp;&lt;/code&gt; operator can be used.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
+  plot_layout(guides = &amp;#39;collect&amp;#39;) +
+  plot_annotation(tag_levels = &amp;quot;I&amp;quot;, tag_prefix = &amp;quot;Plot &amp;quot;, tag_suffix = &amp;quot; :&amp;quot;) &amp;amp;
+  theme(axis.text.x = element_text(angle = -45, face = &amp;#39;italic&amp;#39;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ggplot2: geom_histogram &amp; facet_wrap with different vertical lines on each facet</title>
+      <link>/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/</link>
+      <pubDate>Sun, 03 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/</guid>
+      <description>
+
+
+&lt;p&gt;The &lt;code&gt;geom_histogram()&lt;/code&gt; function from &lt;strong&gt;ggplot2&lt;/strong&gt; package is used to create a histogram plot. For example, let’s plot the distribution of &lt;code&gt;Sepal.Length&lt;/code&gt; from &lt;strong&gt;iris&lt;/strong&gt; data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+theme_set(theme_bw())
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &amp;quot;orange&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-03-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/index_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;To add a vertical line to show the mean value of &lt;code&gt;Sepal.Length&lt;/code&gt;, we can use &lt;code&gt;geom_vline()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &amp;quot;orange&amp;quot;) +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-03-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;One of the most powerful aspects of &lt;strong&gt;ggplot2&lt;/strong&gt; is the ease with which you can create multiple sub-plots using &lt;code&gt;facet_wrap()&lt;/code&gt;. For example, let’s plot the distribution of &lt;code&gt;Sepal.Length&lt;/code&gt; by each group of &lt;code&gt;Species&lt;/code&gt; from &lt;strong&gt;iris&lt;/strong&gt; data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &amp;quot;orange&amp;quot;) +
+  facet_wrap(~Species) +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-03-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;While using &lt;code&gt;facet_wrap()&lt;/code&gt; each plot shows a different subset of the data, however, the &lt;code&gt;geom_vline()&lt;/code&gt; adds the vertical line on the same x-intercept in all plots. For instance, in the above histograms the vertical line shows the overall mean of &lt;code&gt;Sepal.Length&lt;/code&gt; column instead of mean of each group.&lt;/p&gt;
+&lt;p&gt;It’s more practical to add a vertical line on each facet showing the mean for each group of data. To do so, a separate data frame containing the mean of each group should be created to use with &lt;code&gt;geom_vline()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+vline &amp;lt;- summarise(group_by(iris,Species), mean = mean(Sepal.Length))
+vline&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 × 2
+##   Species     mean
+##   &amp;lt;fct&amp;gt;      &amp;lt;dbl&amp;gt;
+## 1 setosa      5.01
+## 2 versicolor  5.94
+## 3 virginica   6.59&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &amp;quot;orange&amp;quot;) +
+  facet_wrap(~Species) +
+  geom_vline(data = vline, aes(xintercept = mean))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-04-03-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Privacy Policy</title>
+      <link>/privacy/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
+      <guid>/privacy/</guid>
+      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Terms</title>
+      <link>/terms/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
+      <guid>/terms/</guid>
+      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/admin/config.yml</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/admin/config.yml</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

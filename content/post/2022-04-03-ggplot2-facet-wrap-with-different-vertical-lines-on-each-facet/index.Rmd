@@ -1,0 +1,59 @@
+---
+title: 'ggplot2: geom_histogram & facet_wrap with different vertical lines on each facet'
+author: Fahim Ahmad
+date: '2022-04-03'
+slug: ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet
+categories:
+  - R
+tags:
+  - ggplot
+  - visualization
+Description: ""
+
+output:
+  blogdown::html_page: 
+    toc: yes
+---
+
+
+The `geom_histogram()` function from **ggplot2** package is used to create a histogram plot. For example, let's plot the distribution of `Sepal.Length` from **iris** data.
+
+```{r message=FALSE}
+library(ggplot2)
+theme_set(theme_bw())
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = "orange")
+```
+
+To add a vertical line to show the mean value of `Sepal.Length`, we can use `geom_vline()`.
+
+```{r message=FALSE}
+library(ggplot2)
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = "orange") +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))
+```
+
+
+One of the most powerful aspects of **ggplot2** is the ease with which you can create multiple sub-plots using `facet_wrap()`. For example, let's plot the distribution of `Sepal.Length` by each group of `Species` from **iris** data.
+
+```{r message=FALSE}
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = "orange") +
+  facet_wrap(~Species) +
+  geom_vline(data = iris, aes(xintercept = mean(Sepal.Length)))
+  
+```
+
+While using `facet_wrap()` each plot shows a different subset of the data, however, the `geom_vline()` adds the vertical line on the same x-intercept in all plots. For instance, in the above histograms the vertical line shows the overall mean of `Sepal.Length` column instead of mean of each group.
+
+It's more practical to add a vertical line on each facet showing the mean for each group of data. To do so, a separate data frame containing the mean of each group should be created to use with `geom_vline()`.
+
+```{r message=FALSE}
+library(dplyr)
+vline <- summarise(group_by(iris,Species), mean = mean(Sepal.Length))
+vline
+
+ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = "orange") +
+  facet_wrap(~Species) +
+  geom_vline(data = vline, aes(xintercept = mean))
+
+```
+
