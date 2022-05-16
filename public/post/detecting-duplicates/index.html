@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="Rename column names with R base functions Rename column names with dplyr Rename column names with data.table   There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data." />
+  <meta name="description" content="Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/rename-data-frame-columns/" />
+  <link rel="alternate" hreflang="en-us" href="/post/detecting-duplicates/" />
 
   
 
@@ -278,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/rename-data-frame-columns/" />
+  <link rel="canonical" href="/post/detecting-duplicates/" />
 
   
   
@@ -295,18 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/rename-data-frame-columns/" />
-  <meta property="og:title" content="Rename Data Frame Columns | Fahim Ahmad" />
-  <meta property="og:description" content="Rename column names with R base functions Rename column names with dplyr Rename column names with data.table   There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/post/detecting-duplicates/" />
+  <meta property="og:title" content="Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad" />
+  <meta property="og:description" content="Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2019-06-19T00:00:00&#43;00:00"
+        content="2021-07-23T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2019-06-19T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2021-07-23T00:00:00&#43;00:00">
   
 
   
@@ -330,12 +330,12 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/rename-data-frame-columns/"
+    "@id": "/post/detecting-duplicates/"
   },
-  "headline": "Rename Data Frame Columns",
+  "headline": "Detecting Duplicates (base R vs. dplyr)",
   
-  "datePublished": "2019-06-19T00:00:00Z",
-  "dateModified": "2019-06-19T00:00:00Z",
+  "datePublished": "2021-07-23T00:00:00Z",
+  "dateModified": "2021-07-23T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -350,7 +350,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Rename column names with R base functions Rename column names with dplyr Rename column names with data.table   There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data."
+  "description": "Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data."
 }
 </script>
 
@@ -366,11 +366,11 @@
 
 
 
-  <title>Rename Data Frame Columns | Fahim Ahmad</title>
+  <title>Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="fe901af0fd88869a873d98d83f8bdea9" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="d8d545a7db874b37d518a47c29924c06" >
 
   
   
@@ -608,7 +608,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Rename Data Frame Columns</h1>
+  <h1>Detecting Duplicates (base R vs. dplyr)</h1>
 
   
 
@@ -630,7 +630,7 @@
     
       
     
-    Jun 19, 2019
+    Jul 23, 2021
   </span>
   
 
@@ -639,7 +639,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    3 min read
+    4 min read
   </span>
   
 
@@ -680,80 +680,117 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#rename-column-names-with-r-base-functions">Rename column names with R base functions</a></li>
-<li><a href="#rename-column-names-with-dplyr">Rename column names with dplyr</a></li>
-<li><a href="#rename-column-names-with-data.table">Rename column names with data.table</a></li>
+<li><a href="#removing-duplicates-based-on-a-single-variable">Removing duplicates based on a single variable</a></li>
+<li><a href="#removing-duplicates-based-on-the-combination-of-multiple-variables">Removing duplicates based on the combination of multiple variables</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
 </ul>
 </div>
 
-<p>There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data.table package.</p>
-<p>I will use the R built-in <strong>iris</strong> data frame.</p>
-<pre class="r"><code>head(iris)</code></pre>
-<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1          5.1         3.5          1.4         0.2  setosa
-## 2          4.9         3.0          1.4         0.2  setosa
-## 3          4.7         3.2          1.3         0.2  setosa
-## 4          4.6         3.1          1.5         0.2  setosa
-## 5          5.0         3.6          1.4         0.2  setosa
-## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
-<div id="rename-column-names-with-r-base-functions" class="section level1">
-<h1>Rename column names with R base functions</h1>
-<p>Let’s change <strong>Sepal.Length</strong> to <strong>S.P</strong>. The procedure is simple; get column names using <code>names()</code> or <code>colnames</code>, extract the specific column name, and assign a new name.</p>
-<pre class="r"><code>colnames(iris)[colnames(iris)==&quot;Sepal.Length&quot;] &lt;- &quot;S.P&quot;
-head(iris)</code></pre>
-<pre><code>##   S.P Sepal.Width Petal.Length Petal.Width Species
-## 1 5.1         3.5          1.4         0.2  setosa
-## 2 4.9         3.0          1.4         0.2  setosa
-## 3 4.7         3.2          1.3         0.2  setosa
-## 4 4.6         3.1          1.5         0.2  setosa
-## 5 5.0         3.6          1.4         0.2  setosa
-## 6 5.4         3.9          1.7         0.4  setosa</code></pre>
-<p>The code does the following:</p>
-<ol style="list-style-type: decimal">
-<li><code>colnames(iris)</code> looks into all the names in the <strong>iris</strong>.</li>
-<li><code>names(iris) == &quot;Sepal.Length&quot;</code> returns a vector with true and false values to extract the variable name you want to change.</li>
-<li><code>&lt;- &quot;S.P&quot;</code> assigns the new name.</li>
-</ol>
-<p>You can also rename a variable by its index as well. For example, let’s change <strong>Sepal.Width</strong> [the second column] to <strong>S.W</strong>.</p>
-<pre class="r"><code>colnames(iris)[2] &lt;- &quot;S.W&quot;
-head(iris)</code></pre>
-<pre><code>##   S.P S.W Petal.Length Petal.Width Species
-## 1 5.1 3.5          1.4         0.2  setosa
-## 2 4.9 3.0          1.4         0.2  setosa
-## 3 4.7 3.2          1.3         0.2  setosa
-## 4 4.6 3.1          1.5         0.2  setosa
-## 5 5.0 3.6          1.4         0.2  setosa
-## 6 5.4 3.9          1.7         0.4  setosa</code></pre>
-</div>
-<div id="rename-column-names-with-dplyr" class="section level1">
-<h1>Rename column names with dplyr</h1>
-<p>You can use <code>rename()</code> function to change column names as following. For instance, let’s change <strong>Petal.Length</strong> to <strong>P.L</strong> and <strong>Petal.Width</strong> to <strong>P.W</strong>.</p>
-<pre class="r"><code># install.packages(&quot;dplyr&quot;)
-library(dplyr)
+<p><img src="imgs/Duplicates.jpg" /></p>
+<p>Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data. In this post, I provide an overview of <code>duplicated()</code> function from base R and the <code>distinct()</code> function from <strong>dplyr</strong> package to detect and remove duplicates.</p>
+<p>I will be using the following data frame as an example in this post.</p>
+<pre class="r"><code>set.seed(1000)
+df &lt;- data.frame(
+  ID = sample(paste0(&quot;ID-00&quot;, 1:7), 10, replace = T),
+  value_1 = sample(1:7, 10, replace = T),
+  value_2 = sample(2:5, 10, replace = T)
+)
 
-iris %&gt;%
-  rename(
-    P.L = Petal.Length,
-    P.W = Petal.Width
-  ) %&gt;%
-  head()</code></pre>
-<pre><code>##   S.P S.W P.L P.W Species
-## 1 5.1 3.5 1.4 0.2  setosa
-## 2 4.9 3.0 1.4 0.2  setosa
-## 3 4.7 3.2 1.3 0.2  setosa
-## 4 4.6 3.1 1.5 0.2  setosa
-## 5 5.0 3.6 1.4 0.2  setosa
-## 6 5.4 3.9 1.7 0.4  setosa</code></pre>
+df</code></pre>
+<pre><code>##        ID value_1 value_2
+## 1  ID-004       5       2
+## 2  ID-003       6       5
+## 3  ID-006       1       3
+## 4  ID-003       1       4
+## 5  ID-005       5       5
+## 6  ID-003       2       3
+## 7  ID-005       2       2
+## 8  ID-002       4       3
+## 9  ID-006       7       2
+## 10 ID-006       2       3</code></pre>
+<div id="removing-duplicates-based-on-a-single-variable" class="section level1">
+<h1>Removing duplicates based on a single variable</h1>
+<p>The <code>duplicated()</code> function returns a logical vector where <code>TRUE</code> specifies which rows of the data frame are duplicates.</p>
+<p>For instance, <code>duplicated(df[&quot;ID&quot;])</code> returns the following vector.</p>
+<pre><code>##  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE</code></pre>
+<blockquote>
+<p><strong>Note</strong>: the <code>duplicated()</code> function preserves the first occurrence in the process of identifying the duplicate values, if you want to consider the duplication from the reverse side, then set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
+</blockquote>
+<p>Let’s use the above vector to exclude the duplicated values.</p>
+<pre class="r"><code>df[!duplicate_rows, ]</code></pre>
+<pre><code>##       ID value_1 value_2
+## 1 ID-004       5       2
+## 2 ID-003       6       5
+## 3 ID-006       1       3
+## 5 ID-005       5       5
+## 8 ID-002       4       3</code></pre>
+<p>An alternative way to select unique values is <code>dplyr::distinct()</code> function that yields a similar result as above.</p>
+<pre class="r"><code>dplyr::distinct(df, ID, .keep_all = TRUE)</code></pre>
+<pre><code>##       ID value_1 value_2
+## 1 ID-004       5       2
+## 2 ID-003       6       5
+## 3 ID-006       1       3
+## 4 ID-005       5       5
+## 5 ID-002       4       3</code></pre>
+<blockquote>
+<p><strong>Note</strong>: The .<code>keep_all</code> argument is used to retain all other columns in the output data frame.</p>
+</blockquote>
 </div>
-<div id="rename-column-names-with-data.table" class="section level1">
-<h1>Rename column names with data.table</h1>
-<p><code>setnames()</code> function from <strong>data.table</strong> package can be used to rename a variable. The syntax is <code>setnames(df, &quot;old_name&quot;, &quot;new_name&quot;)</code>. As an example, let’s change <strong>Species</strong> to <strong>SPECIES</strong>.</p>
-<pre class="r"><code># install.packages(&quot;data.table&quot;)
-library(data.table)
-setnames(iris,
-         &quot;Species&quot;, &quot;SPECIES&quot;)
-colnames(iris)</code></pre>
-<pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot;  &quot;SPECIES&quot;</code></pre>
+<div id="removing-duplicates-based-on-the-combination-of-multiple-variables" class="section level1">
+<h1>Removing duplicates based on the combination of multiple variables</h1>
+<p>The above chunks of codes remove the duplicated rows based on a single column. What if we want to remove duplicates based on more than a single column?</p>
+<p>One way is to concatenate the columns in which you want to check the presence of duplicates. For example, let’s remove the rows where <strong>value_1</strong> and <strong>value_2</strong> are duplicated.</p>
+<pre class="r"><code>df &lt;- dplyr::mutate(df, value_1_2 = paste(value_1, value_2))
+df[!duplicated(df[c(&quot;value_1_2&quot;)]), ]</code></pre>
+<pre><code>##       ID value_1 value_2 value_1_2
+## 1 ID-004       5       2       5 2
+## 2 ID-003       6       5       6 5
+## 3 ID-006       1       3       1 3
+## 4 ID-003       1       4       1 4
+## 5 ID-005       5       5       5 5
+## 6 ID-003       2       3       2 3
+## 7 ID-005       2       2       2 2
+## 8 ID-002       4       3       4 3
+## 9 ID-006       7       2       7 2</code></pre>
+<p>Below is an efficient way of detecting duplicates based on the combination of multiple columns without concatenating the values of the columns in which we want to identify the duplicated values:</p>
+<pre class="r"><code># using duplicated() function
+df[!duplicated(df[c(&quot;value_1&quot;, &quot;value_2&quot;)]), ]
+
+# using distinct() function
+dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
+<pre><code>##       ID value_1 value_2 value_1_2
+## 1 ID-004       5       2       5 2
+## 2 ID-003       6       5       6 5
+## 3 ID-006       1       3       1 3
+## 4 ID-003       1       4       1 4
+## 5 ID-005       5       5       5 5
+## 6 ID-003       2       3       2 3
+## 7 ID-005       2       2       2 2
+## 8 ID-002       4       3       4 3
+## 9 ID-006       7       2       7 2</code></pre>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>It seems that both approaches work very well; however, the advantage of using <code>duplicated()</code> function from base R is it returns a logical vector identifying the duplicated rows that can be used to either drop the duplicated rows or keep only these rows for further investigation while the <code>distinct()</code> function directly removes the duplicated rows without specifying which row has duplicate values.</p>
+<p>For instance, let’s keep the duplicated ID numbers only.</p>
+<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F), ]</code></pre>
+<pre><code>##        ID value_1 value_2 value_1_2
+## 4  ID-003       1       4       1 4
+## 6  ID-003       2       3       2 3
+## 7  ID-005       2       2       2 2
+## 9  ID-006       7       2       7 2
+## 10 ID-006       2       3       2 3</code></pre>
+<p>As mentioned above, the <code>duplicated()</code> function does not assign the first occurrence in the process of identifying the duplicated values as duplicates. Thus, we need to count backward as well to consider the duplication from the reverse side. To do so, we need to set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
+<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F) | duplicated(df[&quot;ID&quot;], fromLast = T), ]</code></pre>
+<pre><code>##        ID value_1 value_2 value_1_2
+## 2  ID-003       6       5       6 5
+## 3  ID-006       1       3       1 3
+## 4  ID-003       1       4       1 4
+## 5  ID-005       5       5       5 5
+## 6  ID-003       2       3       2 3
+## 7  ID-005       2       2       2 2
+## 9  ID-006       7       2       7 2
+## 10 ID-006       2       3       2 3</code></pre>
 </div>
 
     </div>
@@ -784,7 +821,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/rename-data-frame-columns/&amp;text=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/detecting-duplicates/&amp;text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -797,7 +834,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/rename-data-frame-columns/&amp;t=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/detecting-duplicates/&amp;t=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -810,7 +847,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Rename%20Data%20Frame%20Columns&amp;body=/post/rename-data-frame-columns/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29&amp;body=/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -823,7 +860,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/rename-data-frame-columns/&amp;title=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -836,7 +873,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Rename%20Data%20Frame%20Columns%20/post/rename-data-frame-columns/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29%20/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -849,7 +886,7 @@ colnames(iris)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/rename-data-frame-columns/&amp;title=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -955,11 +992,11 @@ colnames(iris)</code></pre>
       
       <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
       
-      <li><a href="/post/detecting-duplicates/">Detecting Duplicates (base R vs. dplyr)</a></li>
-      
       <li><a href="/post/measures-of-dispersion-using-r/">Measures of Dispersion</a></li>
       
       <li><a href="/post/visualizing-distribution-of-data-in-r-box-plot/">Visualizing Distribution of Data | box-plot</a></li>
+      
+      <li><a href="/post/rename-data-frame-columns/">Rename Data Frame Columns</a></li>
       
     </ul>
   </div>
