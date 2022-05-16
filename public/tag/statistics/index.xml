@@ -5,12 +5,900 @@
     <link>/tag/statistics/</link>
       <atom:link href="/tag/statistics/index.xml" rel="self" type="application/rss+xml" />
     <description>Statistics</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Thu, 21 May 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Fri, 26 Jun 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
       <title>Statistics</title>
       <link>/tag/statistics/</link>
     </image>
+    
+    <item>
+      <title>Analysis of the Relationship Between Two Quantitative Variables | Correlation</title>
+      <link>/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/</link>
+      <pubDate>Fri, 26 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#pearson-correlation&#34;&gt;Pearson Correlation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#spearman-rank-correlation&#34;&gt;Spearman Rank Correlation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#interpreting-the-correlation-coefficient&#34;&gt;Interpreting the Correlation Coefficient&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#computing-correlation-coefficient-in-r&#34;&gt;Computing Correlation Coefficient in R&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;In recent posts, we discussed &lt;a href=&#34;https://fahimahmad.netlify.app/post/measures-of-central-tendency-using-r/&#34;&gt;measures of central tendency&lt;/a&gt; and &lt;a href=&#34;https://fahimahmad.netlify.app/post/measures-of-dispersion-using-r/&#34;&gt;measures of dispersion&lt;/a&gt;. But hey, that is the start of a long journey. Finding relationships between variables is more interesting than describing the distribution of the data.&lt;/p&gt;
+&lt;p&gt;While studying, for example, the relationship between GDP and life expectancy, you might be interested to know whether there exists any relationship between the two indicators? is it a positive relationship or a negative relationship? and how strong the association is?&lt;/p&gt;
+&lt;p&gt;The above questions can be answered by computing the correlation coefficient between the two indicators. Depending on the type of data, different methods of correlation exist. In this post, you will learn the Pearson correlation coefficient and the Spearman correlation coefficient.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pearson-correlation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Pearson Correlation&lt;/h1&gt;
+&lt;p&gt;Pearson correlation is a parametric correlation test that measures the strength and direction of a &lt;strong&gt;linear relationship&lt;/strong&gt; between two variables. This method is by far the most used and best method for calculating the association between variables that follow a &lt;strong&gt;normal distribution&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;If the two variables are denoted by &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt;, the Pearson correlation coefficient is defined as the ratio of covariance between &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; to the product of standard deviation of &lt;code&gt;x&lt;/code&gt; and standard deviation of &lt;code&gt;y&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r =  (Covariance (x,y)) \space/\space (S.D.(x)×S.D.(y))\]&lt;/span&gt;
+Where,&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{Covariance(x,y) = \frac{∑^n_{i=1}(x_i-\bar{x})(y_i-\bar{y})}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{S.D.(x) = \sqrt\frac{∑^n_{i=1}(x_i-\bar{x})^2}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{S.D.(y) = \sqrt\frac{∑^n_{i=1}(y_i-\bar{y})^2}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;spearman-rank-correlation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Spearman Rank Correlation&lt;/h1&gt;
+&lt;p&gt;While the Pearson correlation is used to compute the degree of relationship between linearly related variables, the Spearman correlation indicates the monotonic relationship. The Pearson correlation is more appropriate for continuous data such as income, age, and height, while Spearman is more appropriate for ordinal data such as level of satisfaction, or level of happiness measured on a scale of 1 to 4.&lt;/p&gt;
+&lt;p&gt;In other words, the Pearson correlation is used to compute the extent of association when there is an equal interval between the adjacent units of the input variables. For instance, an increase in income from 100 to 101 is equal to the increase from 500 to 501 or an increase in age from 18 to 19 is same as an increase in 38 to 39, while the Spearman correlation is widely used with the ordinal data such that one level can be considered higher or lower than another level, but the magnitude of the difference is not necessarily known or the same. For instance, “Strong satisfaction” is higher than the “Somewhat satisfaction” and “Somewhat dissatisfaction” is higher than “Strong dissatisfaction”. However, it can not be quantified how much higher/lower is one level compared to the other level.&lt;/p&gt;
+&lt;p&gt;Moreover, since the Spearman correlation is based on the ranked values rather than the raw data and does not carry any assumption about the distribution of the data points, it can be used to measure the association between two continuous variables as well when the data are not distributed normally.&lt;/p&gt;
+&lt;p&gt;The Spearman ranked correlation can be expressed as follow:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[rho =  (Covariance (x&amp;#39;,y&amp;#39;)) \space/\space (S.D.(x&amp;#39;)×S.D.(y&amp;#39;))\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Where &lt;span class=&#34;math inline&#34;&gt;\(x&amp;#39;\)&lt;/span&gt; is rank(x) and &lt;span class=&#34;math inline&#34;&gt;\(y&amp;#39;\)&lt;/span&gt; is rank(y).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;interpreting-the-correlation-coefficient&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Interpreting the Correlation Coefficient&lt;/h1&gt;
+&lt;p&gt;The correlation coefficient always lies between -1 and +1 and can’t go outside of this range. Where the sign of the correlation coefficient denotes the direction of the relationship between two variables and the absolute value of the correlation coefficient indicates the strength of association between two variables. A &lt;code&gt;+&lt;/code&gt; sign indicates the positive relationship and a &lt;code&gt;-&lt;/code&gt; sign indicates the negative relationship. Furthermore, the closer the correlation coefficient to -1 or +1, the stronger the relationship, and as it goes toward 0 the relationship will be weaker.&lt;/p&gt;
+&lt;p&gt;How close is close enough to -1 or +1? I get too excited to see correlations beyond ±0.7.
+You can refer to below table while interpreting the correlation coefficient:&lt;/p&gt;
+&lt;div id=&#34;afvpaeqnbm&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;style&gt;html {
+  font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
+}
+
+#afvpaeqnbm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#afvpaeqnbm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#afvpaeqnbm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#afvpaeqnbm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#afvpaeqnbm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#afvpaeqnbm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#afvpaeqnbm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#afvpaeqnbm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#afvpaeqnbm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#afvpaeqnbm .gt_from_md &gt; :first-child {
+  margin-top: 0;
+}
+
+#afvpaeqnbm .gt_from_md &gt; :last-child {
+  margin-bottom: 0;
+}
+
+#afvpaeqnbm .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#afvpaeqnbm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#afvpaeqnbm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#afvpaeqnbm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#afvpaeqnbm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#afvpaeqnbm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#afvpaeqnbm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#afvpaeqnbm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#afvpaeqnbm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#afvpaeqnbm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#afvpaeqnbm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#afvpaeqnbm .gt_left {
+  text-align: left;
+}
+
+#afvpaeqnbm .gt_center {
+  text-align: center;
+}
+
+#afvpaeqnbm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#afvpaeqnbm .gt_font_normal {
+  font-weight: normal;
+}
+
+#afvpaeqnbm .gt_font_bold {
+  font-weight: bold;
+}
+
+#afvpaeqnbm .gt_font_italic {
+  font-style: italic;
+}
+
+#afvpaeqnbm .gt_super {
+  font-size: 65%;
+}
+
+#afvpaeqnbm .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#afvpaeqnbm .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#afvpaeqnbm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#afvpaeqnbm .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#afvpaeqnbm .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#afvpaeqnbm .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+&lt;/style&gt;
+&lt;table class=&#34;gt_table&#34;&gt;
+  &lt;thead class=&#34;gt_header&#34;&gt;
+    &lt;tr&gt;
+      &lt;th colspan=&#34;2&#34; class=&#34;gt_heading gt_title gt_font_normal gt_bottom_border&#34; style&gt;Interpreting the Correlation Coefficient&lt;/th&gt;
+    &lt;/tr&gt;
+    
+  &lt;/thead&gt;
+  &lt;thead class=&#34;gt_col_headings&#34;&gt;
+    &lt;tr&gt;
+      &lt;th class=&#34;gt_col_heading gt_columns_bottom_border gt_right&#34; rowspan=&#34;1&#34; colspan=&#34;1&#34; style=&#34;background-color: #BEBEBE; color: #FFFFFF; text-align: center; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Correlation coefficient&lt;/th&gt;
+      &lt;th class=&#34;gt_col_heading gt_columns_bottom_border gt_left&#34; rowspan=&#34;1&#34; colspan=&#34;1&#34; style=&#34;background-color: #BEBEBE; color: #FFFFFF; text-align: center; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Meaning&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody class=&#34;gt_table_body&#34;&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: #B03060; color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;-1.0&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: #B03060; color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Perfect negative relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.7); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;-0.7&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.7); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Strong negative relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.5); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;-0.5&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.5); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Moderate negative relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.3); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;-0.3&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.3); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Weak negative relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.1); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;0.0&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.1); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;No relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.3); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;0.3&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.3); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Weak positive relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.5); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;0.5&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.5); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Moderate positive relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: rgba(176,48,96,0.7); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;0.7&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: rgba(176,48,96,0.7); color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Strong positive relationship&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td class=&#34;gt_row gt_right&#34; style=&#34;background-color: #B03060; color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;1.0&lt;/td&gt;
+&lt;td class=&#34;gt_row gt_left&#34; style=&#34;background-color: #B03060; color: #000000; text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;&#34;&gt;Perfect positive relationship&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+  
+  
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;computing-correlation-coefficient-in-r&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Computing Correlation Coefficient in R&lt;/h1&gt;
+&lt;p&gt;In the example below, we have a table of time series data of global GDP per capita and life expectancy from 1960 to 2018. Let’s find if if a higher GDP per capita can predict a higher life expectancy, and to what extent both indicators are correlated to each other.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;year&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;life_exp&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;gdp_pc&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1960&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;52.57821&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;452.1089&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1961&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;53.07938&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;464.0490&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1962&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;53.49664&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;489.5471&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1963&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;54.02187&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;516.6151&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1964&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;54.69176&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;554.5533&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1965&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;55.35094&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;591.7181&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1966&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;56.08243&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;628.7388&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1967&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;56.78712&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;655.8735&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1968&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;57.38625&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;693.9011&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1969&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;57.99542&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;749.7251&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1970&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;58.58291&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;803.9466&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1971&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;59.11015&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;870.4373&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1972&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;59.59617&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;984.5294&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1973&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;60.04475&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1178.0889&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1974&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;60.54026&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1332.8028&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1975&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;60.98629&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1457.1544&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1976&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;61.40832&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1556.8154&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1977&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;61.83214&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1729.5263&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1978&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;62.19287&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2005.1087&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1979&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;62.55490&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2288.6660&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1980&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;62.84117&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2532.7632&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1981&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;63.18203&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2576.6880&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1982&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;63.50846&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2507.3214&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1983&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;63.75660&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2513.1282&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1984&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;64.02116&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2560.9983&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1985&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;64.27871&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2643.7584&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1986&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;64.57943&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3069.9131&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1987&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;64.83061&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3431.5807&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1988&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.03467&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3772.4014&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1989&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.24723&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3870.4130&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1990&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.43349&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4285.2353&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1991&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.61949&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4464.6543&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1992&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.77051&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4668.2405&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1993&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;65.88757&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4669.5816&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1994&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;66.08953&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4939.8349&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1995&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;66.27814&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5412.3441&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1996&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;66.55982&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5453.3128&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1997&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;66.84463&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5357.0692&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1998&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;67.08683&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5272.6333&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;1999&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;67.29315&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5395.9428&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;67.54925&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5498.3297&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2001&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;67.82180&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5396.8919&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2002&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;68.07043&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;5533.4253&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2003&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;68.32699&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6131.2232&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2004&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;68.65235&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6820.6152&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2005&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;68.92032&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7297.1534&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2006&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;69.26243&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7811.9362&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2007&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;69.59208&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8694.9003&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2008&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;69.89930&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9423.7573&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2009&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;70.24658&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8830.3069&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2010&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;70.55621&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9551.3357&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2011&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;70.88413&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10488.3340&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2012&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;71.17172&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10605.2083&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2013&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;71.46224&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10781.8553&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2014&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;71.74238&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10952.3444&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2015&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;71.94752&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10246.5074&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2016&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;72.18048&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10281.9088&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2017&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;72.38530&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10817.4819&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2018&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;72.56006&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;11381.6806&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;2019&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;NA&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;11435.6099&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;First thing first, let’s plot the data points to explore if there exists any relationship between the two indicators or not, and if the data points vary together. This is done through a scatter-plot. Please read this post for more details: &lt;a href=&#34;https://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/&#34;&gt;Exploring Relationship Between Variables | scatter-plot&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+df %&amp;gt;% 
+  ggplot(aes(x = gdp_pc, y = life_exp)) +
+  geom_point() +
+  theme_bw() +
+  labs(title = &amp;quot;GDP per capita and life expectancy, 1960-2018&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 1 rows containing missing values (geom_point).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-26-analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since the points are moving from the lower-left corner to the upper-right corner. Thus, a positive relationship exists&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;. However, it does not indicate the extent of the relationship between the variables.&lt;/p&gt;
+&lt;p&gt;Next, the normality test should be performed to check whether the data follow a normal distribution or not. This can be tested visually through &lt;strong&gt;qq-plot&lt;/strong&gt; or &lt;strong&gt;histogram&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;qq1 &amp;lt;- df %&amp;gt;% ggplot(aes(sample = life_exp)) +
+  geom_qq() + labs(y = &amp;quot;life expectancy&amp;quot;)
+
+qq2 &amp;lt;- df %&amp;gt;% ggplot(aes(sample = gdp_pc)) +
+  geom_qq() + labs(y = &amp;quot;GDP per capita&amp;quot;)
+
+hist1 &amp;lt;- df %&amp;gt;% ggplot(aes(x = life_exp)) +
+  geom_histogram(fill = &amp;quot;orange&amp;quot;, alpha = 0.5) + labs(x = &amp;quot;life expectancy&amp;quot;)
+
+hist2 &amp;lt;- df %&amp;gt;% ggplot(aes(x = gdp_pc)) +
+  geom_histogram(fill = &amp;quot;orange&amp;quot;, alpha = 0.5) + labs(x = &amp;quot;GDP per capita&amp;quot;)
+
+library(patchwork)
+(qq1 | qq2) / (hist1 / hist2) &amp;amp;
+  theme_bw()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 1 rows containing non-finite values (stat_qq).&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 1 rows containing non-finite values (stat_bin).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-26-analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;From the above plots it can easily be drawn that the data points do not follow a normal distribution, but the more precise way to check the normality of distribution is to use a statistical test. The &lt;code&gt;shapiro.test()&lt;/code&gt; function performs the Shapiro-Wilk test of normality.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shapiro.test(df$gdp_pc)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;
+    Shapiro-Wilk normality test
+
+data:  df$gdp_pc
+W = 0.89361, p-value = 7.756e-05&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shapiro.test(df$life_exp)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;
+    Shapiro-Wilk normality test
+
+data:  df$life_exp
+W = 0.9538, p-value = 0.02537&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The null hypothesis in the Shapiro-Wilk test is that the data are normally distributed. Therefore, a p-value of less than the significance level, or less than 0.05 indicates the data points are not normally distributed.&lt;/p&gt;
+&lt;p&gt;After testing the assumptions, you can decide to choose either Pearson or Spearman correlation. The &lt;code&gt;cor.test()&lt;/code&gt; function can be used for evaluating the association between variables.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cor.test(df$gdp_pc, df$life_exp, method = &amp;quot;pearson&amp;quot;) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;
+    Pearson&amp;#39;s product-moment correlation
+
+data:  df$gdp_pc and df$life_exp
+t = 18.088, df = 57, p-value &amp;lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.8730810 0.9535685
+sample estimates:
+      cor 
+0.9228352 &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cor.test(df$gdp_pc, df$life_exp, method = &amp;quot;spearman&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;
+    Spearman&amp;#39;s rank correlation rho
+
+data:  df$gdp_pc and df$life_exp
+S = 134, p-value &amp;lt; 2.2e-16
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.9960842 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As shown above, both Pearson and Spearman’s correlation coefficient is above 0.9 which indicates a strong correlation between the two indicators. In other words, as GDP per capita increases life expectancy increases as well.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;If there exists a positive correlation, the points will be moving from the lower-left to the upper-right corner. Similarly, if there is a negative correlation, the points will be moving down from the upper-left corner to the lower right corner. In case the points are scattered and do not form any pattern, it depicts that no relationship exists between the variables.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Measures of Dispersion</title>
