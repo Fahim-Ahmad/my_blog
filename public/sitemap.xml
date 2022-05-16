@@ -68,6 +68,21 @@
   </url>
   
   <url>
+    <loc>/post/measures-of-dispersion-using-r/</loc>
+    <lastmod>2020-05-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tag/statistics/</loc>
+    <lastmod>2020-05-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/category/statistics/</loc>
+    <lastmod>2020-05-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/visualizing-distribution-of-data-in-r-box-plot/</loc>
     <lastmod>2020-04-09T00:00:00+00:00</lastmod>
   </url>

@@ -1,0 +1,128 @@
+---
+title: Measures of Dispersion
+author: Fahim Ahmad
+date: '2020-05-21'
+slug: measures-of-dispersion-using-r
+categories:
+  - R
+  - Statistics
+tags:
+  - R
+  - Statistics
+
+output:
+  blogdown::html_page:
+    toc: yes
+
+Description: As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value. There are mainly two types of measures of dispersion. 1) Absolute measures of dispersion 2) Relative measures of dispersion
+
+katex: false
+---
+
+## Introduction
+
+In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data. In this post, you will learn about the measures of dispersion as part of the descriptive statistics.
+
+As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value.
+
+Two distinct sets of data may have the same central value, but a completely different level of variation. Therefore, an adequate description of the data should include both of these characteristics. In other words, the combination of measures of the central tendency and measures of dispersion help to understand the distribution of the data.
+
+A measure of dispersion is zero if all the data points are the same and increases as the data become more diverse. There are mainly two types of measures of dispersion.
+
+* Absolute measures of dispersion
+* Relative measures of dispersion
+
+## Absolute measures of dispersion
+
+Absolute measures of dispersion express the scattering of the data points in terms of distance such as range or in terms of deviation from the central value such as variance and standard deviation.
+
+**Range:** Range is defined as the difference between the smallest and the largest value in a set of data. The range is easy to compute; however, it is influenced by extreme values. Therefore, it is not a reliable measure of dispersion.
+
+  $$Range = X_{max} - X_{min}$$
+
+**Quartile deviation:** Quartile deviation is defined as half of the distance between the first and third quartile^[Quartiles are values that divide the data into quarters. The first quartile (Q1) is the middle number between the smallest number and the median of the data. The second quartile, (Q2) is the median of the data set. The third quartile (Q3) is the middle number between the median and the largest number.]. Quartile deviation is not influenced by extreme values. However, its demerit is that it ignores 50% of the data. Therefore, variance and standard deviation are suggested as the most reliable measures of dispersion.
+
+
+$$Quartile \space deviation = \frac{Q_{3}-Q_{1}}{\ 2}$$
+
+
+**Variance and Standard Deviation^[In R, the var() and sd() functions compute the sample variance and sample standard deviation. Therefore, the n-1 is used in the denominator.]:** These measures of dispersion tell you how much spread out the data points are from the mean. To find out the variance, deduct each value from the mean, square it, sum each square, and divide it by the total number of values.
+
+$$Variance = \frac{∑(x-\bar{x})^2}{\ {n-1}}$$
+
+
+Standard deviation is the square root of the variance. In the asymmetrical distribution, 68.25% of data points fall between **mean ± 1s.d**; 95.45% of data points fall between **mean ± 2s.d**; 99.73% of the data points fall between **mean ± 3s.d**.
+
+Mathematically, the standard deviation can be expressed as below:
+
+$${Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}$$
+
+No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+library(knitr)
+
+df <- data.frame(
+  project1 = c(10000, 15400, 14250, 13000, 11250, 10450, 9035, 12500, 14125, 11240),
+  project2 = c(10500, 15000, 14300, 12500, 11300, 10500, 8530, 12500, 14120, 11320)
+) %>% 
+  gather(key = "Projects", value = "Expenditures")
+
+df
+
+```
+
+The below functions can be used to compute the measures of dispersion.
+
+```{r}
+library(tidyverse)
+
+df %>% 
+  group_by(Projects) %>% 
+  summarise(Range = max(Expenditures) - min(Expenditures),
+            'Quartile Deviation' = IQR(Expenditures)/2,
+            Variance = var(Expenditures),
+            'Standard Deviation' = sd(Expenditures)) %>% 
+  kable()
+```
+
+As the above table shows, based on **Range** as a measure of dispersion that includes only minimum and maximum values, the data points in the second group (project2) are more scattered while based on the **Standard deviation** the data points in that group are less scattered^[Standard deviation as measure of dispersion to compare variability among two groups should be used only when both groups have the same central value. When the central value of both groups differ widely, the coefficient of dispersion in terms of standard deviation or coefficient of variance should be used.].
+
+## Relative measures of dispersion
+
+For comparing data among two or more than two groups that differ significantly in their averages, and for unit free comparison the relative measures of dispersion are used which is known as the coefficient of dispersion (C.D).
+
+**Coefficient of dispersion in terms of range:** C.D in terms of range is the distance between the minimum value and maximum value divided by sum of the minimum and maximum values.
+
+$${C.D\space in\space terms\space of\space range} = {\frac{X_{max} - X_{min}}{\ X_{max} + X_{min}}}$$
+
+**Coefficient of dispersion in terms of quartile deviation:** C.D in terms of quartile deviation is the distance between first quartile and third quartile divided by the sum of the first and third quartiles.
+
+$${C.D\space in\space terms\space of\space quartile \space deviation} = {\frac{Q_{3} - Q_{1}}{\ Q_{3} + Q_{1}}}$$
+
+
+**Coefficient of dispersion in terms of standard deviation:** C.D in terms of standard deviation is defined as the standard deviation divided by the mean.
+
+$${C.D\space in\space terms\space of\space S.D} = {\frac{S.D}{\bar{X}}}$$
+
+
+**Coefficient of Variation (C.V):** 100 times the coefficient of dispersion based on the standard deviation is the coefficient of variation.
+
+$$C.V = 100 * \frac{S.D}{\bar{X}}$$
+
+Let's find the relative measures of dispersion for the above data.
+
+
+```{r message=FALSE}
+library(raster)
+
+df %>% 
+  group_by(Projects) %>% 
+  summarise('C.D in terms of range' = (max(Expenditures)-min(Expenditures)/max(Expenditures)+min(Expenditures)),
+            'C.D in terms of standard deviation' = sd(Expenditures)/mean(Expenditures),
+            # 'Coefficient of Variation' = 100 * sd(Expenditures)/mean(Expenditures),
+            'Coefficient of Variation' = cv(Expenditures)) %>% 
+  kable()
+```
+

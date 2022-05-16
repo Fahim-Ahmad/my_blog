@@ -30,11 +30,10 @@
   
     
   
-  <meta name="description" content="In R working with survey weight is made possible using survey package. Let’s use below data frame as an exmaple here:
-set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) gender &lt;- c(&quot;Male&quot;, &quot;Female&quot;) gender &lt;- sample(gender, 100, replace = TRUE) country &lt;- c(&quot;A&quot;, &quot;B&quot;) country &lt;- sample(country, 100, replace = TRUE) df &lt;- data." />
+  <meta name="description" content="Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/using-survey-weight-in-r/" />
+  <link rel="alternate" hreflang="en-us" href="/post/measures-of-dispersion-using-r/" />
 
   
 
@@ -279,7 +278,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/using-survey-weight-in-r/" />
+  <link rel="canonical" href="/post/measures-of-dispersion-using-r/" />
 
   
   
@@ -296,19 +295,18 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/using-survey-weight-in-r/" />
-  <meta property="og:title" content="Using Survey Weight | Fahim Ahmad" />
-  <meta property="og:description" content="In R working with survey weight is made possible using survey package. Let’s use below data frame as an exmaple here:
-set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) gender &lt;- c(&quot;Male&quot;, &quot;Female&quot;) gender &lt;- sample(gender, 100, replace = TRUE) country &lt;- c(&quot;A&quot;, &quot;B&quot;) country &lt;- sample(country, 100, replace = TRUE) df &lt;- data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/post/measures-of-dispersion-using-r/" />
+  <meta property="og:title" content="Measures of Dispersion | Fahim Ahmad" />
+  <meta property="og:description" content="Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2022-05-14T00:00:00&#43;00:00"
+        content="2020-05-21T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-05-14T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-05-21T00:00:00&#43;00:00">
   
 
   
@@ -332,12 +330,12 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/using-survey-weight-in-r/"
+    "@id": "/post/measures-of-dispersion-using-r/"
   },
-  "headline": "Using Survey Weight",
+  "headline": "Measures of Dispersion",
   
-  "datePublished": "2022-05-14T00:00:00Z",
-  "dateModified": "2022-05-14T00:00:00Z",
+  "datePublished": "2020-05-21T00:00:00Z",
+  "dateModified": "2020-05-21T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -352,7 +350,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "In R working with survey weight is made possible using survey package. Let’s use below data frame as an exmaple here:\nset.seed(1000) age \u0026lt;- c(18:100) age \u0026lt;- sample(age, 100, replace = TRUE) gender \u0026lt;- c(\u0026quot;Male\u0026quot;, \u0026quot;Female\u0026quot;) gender \u0026lt;- sample(gender, 100, replace = TRUE) country \u0026lt;- c(\u0026quot;A\u0026quot;, \u0026quot;B\u0026quot;) country \u0026lt;- sample(country, 100, replace = TRUE) df \u0026lt;- data."
+  "description": "Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data."
 }
 </script>
 
@@ -368,11 +366,11 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
 
 
 
-  <title>Using Survey Weight | Fahim Ahmad</title>
+  <title>Measures of Dispersion | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="139270799ab66c89449eeb892bb332fd" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="68c3f7ed1051ac55257635e3c3cb539a" >
 
   
   
@@ -610,7 +608,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   
   
 <div class="article-container pt-3">
-  <h1>Using Survey Weight</h1>
+  <h1>Measures of Dispersion</h1>
 
   
 
@@ -632,7 +630,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
     
       
     
-    May 14, 2022
+    May 21, 2020
   </span>
   
 
@@ -641,7 +639,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    2 min read
+    5 min read
   </span>
   
 
@@ -656,7 +654,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
   
   <span class="middot-divider"></span>
   <span class="article-categories">
-    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a></span>
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a>, <a href="/category/statistics/">Statistics</a></span>
   
 
 </div>
@@ -680,75 +678,158 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
     <div class="article-style">
       
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#absolute-measures-of-dispersion">Absolute measures of dispersion</a></li>
+<li><a href="#relative-measures-of-dispersion">Relative measures of dispersion</a></li>
+</ul>
+</div>
 
-<p>In R working with survey weight is made possible using <code>survey</code> package. Let’s use below data frame as an exmaple here:</p>
-<pre class="r"><code>set.seed(1000)
-age &lt;- c(18:100)
-age &lt;- sample(age, 100, replace = TRUE)
-gender &lt;- c(&quot;Male&quot;, &quot;Female&quot;)
-gender &lt;- sample(gender, 100, replace = TRUE)
-country &lt;- c(&quot;A&quot;, &quot;B&quot;)
-country &lt;- sample(country, 100, replace = TRUE)
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data. In this post, you will learn about the measures of dispersion as part of the descriptive statistics.</p>
+<p>As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value.</p>
+<p>Two distinct sets of data may have the same central value, but a completely different level of variation. Therefore, an adequate description of the data should include both of these characteristics. In other words, the combination of measures of the central tendency and measures of dispersion help to understand the distribution of the data.</p>
+<p>A measure of dispersion is zero if all the data points are the same and increases as the data become more diverse. There are mainly two types of measures of dispersion.</p>
+<ul>
+<li>Absolute measures of dispersion</li>
+<li>Relative measures of dispersion</li>
+</ul>
+</div>
+<div id="absolute-measures-of-dispersion" class="section level2">
+<h2>Absolute measures of dispersion</h2>
+<p>Absolute measures of dispersion express the scattering of the data points in terms of distance such as range or in terms of deviation from the central value such as variance and standard deviation.</p>
+<p><strong>Range:</strong> Range is defined as the difference between the smallest and the largest value in a set of data. The range is easy to compute; however, it is influenced by extreme values. Therefore, it is not a reliable measure of dispersion.</p>
+<p><span class="math display">\[Range = X_{max} - X_{min}\]</span></p>
+<p><strong>Quartile deviation:</strong> Quartile deviation is defined as half of the distance between the first and third quartile<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Quartile deviation is not influenced by extreme values. However, its demerit is that it ignores 50% of the data. Therefore, variance and standard deviation are suggested as the most reliable measures of dispersion.</p>
+<p><span class="math display">\[Quartile \space deviation = \frac{Q_{3}-Q_{1}}{\ 2}\]</span></p>
+<p><strong>Variance and Standard Deviation<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</strong> These measures of dispersion tell you how much spread out the data points are from the mean. To find out the variance, deduct each value from the mean, square it, sum each square, and divide it by the total number of values.</p>
+<p><span class="math display">\[Variance = \frac{∑(x-\bar{x})^2}{\ {n-1}}\]</span></p>
+<p>Standard deviation is the square root of the variance. In the asymmetrical distribution, 68.25% of data points fall between <strong>mean ± 1s.d</strong>; 95.45% of data points fall between <strong>mean ± 2s.d</strong>; 99.73% of the data points fall between <strong>mean ± 3s.d</strong>.</p>
+<p>Mathematically, the standard deviation can be expressed as below:</p>
+<p><span class="math display">\[{Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}\]</span></p>
+<p>No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.</p>
+<pre><code>##    Projects Expenditures
+## 1  project1        10000
+## 2  project1        15400
+## 3  project1        14250
+## 4  project1        13000
+## 5  project1        11250
+## 6  project1        10450
+## 7  project1         9035
+## 8  project1        12500
+## 9  project1        14125
+## 10 project1        11240
+## 11 project2        10500
+## 12 project2        15000
+## 13 project2        14300
+## 14 project2        12500
+## 15 project2        11300
+## 16 project2        10500
+## 17 project2         8530
+## 18 project2        12500
+## 19 project2        14120
+## 20 project2        11320</code></pre>
+<p>The below functions can be used to compute the measures of dispersion.</p>
+<pre class="r"><code>library(tidyverse)
 
-df &lt;- data.frame(age, gender, country)
+df %&gt;% 
+  group_by(Projects) %&gt;% 
+  summarise(Range = max(Expenditures) - min(Expenditures),
+            &#39;Quartile Deviation&#39; = IQR(Expenditures)/2,
+            Variance = var(Expenditures),
+            &#39;Standard Deviation&#39; = sd(Expenditures)) %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Projects</th>
+<th align="right">Range</th>
+<th align="right">Quartile Deviation</th>
+<th align="right">Variance</th>
+<th align="right">Standard Deviation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">project1</td>
+<td align="right">6365</td>
+<td align="right">1598.125</td>
+<td align="right">4285078</td>
+<td align="right">2070.043</td>
+</tr>
+<tr class="even">
+<td align="left">project2</td>
+<td align="right">6470</td>
+<td align="right">1507.500</td>
+<td align="right">4082801</td>
+<td align="right">2020.594</td>
+</tr>
+</tbody>
+</table>
+<p>As the above table shows, based on <strong>Range</strong> as a measure of dispersion that includes only minimum and maximum values, the data points in the second group (project2) are more scattered while based on the <strong>Standard deviation</strong> the data points in that group are less scattered<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+</div>
+<div id="relative-measures-of-dispersion" class="section level2">
+<h2>Relative measures of dispersion</h2>
+<p>For comparing data among two or more than two groups that differ significantly in their averages, and for unit free comparison the relative measures of dispersion are used which is known as the coefficient of dispersion (C.D).</p>
+<p><strong>Coefficient of dispersion in terms of range:</strong> C.D in terms of range is the distance between the minimum value and maximum value divided by sum of the minimum and maximum values.</p>
+<p><span class="math display">\[{C.D\space in\space terms\space of\space range} = {\frac{X_{max} - X_{min}}{\ X_{max} + X_{min}}}\]</span></p>
+<p><strong>Coefficient of dispersion in terms of quartile deviation:</strong> C.D in terms of quartile deviation is the distance between first quartile and third quartile divided by the sum of the first and third quartiles.</p>
+<p><span class="math display">\[{C.D\space in\space terms\space of\space quartile \space deviation} = {\frac{Q_{3} - Q_{1}}{\ Q_{3} + Q_{1}}}\]</span></p>
+<p><strong>Coefficient of dispersion in terms of standard deviation:</strong> C.D in terms of standard deviation is defined as the standard deviation divided by the mean.</p>
+<p><span class="math display">\[{C.D\space in\space terms\space of\space S.D} = {\frac{S.D}{\bar{X}}}\]</span></p>
+<p><strong>Coefficient of Variation (C.V):</strong> 100 times the coefficient of dispersion based on the standard deviation is the coefficient of variation.</p>
+<p><span class="math display">\[C.V = 100 * \frac{S.D}{\bar{X}}\]</span></p>
+<p>Let’s find the relative measures of dispersion for the above data.</p>
+<pre class="r"><code>library(raster)
 
-df$weight[df$gender==&quot;Female&quot;] &lt;-50/sum(df$gender==&quot;Female&quot;)
-df$weight[df$gender==&quot;Male&quot;] &lt;-50/sum(df$gender==&quot;Male&quot;)
-
-# summary of data
-summary(df)</code></pre>
-<pre><code>##       age           gender            country              weight      
-##  Min.   :18.00   Length:100         Length:100         Min.   :0.8929  
-##  1st Qu.:38.75   Class :character   Class :character   1st Qu.:0.8929  
-##  Median :54.50   Mode  :character   Mode  :character   Median :0.8929  
-##  Mean   :55.79                                         Mean   :1.0000  
-##  3rd Qu.:73.25                                         3rd Qu.:1.1364  
-##  Max.   :97.00                                         Max.   :1.1364</code></pre>
-<p>The most important variable here is the <em>weight</em> variable which is constructed to balance the sex ratio.</p>
-<p>Inside the <code>survey</code> package, there is <code>svydesign()</code> function that can be used to link a data frame with a weight.</p>
-<pre class="r"><code># install.packages(&quot;survey&quot;)
-library(survey)
-df.w &lt;- svydesign(ids = ~1, data = df, weights = ~weight)</code></pre>
-<p>The resulting object is not a data frame anymore, but is a list of different objects that can be seen using <code>attributes()</code> function.</p>
-<pre class="r"><code>attributes(df.w)</code></pre>
-<pre><code>## $names
-## [1] &quot;cluster&quot;    &quot;strata&quot;     &quot;has.strata&quot; &quot;prob&quot;       &quot;allprob&quot;   
-## [6] &quot;call&quot;       &quot;variables&quot;  &quot;fpc&quot;        &quot;pps&quot;       
-## 
-## $class
-## [1] &quot;survey.design2&quot; &quot;survey.design&quot;</code></pre>
-<p>Therefore, we need to use <code>survey</code>’s own analytical functions. For example, here is a comparison of unweighted and weighted sex ratio.</p>
-<pre class="r"><code># unweighted
-df %&gt;%
-{table(.$gender)} %&gt;%
-  prop.table()</code></pre>
-<pre><code>## 
-## Female   Male 
-##   0.44   0.56</code></pre>
-<pre class="r"><code># weighted
-df.w %&gt;%
-  svytable(~gender, .) %&gt;%
-  prop.table()</code></pre>
-<pre><code>## gender
-## Female   Male 
-##    0.5    0.5</code></pre>
-<p><code>svytable()</code> can be used to create more than one-way frequency/percentage tables as well. For example, let’s create contingency table of <code>gender</code> and <code>country</code></p>
-<pre class="r"><code>df.w %&gt;%
-svytable(~gender+country, .) %&gt;%
-  prop.table(2)</code></pre>
-<pre><code>##         country
-## gender           A         B
-##   Female 0.5600000 0.4329897
-##   Male   0.4400000 0.5670103</code></pre>
-<p>Below are other useful functions of <code>survey</code> package:</p>
-<pre class="r"><code># to compute weighted mean
-svymean(~age, df.w)
-# to compute weighted quantiles
-svyquantile(~age, df.w, c(.25, .50, .75))
-# to compute weigted variance
-svyvar(~age, df.w)
-# to perform t-test
-svyttest(age~gender, df.w)</code></pre>
+df %&gt;% 
+  group_by(Projects) %&gt;% 
+  summarise(&#39;C.D in terms of range&#39; = (max(Expenditures)-min(Expenditures)/max(Expenditures)+min(Expenditures)),
+            &#39;C.D in terms of standard deviation&#39; = sd(Expenditures)/mean(Expenditures),
+            # &#39;Coefficient of Variation&#39; = 100 * sd(Expenditures)/mean(Expenditures),
+            &#39;Coefficient of Variation&#39; = cv(Expenditures)) %&gt;% 
+  kable()</code></pre>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="24%" />
+<col width="38%" />
+<col width="27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Projects</th>
+<th align="right">C.D in terms of range</th>
+<th align="right">C.D in terms of standard deviation</th>
+<th align="right">Coefficient of Variation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">project1</td>
+<td align="right">24434.41</td>
+<td align="right">0.1707252</td>
+<td align="right">17.07252</td>
+</tr>
+<tr class="even">
+<td align="left">project2</td>
+<td align="right">23529.43</td>
+<td align="right">0.1675868</td>
+<td align="right">16.75868</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Quartiles are values that divide the data into quarters. The first quartile (Q1) is the middle number between the smallest number and the median of the data. The second quartile, (Q2) is the median of the data set. The third quartile (Q3) is the middle number between the median and the largest number.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>In R, the var() and sd() functions compute the sample variance and sample standard deviation. Therefore, the n-1 is used in the denominator.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Standard deviation as measure of dispersion to compare variability among two groups should be used only when both groups have the same central value. When the central value of both groups differ widely, the coefficient of dispersion in terms of standard deviation or coefficient of variance should be used.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
 
     </div>
 
@@ -762,6 +843,8 @@ svyttest(age~gender, df.w)</code></pre>
 <div class="article-tags">
   
   <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/statistics/">Statistics</a>
   
 </div>
 
@@ -778,7 +861,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/using-survey-weight-in-r/&amp;text=Using%20Survey%20Weight" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/measures-of-dispersion-using-r/&amp;text=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -791,7 +874,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/using-survey-weight-in-r/&amp;t=Using%20Survey%20Weight" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/measures-of-dispersion-using-r/&amp;t=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -804,7 +887,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Using%20Survey%20Weight&amp;body=/post/using-survey-weight-in-r/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Measures%20of%20Dispersion&amp;body=/post/measures-of-dispersion-using-r/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -817,7 +900,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/using-survey-weight-in-r/&amp;title=Using%20Survey%20Weight" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/measures-of-dispersion-using-r/&amp;title=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -830,7 +913,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Using%20Survey%20Weight%20/post/using-survey-weight-in-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Measures%20of%20Dispersion%20/post/measures-of-dispersion-using-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -843,7 +926,7 @@ svyttest(age~gender, df.w)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/using-survey-weight-in-r/&amp;title=Using%20Survey%20Weight" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/measures-of-dispersion-using-r/&amp;title=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -945,9 +1028,9 @@ svyttest(age~gender, df.w)</code></pre>
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
+      <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
       
-      <li><a href="/post/measures-of-dispersion-using-r/">Measures of Dispersion</a></li>
+      <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
       
       <li><a href="/post/visualizing-distribution-of-data-in-r-box-plot/">Visualizing Distribution of Data | box-plot</a></li>
       

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statistics | Fahim Ahmad</title>
+    <link>/tag/statistics/</link>
+      <atom:link href="/tag/statistics/index.xml" rel="self" type="application/rss+xml" />
+    <description>Statistics</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Thu, 21 May 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Statistics</title>
+      <link>/tag/statistics/</link>
+    </image>
+    
+    <item>
+      <title>Measures of Dispersion</title>
+      <link>/post/measures-of-dispersion-using-r/</link>
+      <pubDate>Thu, 21 May 2020 00:00:00 +0000</pubDate>
+      <guid>/post/measures-of-dispersion-using-r/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#absolute-measures-of-dispersion&#34;&gt;Absolute measures of dispersion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#relative-measures-of-dispersion&#34;&gt;Relative measures of dispersion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data. In this post, you will learn about the measures of dispersion as part of the descriptive statistics.&lt;/p&gt;
+&lt;p&gt;As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value.&lt;/p&gt;
+&lt;p&gt;Two distinct sets of data may have the same central value, but a completely different level of variation. Therefore, an adequate description of the data should include both of these characteristics. In other words, the combination of measures of the central tendency and measures of dispersion help to understand the distribution of the data.&lt;/p&gt;
+&lt;p&gt;A measure of dispersion is zero if all the data points are the same and increases as the data become more diverse. There are mainly two types of measures of dispersion.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Absolute measures of dispersion&lt;/li&gt;
+&lt;li&gt;Relative measures of dispersion&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;absolute-measures-of-dispersion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Absolute measures of dispersion&lt;/h2&gt;
+&lt;p&gt;Absolute measures of dispersion express the scattering of the data points in terms of distance such as range or in terms of deviation from the central value such as variance and standard deviation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Range:&lt;/strong&gt; Range is defined as the difference between the smallest and the largest value in a set of data. The range is easy to compute; however, it is influenced by extreme values. Therefore, it is not a reliable measure of dispersion.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Range = X_{max} - X_{min}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Quartile deviation:&lt;/strong&gt; Quartile deviation is defined as half of the distance between the first and third quartile&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;. Quartile deviation is not influenced by extreme values. However, its demerit is that it ignores 50% of the data. Therefore, variance and standard deviation are suggested as the most reliable measures of dispersion.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Quartile \space deviation = \frac{Q_{3}-Q_{1}}{\ 2}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Variance and Standard Deviation&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;:&lt;/strong&gt; These measures of dispersion tell you how much spread out the data points are from the mean. To find out the variance, deduct each value from the mean, square it, sum each square, and divide it by the total number of values.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Variance = \frac{∑(x-\bar{x})^2}{\ {n-1}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Standard deviation is the square root of the variance. In the asymmetrical distribution, 68.25% of data points fall between &lt;strong&gt;mean ± 1s.d&lt;/strong&gt;; 95.45% of data points fall between &lt;strong&gt;mean ± 2s.d&lt;/strong&gt;; 99.73% of the data points fall between &lt;strong&gt;mean ± 3s.d&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Mathematically, the standard deviation can be expressed as below:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;##    Projects Expenditures
+## 1  project1        10000
+## 2  project1        15400
+## 3  project1        14250
+## 4  project1        13000
+## 5  project1        11250
+## 6  project1        10450
+## 7  project1         9035
+## 8  project1        12500
+## 9  project1        14125
+## 10 project1        11240
+## 11 project2        10500
+## 12 project2        15000
+## 13 project2        14300
+## 14 project2        12500
+## 15 project2        11300
+## 16 project2        10500
+## 17 project2         8530
+## 18 project2        12500
+## 19 project2        14120
+## 20 project2        11320&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The below functions can be used to compute the measures of dispersion.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+df %&amp;gt;% 
+  group_by(Projects) %&amp;gt;% 
+  summarise(Range = max(Expenditures) - min(Expenditures),
+            &amp;#39;Quartile Deviation&amp;#39; = IQR(Expenditures)/2,
+            Variance = var(Expenditures),
+            &amp;#39;Standard Deviation&amp;#39; = sd(Expenditures)) %&amp;gt;% 
+  kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Projects&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Range&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Quartile Deviation&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Variance&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Standard Deviation&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6365&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1598.125&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4285078&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2070.043&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6470&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1507.500&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4082801&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2020.594&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As the above table shows, based on &lt;strong&gt;Range&lt;/strong&gt; as a measure of dispersion that includes only minimum and maximum values, the data points in the second group (project2) are more scattered while based on the &lt;strong&gt;Standard deviation&lt;/strong&gt; the data points in that group are less scattered&lt;a href=&#34;#fn3&#34; class=&#34;footnote-ref&#34; id=&#34;fnref3&#34;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;relative-measures-of-dispersion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Relative measures of dispersion&lt;/h2&gt;
+&lt;p&gt;For comparing data among two or more than two groups that differ significantly in their averages, and for unit free comparison the relative measures of dispersion are used which is known as the coefficient of dispersion (C.D).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Coefficient of dispersion in terms of range:&lt;/strong&gt; C.D in terms of range is the distance between the minimum value and maximum value divided by sum of the minimum and maximum values.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{C.D\space in\space terms\space of\space range} = {\frac{X_{max} - X_{min}}{\ X_{max} + X_{min}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Coefficient of dispersion in terms of quartile deviation:&lt;/strong&gt; C.D in terms of quartile deviation is the distance between first quartile and third quartile divided by the sum of the first and third quartiles.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{C.D\space in\space terms\space of\space quartile \space deviation} = {\frac{Q_{3} - Q_{1}}{\ Q_{3} + Q_{1}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Coefficient of dispersion in terms of standard deviation:&lt;/strong&gt; C.D in terms of standard deviation is defined as the standard deviation divided by the mean.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{C.D\space in\space terms\space of\space S.D} = {\frac{S.D}{\bar{X}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Coefficient of Variation (C.V):&lt;/strong&gt; 100 times the coefficient of dispersion based on the standard deviation is the coefficient of variation.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[C.V = 100 * \frac{S.D}{\bar{X}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Let’s find the relative measures of dispersion for the above data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(raster)
+
+df %&amp;gt;% 
+  group_by(Projects) %&amp;gt;% 
+  summarise(&amp;#39;C.D in terms of range&amp;#39; = (max(Expenditures)-min(Expenditures)/max(Expenditures)+min(Expenditures)),
+            &amp;#39;C.D in terms of standard deviation&amp;#39; = sd(Expenditures)/mean(Expenditures),
+            # &amp;#39;Coefficient of Variation&amp;#39; = 100 * sd(Expenditures)/mean(Expenditures),
+            &amp;#39;Coefficient of Variation&amp;#39; = cv(Expenditures)) %&amp;gt;% 
+  kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;9%&#34; /&gt;
+&lt;col width=&#34;24%&#34; /&gt;
+&lt;col width=&#34;38%&#34; /&gt;
+&lt;col width=&#34;27%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Projects&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;C.D in terms of range&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;C.D in terms of standard deviation&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Coefficient of Variation&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;24434.41&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1707252&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;17.07252&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;23529.43&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.1675868&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;16.75868&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;Quartiles are values that divide the data into quarters. The first quartile (Q1) is the middle number between the smallest number and the median of the data. The second quartile, (Q2) is the median of the data set. The third quartile (Q3) is the middle number between the median and the largest number.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn2&#34;&gt;&lt;p&gt;In R, the var() and sd() functions compute the sample variance and sample standard deviation. Therefore, the n-1 is used in the denominator.&lt;a href=&#34;#fnref2&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id=&#34;fn3&#34;&gt;&lt;p&gt;Standard deviation as measure of dispersion to compare variability among two groups should be used only when both groups have the same central value. When the central value of both groups differ widely, the coefficient of dispersion in terms of standard deviation or coefficient of variance should be used.&lt;a href=&#34;#fnref3&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
