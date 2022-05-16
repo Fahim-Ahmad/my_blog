@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story." />
+  <meta name="description" content="Why box-plot? Box-plot using the base R function Box-plot using the ggplot2 package   Why box-plot? Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/combining-multiple-plots-using-patchwork/" />
+  <link rel="alternate" hreflang="en-us" href="/post/visualizing-distribution-of-data-in-r-box-plot/" />
 
   
 
@@ -278,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/combining-multiple-plots-using-patchwork/" />
+  <link rel="canonical" href="/post/visualizing-distribution-of-data-in-r-box-plot/" />
 
   
   
@@ -295,18 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/combining-multiple-plots-using-patchwork/" />
-  <meta property="og:title" content="Combining Multiple Plots using Patchwork | Fahim Ahmad" />
-  <meta property="og:description" content="Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/post/visualizing-distribution-of-data-in-r-box-plot/" />
+  <meta property="og:title" content="Visualizing Distribution of Data | box-plot | Fahim Ahmad" />
+  <meta property="og:description" content="Why box-plot? Box-plot using the base R function Box-plot using the ggplot2 package   Why box-plot? Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2022-04-11T00:00:00&#43;00:00"
+        content="2020-04-09T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-04-11T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-04-09T00:00:00&#43;00:00">
   
 
   
@@ -330,12 +330,12 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/combining-multiple-plots-using-patchwork/"
+    "@id": "/post/visualizing-distribution-of-data-in-r-box-plot/"
   },
-  "headline": "Combining Multiple Plots using Patchwork",
+  "headline": "Visualizing Distribution of Data | box-plot",
   
-  "datePublished": "2022-04-11T00:00:00Z",
-  "dateModified": "2022-04-11T00:00:00Z",
+  "datePublished": "2020-04-09T00:00:00Z",
+  "dateModified": "2020-04-09T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -350,7 +350,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story."
+  "description": "Why box-plot? Box-plot using the base R function Box-plot using the ggplot2 package   Why box-plot? Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks."
 }
 </script>
 
@@ -366,11 +366,11 @@
 
 
 
-  <title>Combining Multiple Plots using Patchwork | Fahim Ahmad</title>
+  <title>Visualizing Distribution of Data | box-plot | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="ddba152c703054d361462071b25c9a19" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="eaf5c05d697872bb9b1b81d5251645c8" >
 
   
   
@@ -608,7 +608,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Combining Multiple Plots using Patchwork</h1>
+  <h1>Visualizing Distribution of Data | box-plot</h1>
 
   
 
@@ -630,7 +630,7 @@
     
       
     
-    Apr 11, 2022
+    Apr 9, 2020
   </span>
   
 
@@ -680,143 +680,85 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction">Introduction</a><ul>
-<li><a href="#loading-required-packages">loading required packages</a></li>
-<li><a href="#creating-example-plots">creating example plots</a></li>
-</ul></li>
-<li><a href="#combining-plots-using-the-patchwork-package">Combining plots using the patchwork package</a></li>
-<li><a href="#combining-plots-beside-or-on-top-of-each-other">Combining plots beside or on top of each other</a></li>
-<li><a href="#controlling-the-legend">Controlling the legend</a></li>
-<li><a href="#adding-an-empty-area">Adding an empty area</a></li>
-<li><a href="#combining-plot-and-table">Combining plot and table</a></li>
-<li><a href="#annotation">Annotation</a></li>
-<li><a href="#modifying-the-result-of-the-patchwork">Modifying the result of the patchwork</a></li>
+<li><a href="#why-box-plot">Why box-plot?</a></li>
+<li><a href="#box-plot-using-the-base-r-function">Box-plot using the base R function</a></li>
+<li><a href="#box-plot-using-the-ggplot2-package">Box-plot using the ggplot2 package</a></li>
 </ul>
 </div>
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>Data is just a collection of numbers until it is turned into a story. Sometimes, the combination of several plots is required for telling a great data-driven story.</p>
-<p>It is a while that I am using <strong>R</strong> for data analysis and visualization and I have been using several packages for combining multiple plots. During this period, I found the <strong>patchwork</strong> package the most straightforward way of combining multiple ggplot plots which I will explore it in this post.</p>
-<div id="loading-required-packages" class="section level3">
-<h3>loading required packages</h3>
-<pre class="r"><code># install.packages(&quot;patchwork&quot;)
-library(patchwork)
-# install.packages(&quot;gapminder&quot;)
-library(gapminder)
-# install.packages(&quot;dplyr&quot;)
-library(dplyr)
-# install.packages()
-library(ggplot2)</code></pre>
-</div>
-<div id="creating-example-plots" class="section level3">
-<h3>creating example plots</h3>
-<pre class="r"><code>gdpPercap_lifeExpt &lt;- gapminder %&gt;% 
-  ggplot(aes(x=gdpPercap, y=lifeExp, col = continent)) +
-  geom_point() + theme_bw() +
-   labs(x = NULL, y = NULL)
-
-lifeExpt_densityPlot &lt;- gapminder %&gt;%
-  ggplot(aes(x=lifeExp, fill=continent)) +
-  geom_density(alpha=0.4) + theme_bw() +
-   labs(x = NULL, y = NULL)
-
-lifeExpt_boxPlot &lt;- gapminder %&gt;% 
-  ggplot(aes(x=continent, y=lifeExp, col=continent)) +
-  geom_boxplot() +
-  geom_jitter(width=0.2, alpha=0.4) + theme_bw() +
-    labs(x = NULL, y = NULL)
-
-gdpPercap_densityPlot &lt;- gapminder %&gt;%
-  ggplot(aes(x = gdpPercap, fill = continent)) +
-  geom_density(alpha = 0.4) + theme_bw() +
-  labs(x = NULL, y = NULL)
-
-gdpPercap_boxPlot &lt;- gapminder %&gt;% 
-  ggplot(aes(x=continent, y=gdpPercap, col=continent)) +
-  geom_boxplot() +
-  geom_jitter(width=0.2, alpha=0.4) + theme_bw() +
-    labs(x = NULL, y = NULL)</code></pre>
-</div>
-</div>
-<div id="combining-plots-using-the-patchwork-package" class="section level1">
-<h1>Combining plots using the patchwork package</h1>
-<p>Them most simple and straightforward way to combine plots is to use the <code>+</code> operator.</p>
-<pre class="r"><code>lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-</div>
-<div id="combining-plots-beside-or-on-top-of-each-other" class="section level1">
-<h1>Combining plots beside or on top of each other</h1>
-<p>The <code>+</code> operator combines plots without indicating anything about the desired layout. By default, the <strong>patchwork</strong> package keeps the grid square and fill the grid in row order. This can be controlled by <code>plot_layout()</code>.</p>
-<pre class="r"><code>lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot +
-  plot_layout(nrow = 3, byrow = F)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<blockquote>
-<p>By having a one-row layout <code>plot_layout(nrow = 1)</code> or one-column layout <code>plotlayout(ncol = 1)</code>, plots can be placed on top of each other or beside each other.</p>
-</blockquote>
-<p>Likewise, <strong>patchwork</strong> provides two more operators. <code>|</code> and <code>/</code></p>
-<p><code>|</code> will place the plots beside each other, while <code>/</code> will stack them.</p>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-</div>
-<div id="controlling-the-legend" class="section level1">
-<h1>Controlling the legend</h1>
-<p>The <code>plotlayout()</code> function can also be used to place the legends in a common place instead of next to each plot.</p>
-<pre class="r"><code>lifeExpt_densityPlot + lifeExpt_boxPlot + gdpPercap_densityPlot + gdpPercap_boxPlot +
-  plot_layout(nrow = 3, byrow = F, guides = &#39;collect&#39;)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<pre class="r"><code>gdpPercap_lifeExpt / ((lifeExpt_densityPlot / lifeExpt_boxPlot) | (gdpPercap_densityPlot / gdpPercap_boxPlot)) +
-  plot_layout(guides = &#39;collect&#39;)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-</div>
-<div id="adding-an-empty-area" class="section level1">
-<h1>Adding an empty area</h1>
-<p>It is also possible to add an empty area between the plots by creating an empty <em>ggplot</em> object using the <code>plot_spacer()</code> and adding it to the patchwork.</p>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / plot_spacer() / gdpPercap_lifeExpt</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-</div>
-<div id="combining-plot-and-table" class="section level1">
-<h1>Combining plot and table</h1>
-<p>Sometimes you may want to combine a non-ggplot content with a <em>ggplot</em> plot. For instance, let’s combine the correlation table between life expectancy, GDP per capita, and population with the GDP per capita and life expectancy scatter plot.</p>
-<pre class="r"><code># install.packages(&quot;gridExtra&quot;)
-library(gridExtra)
-
-correlation &lt;- cor(gapminder[,c(4:6)], method = &#39;pearson&#39;) %&gt;% round(digits = 3)
-gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-</div>
-<div id="annotation" class="section level1">
-<h1>Annotation</h1>
-<p>The <code>plot_annotation()</code> function can be used to control different aspects of the annotation of the final plot such as title, subtitle, and caption.</p>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt + 
-  plot_layout(guides = &#39;collect&#39;) +
-  plot_annotation(title = &#39;THIS IS TITLE&#39;, subtitle = &#39;this is subtitle&#39;)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>The <code>plot_annotation()</code> function also provide the <code>tag_levels</code>, <code>tag_prefix</code>, and <code>tag_suffix</code> arguments for auto-tagging to identify the subplots in text.</p>
+<div id="why-box-plot" class="section level2">
+<h2>Why box-plot?</h2>
+<p>Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks. Also, it is one of the best tools to identify the outliers to check if an association you find in your analysis can be explained by the presence of potential unusual observations.</p>
+<p>The graph shown below is an example of box-plot where the box shows the interquartile range (IQR), the horizontal line inside the box presents the median (50th percentile), and the whiskers (lines extending from the box) represent maximum value that is not an outlier (1.5 IQR above the third quartile) and minimum value that is not an outlier (1.5 IQR below the first quartile). All individual points outside the whiskers are considered as outliers.</p>
+<p><img src="imgs/ComparingDistributionofDatainRbox-plot.jpg" /></p>
 <ul>
-<li><p><strong>tag_levels</strong> = A character vector defining the enumeration format to use at each level. Possible values are ‘a’ for lowercase letters, ‘A’ for uppercase letters, ‘1’ for numbers, ‘i’ for lowercase Roman numerals, and ‘I’ for uppercase Roman numerals.</p></li>
-<li><p><strong>tag_prefix</strong> = String that should appear before the tag.</p></li>
-<li><p><strong>tag_suffix</strong> = String that should appear after the tag.</p></li>
+<li>First quartile (Q1 / 25<sup>th</sup> Percentile) also knows as lower quartile is the center of the lower half of the data.</li>
+<li>Median (Q2 / 50<sup>th</sup> Percentile) is the middle value of the data.</li>
+<li>Third quartile (Q3 / 75<sup>th</sup> Percentile) also known as upper quartile is center of the upper half of the data.</li>
+<li>Interquartile range (IQR) shows the middle half of the data. (distance between first and third quartile)</li>
 </ul>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
-  plot_layout(guides = &#39;collect&#39;) +
-  plot_annotation(tag_levels = &quot;I&quot;, tag_prefix = &quot;Plot &quot;, tag_suffix = &quot; :&quot;)</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Box-plots are usually a useful way to compare the distribution of data among two or more groups, or to compare the distribution of data among one or more than one group across time.</p>
 </div>
-<div id="modifying-the-result-of-the-patchwork" class="section level1">
-<h1>Modifying the result of the patchwork</h1>
-<p>The resulting object of the patchwork is a ggplot object. Which means if you continue adding objects such as geoms, scales, etc. it will be referenced to the last added plot. For example, let’s italicize the x-axis text and set the angle to 45.</p>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
-  plot_layout(guides = &#39;collect&#39;) +
-  plot_annotation(tag_levels = &quot;I&quot;, tag_prefix = &quot;Plot &quot;, tag_suffix = &quot; :&quot;) +
-  theme(axis.text.x = element_text(angle = -45, face = &#39;italic&#39;))</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>Often when it comes to modifying the plot it is more reasonable to modify everything at once. To do so, instead of the <code>+</code> operator, the <code>&amp;</code> operator can be used.</p>
-<pre class="r"><code>(lifeExpt_densityPlot | lifeExpt_boxPlot) / gdpPercap_lifeExpt +
-  plot_layout(guides = &#39;collect&#39;) +
-  plot_annotation(tag_levels = &quot;I&quot;, tag_prefix = &quot;Plot &quot;, tag_suffix = &quot; :&quot;) &amp;
-  theme(axis.text.x = element_text(angle = -45, face = &#39;italic&#39;))</code></pre>
-<p><img src="/post/2022-04-11-combining-multiple-plots-using-patchwork/index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div id="box-plot-using-the-base-r-function" class="section level2">
+<h2>Box-plot using the base R function</h2>
+<p>Let’s use the below data as an example. The first column shows the gender of each observation, the values in the second column are pre-test scores and the values in the third column are post-test scores.</p>
+<pre class="r"><code>df &lt;- data.frame(
+  gender    = c(&quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Female&quot;),
+  pre_test =    c(30,   26, 24, 19, 27, 21, 31, 16, 16, 26, 28, 29, 36, 25, 27, 24, 32, 30, 33, 26),
+  post_test =   c(35,   31, 29, 24, 32, 26, 36, 21, 21, 31, 33, 34, 41, 30, 32, 29, 37, 35, 38, 31)
+)
+
+df</code></pre>
+<pre><code>##    gender pre_test post_test
+## 1    Male       30        35
+## 2    Male       26        31
+## 3    Male       24        29
+## 4    Male       19        24
+## 5    Male       27        32
+## 6    Male       21        26
+## 7    Male       31        36
+## 8    Male       16        21
+## 9    Male       16        21
+## 10 Female       26        31
+## 11 Female       28        33
+## 12 Female       29        34
+## 13 Female       36        41
+## 14 Female       25        30
+## 15 Female       27        32
+## 16 Female       24        29
+## 17 Female       32        37
+## 18 Female       30        35
+## 19 Female       33        38
+## 20 Female       26        31</code></pre>
+<p>The base R function to build a boxplot is <code>boxplot()</code>.</p>
+<pre class="r"><code>boxplot(df$pre_test, main=&quot;Pre-test&quot;)</code></pre>
+<p><img src="/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Let’s combine both plots for better comparison.</p>
+<pre class="r"><code>boxplot(df[,c(&quot;pre_test&quot;, &quot;post_test&quot;)], main = &quot;Pre-test vs Post test&quot;)</code></pre>
+<p><img src="/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="box-plot-using-the-ggplot2-package" class="section level2">
+<h2>Box-plot using the ggplot2 package</h2>
+<p>I prefer the ggplot2 plots because the output is nicer and importantly it can be easily modified compared to base R graphs, moreover, it is more popular among R users.</p>
+<p>The <code>geom_box()</code> function from the <strong>ggplot2</strong> package can be used to create a box-plot.</p>
+<pre class="r"><code># install.packages(&quot;ggplot2&quot;)
+library(ggplot2)
+
+ggplot(df) +
+  geom_boxplot(aes(y = pre_test, x = &quot;1: Pre-test&quot;)) +
+  geom_boxplot(aes(y = post_test, x = &quot;2: Post-test&quot;)) +
+  theme_bw() +
+  labs(title = &quot;Pre-test vs. Post-test scores&quot;, x = NULL, y = NULL)</code></pre>
+<p><img src="/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The plot on the left side shows the distribution of pre-test scores and the one on the right side shows the distribution of post-test scores. The above plot shows that average post-test score (31.5) is higher compare to the pre-test (26.5).</p>
+<p>It is also possible to use box-plot to visualize the distribution of data by categories of another variable as well, see below example for instance.</p>
+<pre class="r"><code>ggplot(df) +
+  geom_boxplot(aes(y = pre_test, x = &quot;1: Pre-test&quot;, fill = gender), alpha = 0.25) +
+  geom_boxplot(aes(y = post_test, x = &quot;2: Post-test&quot;, fill = gender), alpha = 0.25) +
+  theme_bw() +
+  labs(title = &quot;Pre-test vs. Post-test scores, by gender&quot;, x = NULL, y = NULL)</code></pre>
+<p><img src="/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The above plot shows that on average females have higher score (boxes in red color) compare to those of males (boxes in blue color) in both pre-test and post-test.</p>
 </div>
 
     </div>
@@ -832,7 +774,9 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
   
   <a class="badge badge-light" href="/tag/ggplot/">ggplot</a>
   
-  <a class="badge badge-light" href="/tag/patchwork/">patchwork</a>
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/visualization/">visualization</a>
   
 </div>
 
@@ -849,7 +793,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/combining-multiple-plots-using-patchwork/&amp;text=Combining%20Multiple%20Plots%20using%20Patchwork" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/visualizing-distribution-of-data-in-r-box-plot/&amp;text=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -862,7 +806,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/combining-multiple-plots-using-patchwork/&amp;t=Combining%20Multiple%20Plots%20using%20Patchwork" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/visualizing-distribution-of-data-in-r-box-plot/&amp;t=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -875,7 +819,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Combining%20Multiple%20Plots%20using%20Patchwork&amp;body=/post/combining-multiple-plots-using-patchwork/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot&amp;body=/post/visualizing-distribution-of-data-in-r-box-plot/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -888,7 +832,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/combining-multiple-plots-using-patchwork/&amp;title=Combining%20Multiple%20Plots%20using%20Patchwork" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/visualizing-distribution-of-data-in-r-box-plot/&amp;title=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -901,7 +845,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Combining%20Multiple%20Plots%20using%20Patchwork%20/post/combining-multiple-plots-using-patchwork/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot%20/post/visualizing-distribution-of-data-in-r-box-plot/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -914,7 +858,7 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/combining-multiple-plots-using-patchwork/&amp;title=Combining%20Multiple%20Plots%20using%20Patchwork" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/visualizing-distribution-of-data-in-r-box-plot/&amp;title=Visualizing%20Distribution%20of%20Data%20%7c%20box-plot" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1016,11 +960,15 @@ gdpPercap_lifeExpt / tableGrob(correlation)</code></pre>
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/">ggplot2: geom_histogram &amp; facet_wrap with different vertical lines on each facet</a></li>
-      
       <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
       
-      <li><a href="/post/visualizing-distribution-of-data-in-r-box-plot/">Visualizing Distribution of Data | box-plot</a></li>
+      <li><a href="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/">ggplot2: geom_histogram &amp; facet_wrap with different vertical lines on each facet</a></li>
+      
+      <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
+      
+      <li><a href="/post/combining-multiple-plots-using-patchwork/">Combining Multiple Plots using Patchwork</a></li>
+      
+      <li><a href="/post/rename-data-frame-columns/">Rename Data Frame Columns</a></li>
       
     </ul>
   </div>

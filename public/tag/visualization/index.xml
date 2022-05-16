@@ -198,5 +198,97 @@ plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&am
 </description>
     </item>
     
+    <item>
+      <title>Visualizing Distribution of Data | box-plot</title>
+      <link>/post/visualizing-distribution-of-data-in-r-box-plot/</link>
+      <pubDate>Thu, 09 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>/post/visualizing-distribution-of-data-in-r-box-plot/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#why-box-plot&#34;&gt;Why box-plot?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#box-plot-using-the-base-r-function&#34;&gt;Box-plot using the base R function&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#box-plot-using-the-ggplot2-package&#34;&gt;Box-plot using the ggplot2 package&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;why-box-plot&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Why box-plot?&lt;/h2&gt;
+&lt;p&gt;Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks. Also, it is one of the best tools to identify the outliers to check if an association you find in your analysis can be explained by the presence of potential unusual observations.&lt;/p&gt;
+&lt;p&gt;The graph shown below is an example of box-plot where the box shows the interquartile range (IQR), the horizontal line inside the box presents the median (50th percentile), and the whiskers (lines extending from the box) represent maximum value that is not an outlier (1.5 IQR above the third quartile) and minimum value that is not an outlier (1.5 IQR below the first quartile). All individual points outside the whiskers are considered as outliers.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;imgs/ComparingDistributionofDatainRbox-plot.jpg&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First quartile (Q1 / 25&lt;sup&gt;th&lt;/sup&gt; Percentile) also knows as lower quartile is the center of the lower half of the data.&lt;/li&gt;
+&lt;li&gt;Median (Q2 / 50&lt;sup&gt;th&lt;/sup&gt; Percentile) is the middle value of the data.&lt;/li&gt;
+&lt;li&gt;Third quartile (Q3 / 75&lt;sup&gt;th&lt;/sup&gt; Percentile) also known as upper quartile is center of the upper half of the data.&lt;/li&gt;
+&lt;li&gt;Interquartile range (IQR) shows the middle half of the data. (distance between first and third quartile)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Box-plots are usually a useful way to compare the distribution of data among two or more groups, or to compare the distribution of data among one or more than one group across time.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;box-plot-using-the-base-r-function&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Box-plot using the base R function&lt;/h2&gt;
+&lt;p&gt;Let’s use the below data as an example. The first column shows the gender of each observation, the values in the second column are pre-test scores and the values in the third column are post-test scores.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df &amp;lt;- data.frame(
+  gender    = c(&amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Male&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;, &amp;quot;Female&amp;quot;),
+  pre_test =    c(30,   26, 24, 19, 27, 21, 31, 16, 16, 26, 28, 29, 36, 25, 27, 24, 32, 30, 33, 26),
+  post_test =   c(35,   31, 29, 24, 32, 26, 36, 21, 21, 31, 33, 34, 41, 30, 32, 29, 37, 35, 38, 31)
+)
+
+df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    gender pre_test post_test
+## 1    Male       30        35
+## 2    Male       26        31
+## 3    Male       24        29
+## 4    Male       19        24
+## 5    Male       27        32
+## 6    Male       21        26
+## 7    Male       31        36
+## 8    Male       16        21
+## 9    Male       16        21
+## 10 Female       26        31
+## 11 Female       28        33
+## 12 Female       29        34
+## 13 Female       36        41
+## 14 Female       25        30
+## 15 Female       27        32
+## 16 Female       24        29
+## 17 Female       32        37
+## 18 Female       30        35
+## 19 Female       33        38
+## 20 Female       26        31&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The base R function to build a boxplot is &lt;code&gt;boxplot()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;boxplot(df$pre_test, main=&amp;quot;Pre-test&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Let’s combine both plots for better comparison.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;boxplot(df[,c(&amp;quot;pre_test&amp;quot;, &amp;quot;post_test&amp;quot;)], main = &amp;quot;Pre-test vs Post test&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;box-plot-using-the-ggplot2-package&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Box-plot using the ggplot2 package&lt;/h2&gt;
+&lt;p&gt;I prefer the ggplot2 plots because the output is nicer and importantly it can be easily modified compared to base R graphs, moreover, it is more popular among R users.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;geom_box()&lt;/code&gt; function from the &lt;strong&gt;ggplot2&lt;/strong&gt; package can be used to create a box-plot.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;ggplot2&amp;quot;)
+library(ggplot2)
+
+ggplot(df) +
+  geom_boxplot(aes(y = pre_test, x = &amp;quot;1: Pre-test&amp;quot;)) +
+  geom_boxplot(aes(y = post_test, x = &amp;quot;2: Post-test&amp;quot;)) +
+  theme_bw() +
+  labs(title = &amp;quot;Pre-test vs. Post-test scores&amp;quot;, x = NULL, y = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The plot on the left side shows the distribution of pre-test scores and the one on the right side shows the distribution of post-test scores. The above plot shows that average post-test score (31.5) is higher compare to the pre-test (26.5).&lt;/p&gt;
+&lt;p&gt;It is also possible to use box-plot to visualize the distribution of data by categories of another variable as well, see below example for instance.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(df) +
+  geom_boxplot(aes(y = pre_test, x = &amp;quot;1: Pre-test&amp;quot;, fill = gender), alpha = 0.25) +
+  geom_boxplot(aes(y = post_test, x = &amp;quot;2: Post-test&amp;quot;, fill = gender), alpha = 0.25) +
+  theme_bw() +
+  labs(title = &amp;quot;Pre-test vs. Post-test scores, by gender&amp;quot;, x = NULL, y = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-04-08-visualizing-distribution-of-data-in-r-box-plot/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above plot shows that on average females have higher score (boxes in red color) compare to those of males (boxes in blue color) in both pre-test and post-test.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
