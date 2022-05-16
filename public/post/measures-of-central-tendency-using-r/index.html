@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data." />
+  <meta name="description" content="Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/measures-of-dispersion-using-r/" />
+  <link rel="alternate" hreflang="en-us" href="/post/measures-of-central-tendency-using-r/" />
 
   
 
@@ -278,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/measures-of-dispersion-using-r/" />
+  <link rel="canonical" href="/post/measures-of-central-tendency-using-r/" />
 
   
   
@@ -295,18 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/measures-of-dispersion-using-r/" />
-  <meta property="og:title" content="Measures of Dispersion | Fahim Ahmad" />
-  <meta property="og:description" content="Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/post/measures-of-central-tendency-using-r/" />
+  <meta property="og:title" content="What is Central Tendency? | Fahim Ahmad" />
+  <meta property="og:description" content="Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2020-05-21T00:00:00&#43;00:00"
+        content="2020-04-18T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2020-05-21T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-04-18T00:00:00&#43;00:00">
   
 
   
@@ -330,12 +330,12 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/measures-of-dispersion-using-r/"
+    "@id": "/post/measures-of-central-tendency-using-r/"
   },
-  "headline": "Measures of Dispersion",
+  "headline": "What is Central Tendency?",
   
-  "datePublished": "2020-05-21T00:00:00Z",
-  "dateModified": "2020-05-21T00:00:00Z",
+  "datePublished": "2020-04-18T00:00:00Z",
+  "dateModified": "2020-04-18T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -350,7 +350,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data."
+  "description": "Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks."
 }
 </script>
 
@@ -366,11 +366,11 @@
 
 
 
-  <title>Measures of Dispersion | Fahim Ahmad</title>
+  <title>What is Central Tendency? | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="68c3f7ed1051ac55257635e3c3cb539a" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="1d7204a616e3197f25169a278f48b616" >
 
   
   
@@ -608,7 +608,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Measures of Dispersion</h1>
+  <h1>What is Central Tendency?</h1>
 
   
 
@@ -630,7 +630,7 @@
     
       
     
-    May 21, 2020
+    Apr 18, 2020
   </span>
   
 
@@ -678,156 +678,150 @@
     <div class="article-style">
       
 
-<div id="TOC">
-<ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#absolute-measures-of-dispersion">Absolute measures of dispersion</a></li>
-<li><a href="#relative-measures-of-dispersion">Relative measures of dispersion</a></li>
-</ul>
-</div>
 
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data. In this post, you will learn about the measures of dispersion as part of the descriptive statistics.</p>
-<p>As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value.</p>
-<p>Two distinct sets of data may have the same central value, but a completely different level of variation. Therefore, an adequate description of the data should include both of these characteristics. In other words, the combination of measures of the central tendency and measures of dispersion help to understand the distribution of the data.</p>
-<p>A measure of dispersion is zero if all the data points are the same and increases as the data become more diverse. There are mainly two types of measures of dispersion.</p>
-<ul>
-<li>Absolute measures of dispersion</li>
-<li>Relative measures of dispersion</li>
-</ul>
-</div>
-<div id="absolute-measures-of-dispersion" class="section level2">
-<h2>Absolute measures of dispersion</h2>
-<p>Absolute measures of dispersion express the scattering of the data points in terms of distance such as range or in terms of deviation from the central value such as variance and standard deviation.</p>
-<p><strong>Range:</strong> Range is defined as the difference between the smallest and the largest value in a set of data. The range is easy to compute; however, it is influenced by extreme values. Therefore, it is not a reliable measure of dispersion.</p>
-<p><span class="math display">\[Range = X_{max} - X_{min}\]</span></p>
-<p><strong>Quartile deviation:</strong> Quartile deviation is defined as half of the distance between the first and third quartile<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Quartile deviation is not influenced by extreme values. However, its demerit is that it ignores 50% of the data. Therefore, variance and standard deviation are suggested as the most reliable measures of dispersion.</p>
-<p><span class="math display">\[Quartile \space deviation = \frac{Q_{3}-Q_{1}}{\ 2}\]</span></p>
-<p><strong>Variance and Standard Deviation<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</strong> These measures of dispersion tell you how much spread out the data points are from the mean. To find out the variance, deduct each value from the mean, square it, sum each square, and divide it by the total number of values.</p>
-<p><span class="math display">\[Variance = \frac{∑(x-\bar{x})^2}{\ {n-1}}\]</span></p>
-<p>Standard deviation is the square root of the variance. In the asymmetrical distribution, 68.25% of data points fall between <strong>mean ± 1s.d</strong>; 95.45% of data points fall between <strong>mean ± 2s.d</strong>; 99.73% of the data points fall between <strong>mean ± 3s.d</strong>.</p>
-<p>Mathematically, the standard deviation can be expressed as below:</p>
-<p><span class="math display">\[{Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}\]</span></p>
-<p>No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.</p>
-<pre><code>##    Projects Expenditures
-## 1  project1        10000
-## 2  project1        15400
-## 3  project1        14250
-## 4  project1        13000
-## 5  project1        11250
-## 6  project1        10450
-## 7  project1         9035
-## 8  project1        12500
-## 9  project1        14125
-## 10 project1        11240
-## 11 project2        10500
-## 12 project2        15000
-## 13 project2        14300
-## 14 project2        12500
-## 15 project2        11300
-## 16 project2        10500
-## 17 project2         8530
-## 18 project2        12500
-## 19 project2        14120
-## 20 project2        11320</code></pre>
-<p>The below functions can be used to compute the measures of dispersion.</p>
-<pre class="r"><code>library(tidyverse)
-
-df %&gt;% 
-  group_by(Projects) %&gt;% 
-  summarise(Range = max(Expenditures) - min(Expenditures),
-            &#39;Quartile Deviation&#39; = IQR(Expenditures)/2,
-            Variance = var(Expenditures),
-            &#39;Standard Deviation&#39; = sd(Expenditures)) %&gt;% 
-  kable()</code></pre>
+<p>Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks. Now tell me which one is cost-efficient than the other, or both are the same?</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Projects</th>
-<th align="right">Range</th>
-<th align="right">Quartile Deviation</th>
-<th align="right">Variance</th>
-<th align="right">Standard Deviation</th>
+<th align="right">project1</th>
+<th align="right">project2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10000</td>
+<td align="right">10500</td>
+</tr>
+<tr class="even">
+<td align="right">15400</td>
+<td align="right">15000</td>
+</tr>
+<tr class="odd">
+<td align="right">14250</td>
+<td align="right">14300</td>
+</tr>
+<tr class="even">
+<td align="right">13000</td>
+<td align="right">12500</td>
+</tr>
+<tr class="odd">
+<td align="right">11250</td>
+<td align="right">11300</td>
+</tr>
+<tr class="even">
+<td align="right">10450</td>
+<td align="right">10500</td>
+</tr>
+<tr class="odd">
+<td align="right">9035</td>
+<td align="right">9030</td>
+</tr>
+<tr class="even">
+<td align="right">12500</td>
+<td align="right">12500</td>
+</tr>
+<tr class="odd">
+<td align="right">14125</td>
+<td align="right">14120</td>
+</tr>
+<tr class="even">
+<td align="right">11240</td>
+<td align="right">11320</td>
+</tr>
+</tbody>
+</table>
+<p>What if I show you this?</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">projects</th>
+<th align="right">average</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">project1</td>
-<td align="right">6365</td>
-<td align="right">1598.125</td>
-<td align="right">4285078</td>
-<td align="right">2070.043</td>
+<td align="right">12125</td>
 </tr>
 <tr class="even">
 <td align="left">project2</td>
-<td align="right">6470</td>
-<td align="right">1507.500</td>
-<td align="right">4082801</td>
-<td align="right">2020.594</td>
+<td align="right">12107</td>
 </tr>
 </tbody>
 </table>
-<p>As the above table shows, based on <strong>Range</strong> as a measure of dispersion that includes only minimum and maximum values, the data points in the second group (project2) are more scattered while based on the <strong>Standard deviation</strong> the data points in that group are less scattered<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
-</div>
-<div id="relative-measures-of-dispersion" class="section level2">
-<h2>Relative measures of dispersion</h2>
-<p>For comparing data among two or more than two groups that differ significantly in their averages, and for unit free comparison the relative measures of dispersion are used which is known as the coefficient of dispersion (C.D).</p>
-<p><strong>Coefficient of dispersion in terms of range:</strong> C.D in terms of range is the distance between the minimum value and maximum value divided by sum of the minimum and maximum values.</p>
-<p><span class="math display">\[{C.D\space in\space terms\space of\space range} = {\frac{X_{max} - X_{min}}{\ X_{max} + X_{min}}}\]</span></p>
-<p><strong>Coefficient of dispersion in terms of quartile deviation:</strong> C.D in terms of quartile deviation is the distance between first quartile and third quartile divided by the sum of the first and third quartiles.</p>
-<p><span class="math display">\[{C.D\space in\space terms\space of\space quartile \space deviation} = {\frac{Q_{3} - Q_{1}}{\ Q_{3} + Q_{1}}}\]</span></p>
-<p><strong>Coefficient of dispersion in terms of standard deviation:</strong> C.D in terms of standard deviation is defined as the standard deviation divided by the mean.</p>
-<p><span class="math display">\[{C.D\space in\space terms\space of\space S.D} = {\frac{S.D}{\bar{X}}}\]</span></p>
-<p><strong>Coefficient of Variation (C.V):</strong> 100 times the coefficient of dispersion based on the standard deviation is the coefficient of variation.</p>
-<p><span class="math display">\[C.V = 100 * \frac{S.D}{\bar{X}}\]</span></p>
-<p>Let’s find the relative measures of dispersion for the above data.</p>
-<pre class="r"><code>library(raster)
+<p>Using the average, it is easy to compare the expenditures of both projects. This is one of the primary purposes of the measures of central tendency to summarize the data into a single number that represents the center point of the data.</p>
+<p>Measures of central tendency show the point where most values of a the data fall and represent the tendency of the data to cluster around a middle value using different approaches. Selecting the appropriate method, however, depends on the type of data you are dealing with. In this post, you will learn when to use a particular measure of central tendency and how to calculate it using R.</p>
+<ul>
+<li><strong>Mean:</strong> Mean is the measure of central tendency that you are most familiar with. Its use is most often with continuous data. You just add up all of the values and divide by the number of observations in the data. The mean locates the center accurately when the data is normally distributed. In fact, in any symmetrical distribution the mean, median and mode are equal. You can, therefore, use any of the measures of the central tendency to locate the center of the data. However, the presence of extreme values pulls the mean away from the center while the median is less affected by outliers.</li>
+</ul>
+<p><img src="imgs\measuresofcentraltendency.jpg" /></p>
+<p>As mean is susceptible to the presence of outliers<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.</p>
+<p>In R, the <code>mean()</code> function can be used to calculate the arithmetic mean. It takes a vector of values as input and returns the average.</p>
+<pre class="r"><code># use (na.rm = TRUE) if there is any missing value in the list of values
+mean(c(10000, 15400, 14250, 13000, 11250, 10450, 9035, 12500, 14125, 11240), na.rm = FALSE)</code></pre>
+<pre><code>## [1] 12125</code></pre>
+<ul>
+<li><strong>Median:</strong> Median is the middle point of the data that is arranged in ascending or descending order. If a dataset contains an even number of values, the median is the mean of the two middle values. In other words, the median is the middle of an ordered list of values. Median is less likely to be influenced by the presence of outliers. Therefore, it is the most preferred measure of central tendency when the distribution of the data is skewed. Moreover, the median is used when there is an open-ended distribution. For example, if you have data that measures numbers of employees and the options are 1, 2, 3, 4, “5 or more”. The “5 or more” option is open-ended and the exact value is unknown. Thus, it makes calculating the mean impossible.</li>
+</ul>
+<p>The <code>median()</code> function can be used to compute the median. It takes a vector of values as input and returns the value that is occurred most frequently.</p>
+<pre class="r"><code># use (na.rm = TRUE) if there is any missing value in the list of values
+median(c(10000, 15400, 14250, 13000, 11250, 10450, 9035, 12500, 14125, 11240), na.rm = FALSE)</code></pre>
+<pre><code>## [1] 11875</code></pre>
+<ul>
+<li><strong>Mode:</strong> Mode is preferred when you have a categorical data. It is not often used with the continuous data because there are an infinite number of values between two values and it is very unlikely that two or more values will be exactly equal. Mode represents the most common value -the value that occurs most frequently- in the data. In some cases, a dataset may contain multiple modes while some datasets may not have any mode at all</li>
+</ul>
+<p>To the best of my knowledge, there is not any built-in function in R to find out mode in a vector of values. Therefore, below two steps must be followed:</p>
+<ol style="list-style-type: lower-alpha">
+<li>count the frequency of each value using <code>table()</code> function.</li>
+<li>use the result of the first step as an input into the <code>which.max()</code> function to find the mode.</li>
+</ol>
+<p>Also, you can use below code to program a new function called <strong>Mode</strong> to find the mode in a given vector of values.</p>
+<pre class="r"><code>Mode &lt;- function(x) {
+  as.character(
+    pull(
+      filter(
+        data.frame(
+          table(x)
+        ),
+        Freq == max(Freq)),
+      x)
+  )
+}
 
-df %&gt;% 
-  group_by(Projects) %&gt;% 
-  summarise(&#39;C.D in terms of range&#39; = (max(Expenditures)-min(Expenditures)/max(Expenditures)+min(Expenditures)),
-            &#39;C.D in terms of standard deviation&#39; = sd(Expenditures)/mean(Expenditures),
-            # &#39;Coefficient of Variation&#39; = 100 * sd(Expenditures)/mean(Expenditures),
-            &#39;Coefficient of Variation&#39; = cv(Expenditures)) %&gt;% 
-  kable()</code></pre>
+Mode(c(2, 4, 7, 2, 3, 2, 5, 7, 9))</code></pre>
+<pre><code>## [1] &quot;2&quot;</code></pre>
+<p>The following table shows what the best measure of central tendency is with respect to different types of variables.</p>
 <table>
-<colgroup>
-<col width="9%" />
-<col width="24%" />
-<col width="38%" />
-<col width="27%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th align="left">Projects</th>
-<th align="right">C.D in terms of range</th>
-<th align="right">C.D in terms of standard deviation</th>
-<th align="right">Coefficient of Variation</th>
+<th align="center">Types of the variable</th>
+<th align="center">The best measure of central tendency</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">project1</td>
-<td align="right">24434.41</td>
-<td align="right">0.1707252</td>
-<td align="right">17.07252</td>
+<td align="center">Nominal</td>
+<td align="center">Mode</td>
 </tr>
 <tr class="even">
-<td align="left">project2</td>
-<td align="right">23529.43</td>
-<td align="right">0.1675868</td>
-<td align="right">16.75868</td>
+<td align="center">Ordinal</td>
+<td align="center">Median / Mode</td>
+</tr>
+<tr class="odd">
+<td align="center">Continuous (not skewed)</td>
+<td align="center">Mean</td>
+</tr>
+<tr class="even">
+<td align="center">Continuous (skewed)</td>
+<td align="center">Median</td>
 </tr>
 </tbody>
 </table>
-</div>
+<p><br><br></p>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Quartiles are values that divide the data into quarters. The first quartile (Q1) is the middle number between the smallest number and the median of the data. The second quartile, (Q2) is the median of the data set. The third quartile (Q3) is the middle number between the median and the largest number.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>In R, the var() and sd() functions compute the sample variance and sample standard deviation. Therefore, the n-1 is used in the denominator.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>Standard deviation as measure of dispersion to compare variability among two groups should be used only when both groups have the same central value. When the central value of both groups differ widely, the coefficient of dispersion in terms of standard deviation or coefficient of variance should be used.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Outliers are values that are notably different from the rest of the data. Usually, any value larger than 1.5IQR above the third quartile or lower than 1.5IQR below the first quartile is considered as outlier.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
@@ -861,7 +855,7 @@ df %&gt;%
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/measures-of-dispersion-using-r/&amp;text=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/measures-of-central-tendency-using-r/&amp;text=What%20is%20Central%20Tendency?" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -874,7 +868,7 @@ df %&gt;%
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/measures-of-dispersion-using-r/&amp;t=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/measures-of-central-tendency-using-r/&amp;t=What%20is%20Central%20Tendency?" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -887,7 +881,7 @@ df %&gt;%
       
       
       <li>
-        <a href="mailto:?subject=Measures%20of%20Dispersion&amp;body=/post/measures-of-dispersion-using-r/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=What%20is%20Central%20Tendency?&amp;body=/post/measures-of-central-tendency-using-r/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -900,7 +894,7 @@ df %&gt;%
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/measures-of-dispersion-using-r/&amp;title=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/measures-of-central-tendency-using-r/&amp;title=What%20is%20Central%20Tendency?" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -913,7 +907,7 @@ df %&gt;%
       
       
       <li>
-        <a href="whatsapp://send?text=Measures%20of%20Dispersion%20/post/measures-of-dispersion-using-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=What%20is%20Central%20Tendency?%20/post/measures-of-central-tendency-using-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -926,7 +920,7 @@ df %&gt;%
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/measures-of-dispersion-using-r/&amp;title=Measures%20of%20Dispersion" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/measures-of-central-tendency-using-r/&amp;title=What%20is%20Central%20Tendency?" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1028,7 +1022,7 @@ df %&gt;%
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/measures-of-central-tendency-using-r/">What is Central Tendency?</a></li>
+      <li><a href="/post/measures-of-dispersion-using-r/">Measures of Dispersion</a></li>
       
       <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
       

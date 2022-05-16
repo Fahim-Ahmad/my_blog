@@ -174,5 +174,161 @@ df %&amp;gt;%
 </description>
     </item>
     
+    <item>
+      <title>What is Central Tendency?</title>
+      <link>/post/measures-of-central-tendency-using-r/</link>
+      <pubDate>Sat, 18 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>/post/measures-of-central-tendency-using-r/</guid>
+      <description>
+
+
+&lt;p&gt;Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks. Now tell me which one is cost-efficient than the other, or both are the same?&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;project1&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;project2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;10000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10500&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;15400&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;15000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;14250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;14300&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;13000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;12500&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;11250&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;11300&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;10450&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10500&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;9035&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9030&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;12500&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;12500&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;14125&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;14120&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;11240&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;11320&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;What if I show you this?&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;projects&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;average&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;12125&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;project2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;12107&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Using the average, it is easy to compare the expenditures of both projects. This is one of the primary purposes of the measures of central tendency to summarize the data into a single number that represents the center point of the data.&lt;/p&gt;
+&lt;p&gt;Measures of central tendency show the point where most values of a the data fall and represent the tendency of the data to cluster around a middle value using different approaches. Selecting the appropriate method, however, depends on the type of data you are dealing with. In this post, you will learn when to use a particular measure of central tendency and how to calculate it using R.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Mean:&lt;/strong&gt; Mean is the measure of central tendency that you are most familiar with. Its use is most often with continuous data. You just add up all of the values and divide by the number of observations in the data. The mean locates the center accurately when the data is normally distributed. In fact, in any symmetrical distribution the mean, median and mode are equal. You can, therefore, use any of the measures of the central tendency to locate the center of the data. However, the presence of extreme values pulls the mean away from the center while the median is less affected by outliers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;imgs\measuresofcentraltendency.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As mean is susceptible to the presence of outliers&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;, it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.&lt;/p&gt;
+&lt;p&gt;In R, the &lt;code&gt;mean()&lt;/code&gt; function can be used to calculate the arithmetic mean. It takes a vector of values as input and returns the average.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# use (na.rm = TRUE) if there is any missing value in the list of values
+mean(c(10000, 15400, 14250, 13000, 11250, 10450, 9035, 12500, 14125, 11240), na.rm = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 12125&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Median:&lt;/strong&gt; Median is the middle point of the data that is arranged in ascending or descending order. If a dataset contains an even number of values, the median is the mean of the two middle values. In other words, the median is the middle of an ordered list of values. Median is less likely to be influenced by the presence of outliers. Therefore, it is the most preferred measure of central tendency when the distribution of the data is skewed. Moreover, the median is used when there is an open-ended distribution. For example, if you have data that measures numbers of employees and the options are 1, 2, 3, 4, “5 or more”. The “5 or more” option is open-ended and the exact value is unknown. Thus, it makes calculating the mean impossible.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;median()&lt;/code&gt; function can be used to compute the median. It takes a vector of values as input and returns the value that is occurred most frequently.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# use (na.rm = TRUE) if there is any missing value in the list of values
+median(c(10000, 15400, 14250, 13000, 11250, 10450, 9035, 12500, 14125, 11240), na.rm = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 11875&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Mode:&lt;/strong&gt; Mode is preferred when you have a categorical data. It is not often used with the continuous data because there are an infinite number of values between two values and it is very unlikely that two or more values will be exactly equal. Mode represents the most common value -the value that occurs most frequently- in the data. In some cases, a dataset may contain multiple modes while some datasets may not have any mode at all&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To the best of my knowledge, there is not any built-in function in R to find out mode in a vector of values. Therefore, below two steps must be followed:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: lower-alpha&#34;&gt;
+&lt;li&gt;count the frequency of each value using &lt;code&gt;table()&lt;/code&gt; function.&lt;/li&gt;
+&lt;li&gt;use the result of the first step as an input into the &lt;code&gt;which.max()&lt;/code&gt; function to find the mode.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Also, you can use below code to program a new function called &lt;strong&gt;Mode&lt;/strong&gt; to find the mode in a given vector of values.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Mode &amp;lt;- function(x) {
+  as.character(
+    pull(
+      filter(
+        data.frame(
+          table(x)
+        ),
+        Freq == max(Freq)),
+      x)
+  )
+}
+
+Mode(c(2, 4, 7, 2, 3, 2, 5, 7, 9))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;2&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The following table shows what the best measure of central tendency is with respect to different types of variables.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;center&#34;&gt;Types of the variable&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;The best measure of central tendency&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;Nominal&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Mode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;Ordinal&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Median / Mode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;Continuous (not skewed)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Mean&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;Continuous (skewed)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Median&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn1&#34;&gt;&lt;p&gt;Outliers are values that are notably different from the rest of the data. Usually, any value larger than 1.5IQR above the third quartile or lower than 1.5IQR below the first quartile is considered as outlier.&lt;a href=&#34;#fnref1&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
