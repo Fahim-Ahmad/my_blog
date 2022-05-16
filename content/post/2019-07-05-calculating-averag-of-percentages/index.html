@@ -1,0 +1,131 @@
+---
+title: Calculating Average of Percentages
+author: Fahim Ahmad
+date: '2019-07-05'
+slug: calculating-averag-of-percentages
+categories:
+tags:
+output:
+  blogdown::html_page:
+    toc: no
+Description: In this post you will learn when to calculate average of percentages and when not to do it.
+---
+
+
+
+<style> 
+  body {
+    text-align: justify}
+</style>
+<p>Calculating the average of percentages is <strong>NOT</strong> similar to calculating the average of numbers.</p>
+<p>I am conducting data analysis trainings once every two months and at the end of each class I ask students if they want to join the advanced data analysis class that I organize once each year. Below data frame contains part of the actual data which I collected from those who have participated in my classes in the past few months which basically has three variables as following:</p>
+<ul>
+<li><strong>class</strong>: either a trainee is from class 1 or class 2.</li>
+<li><strong>education</strong>: highest education level of trainees</li>
+<li><strong>advanced_class</strong>: a dummy variable where <code>TRUE</code> indicates a trainee is eager to participate in the advanced class and <code>FALAE</code> indicates a trainee doesn’t want to attend in the advanced class.</li>
+</ul>
+<pre class="r"><code>df &lt;- data.frame(
+  class = c(&quot;class 1&quot;,&quot;class 2&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 2&quot;,&quot;class 2&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 2&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 2&quot;,&quot;class 2&quot;,&quot;class 2&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 1&quot;,&quot;class 2&quot;,&quot;class 1&quot;,&quot;class 1&quot;, &quot;class 1&quot;,&quot;class 2&quot;,&quot;class 1&quot;, &quot;class 1&quot;, &quot;class 1&quot;,&quot;class 2&quot;),
+  education = c(&quot;BA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;BA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;MA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;MA&quot;,&quot;BA&quot;,&quot;MA&quot;),
+  advanced_class = c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE)
+)</code></pre>
+<pre><code>##      class education advanced_class
+## 1  class 1        BA           TRUE
+## 2  class 2        MA           TRUE
+## 3  class 1        BA          FALSE
+## 4  class 1        BA           TRUE
+## 5  class 2        MA          FALSE
+## 6  class 2        MA           TRUE
+## 7  class 1        BA           TRUE
+## 8  class 1        BA          FALSE
+## 9  class 1        BA           TRUE
+## 10 class 2        MA           TRUE
+## 11 class 1        MA          FALSE
+## 12 class 1        MA           TRUE
+## 13 class 2        BA          FALSE
+## 14 class 2        MA           TRUE
+## 15 class 2        BA          FALSE
+## 16 class 1        MA          FALSE
+## 17 class 1        BA          FALSE
+## 18 class 1        BA           TRUE
+## 19 class 1        MA           TRUE
+## 20 class 2        MA           TRUE
+## 21 class 1        BA          FALSE
+## 22 class 1        BA          FALSE
+## 23 class 1        MA          FALSE
+## 24 class 2        MA          FALSE
+## 25 class 1        BA           TRUE
+## 26 class 1        MA           TRUE
+## 27 class 1        BA          FALSE
+## 28 class 2        MA           TRUE</code></pre>
+<p>Let’s find the percentage of each group who are eager to participate in the advanced class.</p>
+<pre class="r"><code>library(dplyr)
+
+df %&gt;%
+  {round(prop.table(table(.$class, .$advanced_class),1)*100,2)}</code></pre>
+<pre><code>##          
+##           FALSE TRUE
+##   class 1    50   50
+##   class 2    40   60</code></pre>
+<p>Above table shows that 60% of trainees from class 2 and 50% of trainees from class 1 want to join the advanced class. Does this mean that <code>(60%+50%)/2=</code><strong>55%</strong> of all trainees are intended to join the advanced class?</p>
+<pre class="r"><code>library(ggplot2)
+theme_set(theme_bw())
+
+round(prop.table(table(df$class, df$advanced_class),1)*100,1) %&gt;%
+  data.frame() %&gt;%
+  rename(class = Var1,
+         advanced_class=Var2,
+          percentage = Freq) %&gt;%
+  filter(advanced_class!=FALSE) %&gt;%
+  # mutate(average = sum(percentage)/2) %&gt;%
+  ggplot(aes(x=class, y=percentage, fill = class)) + geom_col() +
+  geom_text(aes(label = percentage), nudge_x=0, nudge_y = 2) +
+  geom_hline(yintercept = (50+60)/2, linetype = &quot;dashed&quot;, color = &quot;red&quot;, size = 1)</code></pre>
+<p><img src="/post/2019-07-05-calculating-averag-of-percentages/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The answer is <strong>No</strong>. Because each group does not represent equal numbers of trainees.</p>
+<pre class="r"><code>df %&gt;%
+  {table(.$class)}</code></pre>
+<pre><code>## 
+## class 1 class 2 
+##      18      10</code></pre>
+<p>As shown above, there are 18 trainees from class 1 and 10 trainees from class 2. It means that 60% of those form the second class represents only 6 trainees and 50% of those from the first class represents 9 trainees.</p>
+<ul>
+<li>class 1: <code>(50 / 100) x 18 = 9</code></li>
+<li>class 2: <code>(60 / 100) x 10 = 6</code></li>
+</ul>
+<p>From the above result we can say that <code>9+6=</code>15 out of all <code>18+10=</code>28 trainees in both classes said they would like to join the advanced class. Therefore we can say that <code>(15/28)*100=</code>53.57% of all trainees want to join the advanced class.</p>
+<pre class="r"><code>df %&gt;%
+  {round(prop.table(table(.$advanced_class))*100,2)}</code></pre>
+<pre><code>## 
+## FALSE  TRUE 
+## 46.43 53.57</code></pre>
+<p>It can be observed that there is an inconsistency between <code>(6+9/28)*100 =</code><strong>53.57%</strong> and <code>(60%+50%)/2=</code><strong>55%</strong>. Hence, the temptation of averaging percentages can lead to an inaccurate result.</p>
+<p>When sample size in both groups is equal, however, the average of percentages agrees with the accurate percentage calculation.</p>
+<p>For example, the above data shows that 64.29% of trainees with a master degree would like to join the advanced data analysis class and this proportion is 42.86% among those with a bachelor degree.</p>
+<pre class="r"><code>df %&gt;%
+  {round(prop.table(table(.$education, .$advanced_class),1)*100,2)}</code></pre>
+<pre><code>##     
+##      FALSE  TRUE
+##   BA 57.14 42.86
+##   MA 35.71 64.29</code></pre>
+<p>Here the average of both percentages is <code>(64.29%+42.86)/2=</code><strong>53.57%</strong> which is equal to accurate calculation of the percentage of trainees who are intended to join the advanced data analysis training.</p>
+<pre class="r"><code>round(prop.table(table(df$education, df$advanced_class),1)*100,1) %&gt;%
+  data.frame() %&gt;%
+  rename(education = Var1,
+         advanced_class=Var2,
+         percentage = Freq) %&gt;%
+  filter(advanced_class!=FALSE) %&gt;%
+  ggplot(aes(x=education, y=percentage, fill = education)) + geom_col()+
+  geom_text(aes(label=percentage), nudge_y = 2) +
+  geom_hline(yintercept = (42.9+64.3)/2, linetype = &quot;dashed&quot;, color = &quot;red&quot;, size = 2 )</code></pre>
+<p><img src="/post/2019-07-05-calculating-averag-of-percentages/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The reason is that there is an equal number of trainees with master and bachelor degrees.</p>
+<pre class="r"><code>df %&gt;%
+  {table(.$education)}</code></pre>
+<pre><code>## 
+## BA MA 
+## 14 14</code></pre>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Average of percentages would lead you to an inaccurate result unless all groups represent the equal sample size. The reason is simple, when two groups are different in size then the same percentage in both groups will give you two different numbers. For example, 10% of a group of 100 individuals is 10 while 10% of a group of 150 individuals is 15.</p>
+</div>

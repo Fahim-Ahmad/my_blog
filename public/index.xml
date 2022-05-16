@@ -428,6 +428,133 @@ plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&am
     </item>
     
     <item>
+      <title>Calculating Average of Percentages</title>
+      <link>/post/calculating-averag-of-percentages/</link>
+      <pubDate>Fri, 05 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>/post/calculating-averag-of-percentages/</guid>
+      <description>
+
+
+&lt;style&gt; 
+  body {
+    text-align: justify}
+&lt;/style&gt;
+&lt;p&gt;Calculating the average of percentages is &lt;strong&gt;NOT&lt;/strong&gt; similar to calculating the average of numbers.&lt;/p&gt;
+&lt;p&gt;I am conducting data analysis trainings once every two months and at the end of each class I ask students if they want to join the advanced data analysis class that I organize once each year. Below data frame contains part of the actual data which I collected from those who have participated in my classes in the past few months which basically has three variables as following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;class&lt;/strong&gt;: either a trainee is from class 1 or class 2.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;education&lt;/strong&gt;: highest education level of trainees&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;advanced_class&lt;/strong&gt;: a dummy variable where &lt;code&gt;TRUE&lt;/code&gt; indicates a trainee is eager to participate in the advanced class and &lt;code&gt;FALAE&lt;/code&gt; indicates a trainee doesn’t want to attend in the advanced class.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df &amp;lt;- data.frame(
+  class = c(&amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;,&amp;quot;class 1&amp;quot;, &amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;,&amp;quot;class 1&amp;quot;, &amp;quot;class 1&amp;quot;, &amp;quot;class 1&amp;quot;,&amp;quot;class 2&amp;quot;),
+  education = c(&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;,&amp;quot;BA&amp;quot;,&amp;quot;MA&amp;quot;),
+  advanced_class = c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE)
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      class education advanced_class
+## 1  class 1        BA           TRUE
+## 2  class 2        MA           TRUE
+## 3  class 1        BA          FALSE
+## 4  class 1        BA           TRUE
+## 5  class 2        MA          FALSE
+## 6  class 2        MA           TRUE
+## 7  class 1        BA           TRUE
+## 8  class 1        BA          FALSE
+## 9  class 1        BA           TRUE
+## 10 class 2        MA           TRUE
+## 11 class 1        MA          FALSE
+## 12 class 1        MA           TRUE
+## 13 class 2        BA          FALSE
+## 14 class 2        MA           TRUE
+## 15 class 2        BA          FALSE
+## 16 class 1        MA          FALSE
+## 17 class 1        BA          FALSE
+## 18 class 1        BA           TRUE
+## 19 class 1        MA           TRUE
+## 20 class 2        MA           TRUE
+## 21 class 1        BA          FALSE
+## 22 class 1        BA          FALSE
+## 23 class 1        MA          FALSE
+## 24 class 2        MA          FALSE
+## 25 class 1        BA           TRUE
+## 26 class 1        MA           TRUE
+## 27 class 1        BA          FALSE
+## 28 class 2        MA           TRUE&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s find the percentage of each group who are eager to participate in the advanced class.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+
+df %&amp;gt;%
+  {round(prop.table(table(.$class, .$advanced_class),1)*100,2)}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##          
+##           FALSE TRUE
+##   class 1    50   50
+##   class 2    40   60&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Above table shows that 60% of trainees from class 2 and 50% of trainees from class 1 want to join the advanced class. Does this mean that &lt;code&gt;(60%+50%)/2=&lt;/code&gt;&lt;strong&gt;55%&lt;/strong&gt; of all trainees are intended to join the advanced class?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+theme_set(theme_bw())
+
+round(prop.table(table(df$class, df$advanced_class),1)*100,1) %&amp;gt;%
+  data.frame() %&amp;gt;%
+  rename(class = Var1,
+         advanced_class=Var2,
+          percentage = Freq) %&amp;gt;%
+  filter(advanced_class!=FALSE) %&amp;gt;%
+  # mutate(average = sum(percentage)/2) %&amp;gt;%
+  ggplot(aes(x=class, y=percentage, fill = class)) + geom_col() +
+  geom_text(aes(label = percentage), nudge_x=0, nudge_y = 2) +
+  geom_hline(yintercept = (50+60)/2, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;red&amp;quot;, size = 1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-07-05-calculating-averag-of-percentages/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The answer is &lt;strong&gt;No&lt;/strong&gt;. Because each group does not represent equal numbers of trainees.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;gt;%
+  {table(.$class)}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## class 1 class 2 
+##      18      10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As shown above, there are 18 trainees from class 1 and 10 trainees from class 2. It means that 60% of those form the second class represents only 6 trainees and 50% of those from the first class represents 9 trainees.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;class 1: &lt;code&gt;(50 / 100) x 18 = 9&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;class 2: &lt;code&gt;(60 / 100) x 10 = 6&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;From the above result we can say that &lt;code&gt;9+6=&lt;/code&gt;15 out of all &lt;code&gt;18+10=&lt;/code&gt;28 trainees in both classes said they would like to join the advanced class. Therefore we can say that &lt;code&gt;(15/28)*100=&lt;/code&gt;53.57% of all trainees want to join the advanced class.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;gt;%
+  {round(prop.table(table(.$advanced_class))*100,2)}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## FALSE  TRUE 
+## 46.43 53.57&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It can be observed that there is an inconsistency between &lt;code&gt;(6+9/28)*100 =&lt;/code&gt;&lt;strong&gt;53.57%&lt;/strong&gt; and &lt;code&gt;(60%+50%)/2=&lt;/code&gt;&lt;strong&gt;55%&lt;/strong&gt;. Hence, the temptation of averaging percentages can lead to an inaccurate result.&lt;/p&gt;
+&lt;p&gt;When sample size in both groups is equal, however, the average of percentages agrees with the accurate percentage calculation.&lt;/p&gt;
+&lt;p&gt;For example, the above data shows that 64.29% of trainees with a master degree would like to join the advanced data analysis class and this proportion is 42.86% among those with a bachelor degree.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;gt;%
+  {round(prop.table(table(.$education, .$advanced_class),1)*100,2)}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##     
+##      FALSE  TRUE
+##   BA 57.14 42.86
+##   MA 35.71 64.29&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here the average of both percentages is &lt;code&gt;(64.29%+42.86)/2=&lt;/code&gt;&lt;strong&gt;53.57%&lt;/strong&gt; which is equal to accurate calculation of the percentage of trainees who are intended to join the advanced data analysis training.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;round(prop.table(table(df$education, df$advanced_class),1)*100,1) %&amp;gt;%
+  data.frame() %&amp;gt;%
+  rename(education = Var1,
+         advanced_class=Var2,
+         percentage = Freq) %&amp;gt;%
+  filter(advanced_class!=FALSE) %&amp;gt;%
+  ggplot(aes(x=education, y=percentage, fill = education)) + geom_col()+
+  geom_text(aes(label=percentage), nudge_y = 2) +
+  geom_hline(yintercept = (42.9+64.3)/2, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;red&amp;quot;, size = 2 )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2019-07-05-calculating-averag-of-percentages/index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The reason is that there is an equal number of trainees with master and bachelor degrees.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;gt;%
+  {table(.$education)}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## BA MA 
+## 14 14&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Average of percentages would lead you to an inaccurate result unless all groups represent the equal sample size. The reason is simple, when two groups are different in size then the same percentage in both groups will give you two different numbers. For example, 10% of a group of 100 individuals is 10 while 10% of a group of 150 individuals is 15.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Rename Data Frame Columns</title>
       <link>/post/rename-data-frame-columns/</link>
       <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
