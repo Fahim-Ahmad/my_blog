@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data." />
+  <meta name="description" content="What is Skewness? Calculating Skewness using R and by Hand Importance of Skewness in Data Science   What is Skewness? Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/detecting-duplicates/" />
+  <link rel="alternate" hreflang="en-us" href="/post/skewness-definition-and-its-importance-in-data-science/" />
 
   
 
@@ -278,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/detecting-duplicates/" />
+  <link rel="canonical" href="/post/skewness-definition-and-its-importance-in-data-science/" />
 
   
   
@@ -295,18 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/detecting-duplicates/" />
-  <meta property="og:title" content="Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad" />
-  <meta property="og:description" content="Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/post/skewness-definition-and-its-importance-in-data-science/" />
+  <meta property="og:title" content="Skewness | Definition and its Importance in Data Science | Fahim Ahmad" />
+  <meta property="og:description" content="What is Skewness? Calculating Skewness using R and by Hand Importance of Skewness in Data Science   What is Skewness? Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2021-07-23T00:00:00&#43;00:00"
+        content="2020-07-17T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-07-23T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-07-17T00:00:00&#43;00:00">
   
 
   
@@ -330,12 +330,12 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/detecting-duplicates/"
+    "@id": "/post/skewness-definition-and-its-importance-in-data-science/"
   },
-  "headline": "Detecting Duplicates (base R vs. dplyr)",
+  "headline": "Skewness | Definition and its Importance in Data Science",
   
-  "datePublished": "2021-07-23T00:00:00Z",
-  "dateModified": "2021-07-23T00:00:00Z",
+  "datePublished": "2020-07-17T00:00:00Z",
+  "dateModified": "2020-07-17T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -350,7 +350,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data."
+  "description": "What is Skewness? Calculating Skewness using R and by Hand Importance of Skewness in Data Science   What is Skewness? Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know."
 }
 </script>
 
@@ -366,11 +366,11 @@
 
 
 
-  <title>Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad</title>
+  <title>Skewness | Definition and its Importance in Data Science | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="d8d545a7db874b37d518a47c29924c06" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="e7bb61671f87d4c3c7a61bd497c78654" >
 
   
   
@@ -608,7 +608,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Detecting Duplicates (base R vs. dplyr)</h1>
+  <h1>Skewness | Definition and its Importance in Data Science</h1>
 
   
 
@@ -630,7 +630,7 @@
     
       
     
-    Jul 23, 2021
+    Jul 17, 2020
   </span>
   
 
@@ -654,7 +654,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-categories">
-    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a></span>
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a>, <a href="/category/statistics/">Statistics</a></span>
   
 
 </div>
@@ -680,117 +680,60 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#removing-duplicates-based-on-a-single-variable">Removing duplicates based on a single variable</a></li>
-<li><a href="#removing-duplicates-based-on-the-combination-of-multiple-variables">Removing duplicates based on the combination of multiple variables</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#what-is-skewness">What is Skewness?</a></li>
+<li><a href="#calculating-skewness-using-r-and-by-hand">Calculating Skewness using R and by Hand</a></li>
+<li><a href="#importance-of-skewness-in-data-science">Importance of Skewness in Data Science</a></li>
 </ul>
 </div>
 
-<p><img src="imgs/Duplicates.jpg" /></p>
-<p>Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data. In this post, I provide an overview of <code>duplicated()</code> function from base R and the <code>distinct()</code> function from <strong>dplyr</strong> package to detect and remove duplicates.</p>
-<p>I will be using the following data frame as an example in this post.</p>
-<pre class="r"><code>set.seed(1000)
-df &lt;- data.frame(
-  ID = sample(paste0(&quot;ID-00&quot;, 1:7), 10, replace = T),
-  value_1 = sample(1:7, 10, replace = T),
-  value_2 = sample(2:5, 10, replace = T)
-)
-
-df</code></pre>
-<pre><code>##        ID value_1 value_2
-## 1  ID-004       5       2
-## 2  ID-003       6       5
-## 3  ID-006       1       3
-## 4  ID-003       1       4
-## 5  ID-005       5       5
-## 6  ID-003       2       3
-## 7  ID-005       2       2
-## 8  ID-002       4       3
-## 9  ID-006       7       2
-## 10 ID-006       2       3</code></pre>
-<div id="removing-duplicates-based-on-a-single-variable" class="section level1">
-<h1>Removing duplicates based on a single variable</h1>
-<p>The <code>duplicated()</code> function returns a logical vector where <code>TRUE</code> specifies which rows of the data frame are duplicates.</p>
-<p>For instance, <code>duplicated(df[&quot;ID&quot;])</code> returns the following vector.</p>
-<pre><code>##  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE</code></pre>
-<blockquote>
-<p><strong>Note</strong>: the <code>duplicated()</code> function preserves the first occurrence in the process of identifying the duplicate values, if you want to consider the duplication from the reverse side, then set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
-</blockquote>
-<p>Let’s use the above vector to exclude the duplicated values.</p>
-<pre class="r"><code>df[!duplicate_rows, ]</code></pre>
-<pre><code>##       ID value_1 value_2
-## 1 ID-004       5       2
-## 2 ID-003       6       5
-## 3 ID-006       1       3
-## 5 ID-005       5       5
-## 8 ID-002       4       3</code></pre>
-<p>An alternative way to select unique values is <code>dplyr::distinct()</code> function that yields a similar result as above.</p>
-<pre class="r"><code>dplyr::distinct(df, ID, .keep_all = TRUE)</code></pre>
-<pre><code>##       ID value_1 value_2
-## 1 ID-004       5       2
-## 2 ID-003       6       5
-## 3 ID-006       1       3
-## 4 ID-005       5       5
-## 5 ID-002       4       3</code></pre>
-<blockquote>
-<p><strong>Note</strong>: The .<code>keep_all</code> argument is used to retain all other columns in the output data frame.</p>
-</blockquote>
+<div id="what-is-skewness" class="section level1">
+<h1>What is Skewness?</h1>
+<p>Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know. As you are reading this post, I am sure you will understand the concept of skewness and why it is important in data analytics by the end of this post.</p>
+<p>Skewness is a measure of the asymmetry of the probability distribution. In other words, skewness is a measure to describe the deviation of the distribution of the data from a normal distribution. Have a glance at the below graphs for comparing normal distribution with the skewed distribution.</p>
+<p><img src="/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p>As the above plots depict, the normal distribution is symmetrical on both sides and the data points tend to fall at the center of the distribution. Whereas the positively skewed distribution has its long tail on the right side and most of the data points are concentrated around the lower values, and the distribution with its long tail on the left side is a negatively skewed distribution which most of its data points are concentrated around the higher values.</p>
+<p>Another aspect of the normal distribution is that all measures of the central tendency <strong><a href="https://fahimahmad.netlify.app/post/measures-of-central-tendency-using-r/">(click here to read more about the measures of central tendency)</a></strong> are equal and lie in one point <em>(mean = mode = median)</em>. While in the skewed distributions, the mean is pulled out toward the longer tail. Therefore, in the positively skewed distribution, the mean is larger than the median and mode <em>(mean &gt; median &gt; mode)</em> and the opposite is the case in a negatively skewed distribution <em>(mean &lt; median &lt; mode)</em>.</p>
 </div>
-<div id="removing-duplicates-based-on-the-combination-of-multiple-variables" class="section level1">
-<h1>Removing duplicates based on the combination of multiple variables</h1>
-<p>The above chunks of codes remove the duplicated rows based on a single column. What if we want to remove duplicates based on more than a single column?</p>
-<p>One way is to concatenate the columns in which you want to check the presence of duplicates. For example, let’s remove the rows where <strong>value_1</strong> and <strong>value_2</strong> are duplicated.</p>
-<pre class="r"><code>df &lt;- dplyr::mutate(df, value_1_2 = paste(value_1, value_2))
-df[!duplicated(df[c(&quot;value_1_2&quot;)]), ]</code></pre>
-<pre><code>##       ID value_1 value_2 value_1_2
-## 1 ID-004       5       2       5 2
-## 2 ID-003       6       5       6 5
-## 3 ID-006       1       3       1 3
-## 4 ID-003       1       4       1 4
-## 5 ID-005       5       5       5 5
-## 6 ID-003       2       3       2 3
-## 7 ID-005       2       2       2 2
-## 8 ID-002       4       3       4 3
-## 9 ID-006       7       2       7 2</code></pre>
-<p>Below is an efficient way of detecting duplicates based on the combination of multiple columns without concatenating the values of the columns in which we want to identify the duplicated values:</p>
-<pre class="r"><code># using duplicated() function
-df[!duplicated(df[c(&quot;value_1&quot;, &quot;value_2&quot;)]), ]
+<div id="calculating-skewness-using-r-and-by-hand" class="section level1">
+<h1>Calculating Skewness using R and by Hand</h1>
+<p>Skewness can be quantified to represent the extent of variation of a distribution from the normal distribution. A normal distribution has a skew of zero and is used as a reference for determining the level of skewness. When the skewness is greater than zero it shows a positively skewed distribution, whereas a negatively skewed distribution has a skewness of lower than zero.</p>
+<p>When is the skewness too much? As a rule of thumb, the data with the skewness between -0.5 to 0.5 is assumed to be fairly symmetrical and if the skewness is greater than 1 or lower than -1, it denotes highly skewed distribution.</p>
+<p><img src="/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Skewness is defined as:</p>
+<p><span class="math display">\[{ Skewness = \frac{∑_{i=1}^{n} \ ((x_i - \bar{x})^3/n)}{(∑_{i=1}^{n} \ ((x_i - \bar{x})^2/n))^{(3/2)}}}\]</span></p>
+<p>Where <span class="math inline">\(X_i\)</span> is the <span class="math inline">\(i^{th}\)</span> value of <span class="math inline">\(X\)</span>, <span class="math inline">\(\bar{X}\)</span> is the mean, and <span class="math inline">\(n\)</span> is the sample size.</p>
+<p>In R, the <code>skewness()</code> function from the <strong>moments</strong> package can be used to compute the skewness of a given data.</p>
+<p>For example, let’s compute the skewness of below data using the <code>skewness()</code> function and the aforementioned formula to confirm the consistent results.</p>
+<pre class="r"><code>(df &lt;- data.frame(x = c(400, 300, 180, 360, 490, 400, 280, 290, 180, 110, 120, 270)))</code></pre>
+<pre><code>##      x
+## 1  400
+## 2  300
+## 3  180
+## 4  360
+## 5  490
+## 6  400
+## 7  280
+## 8  290
+## 9  180
+## 10 110
+## 11 120
+## 12 270</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(moments)
 
-# using distinct() function
-dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
-<pre><code>##       ID value_1 value_2 value_1_2
-## 1 ID-004       5       2       5 2
-## 2 ID-003       6       5       6 5
-## 3 ID-006       1       3       1 3
-## 4 ID-003       1       4       1 4
-## 5 ID-005       5       5       5 5
-## 6 ID-003       2       3       2 3
-## 7 ID-005       2       2       2 2
-## 8 ID-002       4       3       4 3
-## 9 ID-006       7       2       7 2</code></pre>
+df %&gt;% 
+  summarise(skewness_builtin = skewness(x),
+            skewness_by_hand = sum((x - mean(x))^3/nrow(.))/sum((x - mean(x))^2/nrow(.))^(3/2)
+            )</code></pre>
+<pre><code>##   skewness_builtin skewness_by_hand
+## 1       0.08316773       0.08316773</code></pre>
 </div>
-<div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
-<p>It seems that both approaches work very well; however, the advantage of using <code>duplicated()</code> function from base R is it returns a logical vector identifying the duplicated rows that can be used to either drop the duplicated rows or keep only these rows for further investigation while the <code>distinct()</code> function directly removes the duplicated rows without specifying which row has duplicate values.</p>
-<p>For instance, let’s keep the duplicated ID numbers only.</p>
-<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F), ]</code></pre>
-<pre><code>##        ID value_1 value_2 value_1_2
-## 4  ID-003       1       4       1 4
-## 6  ID-003       2       3       2 3
-## 7  ID-005       2       2       2 2
-## 9  ID-006       7       2       7 2
-## 10 ID-006       2       3       2 3</code></pre>
-<p>As mentioned above, the <code>duplicated()</code> function does not assign the first occurrence in the process of identifying the duplicated values as duplicates. Thus, we need to count backward as well to consider the duplication from the reverse side. To do so, we need to set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
-<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F) | duplicated(df[&quot;ID&quot;], fromLast = T), ]</code></pre>
-<pre><code>##        ID value_1 value_2 value_1_2
-## 2  ID-003       6       5       6 5
-## 3  ID-006       1       3       1 3
-## 4  ID-003       1       4       1 4
-## 5  ID-005       5       5       5 5
-## 6  ID-003       2       3       2 3
-## 7  ID-005       2       2       2 2
-## 9  ID-006       7       2       7 2
-## 10 ID-006       2       3       2 3</code></pre>
+<div id="importance-of-skewness-in-data-science" class="section level1">
+<h1>Importance of Skewness in Data Science</h1>
+<p>Skewness is an important statistical concept for, at least, three reasons. <strong>a)</strong> Many statistical models and inferences require that the distribution of the data should be normal, while the real-world data rarely follow a normal distribution. Therefore, skewness as a measure of asymmetric is essential to know the shape of the distribution of the data; <strong>b)</strong> skewness tells us about the direction of outliers. The positive skewness is the sign of the presence of larger extreme values and the negative skewness indicates the presence lower extreme values; <strong>c)</strong> skewness shows the location of the data points. That is, it denotes where most of the values are concentrated.</p>
+<p>For instance, below graph depicts the density plot of GDP per capita which is skewed on the right side and the mean is more than two times higher than the median.</p>
+<p><img src="/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
+<p>In other words, most countries have a lower GDP per capita. That is, if you use this data to predict, for example, life expectancy, it can predict the life expectancy of those countries with the lower GDP per capita more accurately compare to predicting the life expectancy of the countries with the higher GDP per capita.</p>
 </div>
 
     </div>
@@ -805,6 +748,8 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
 <div class="article-tags">
   
   <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/statistics/">Statistics</a>
   
 </div>
 
@@ -821,7 +766,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/detecting-duplicates/&amp;text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/skewness-definition-and-its-importance-in-data-science/&amp;text=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -834,7 +779,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/detecting-duplicates/&amp;t=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/skewness-definition-and-its-importance-in-data-science/&amp;t=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -847,7 +792,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29&amp;body=/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science&amp;body=/post/skewness-definition-and-its-importance-in-data-science/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -860,7 +805,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/skewness-definition-and-its-importance-in-data-science/&amp;title=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -873,7 +818,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29%20/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science%20/post/skewness-definition-and-its-importance-in-data-science/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -886,7 +831,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/skewness-definition-and-its-importance-in-data-science/&amp;title=Skewness%20%7c%20Definition%20and%20its%20Importance%20in%20Data%20Science" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -988,15 +933,15 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
-      
-      <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
-      
-      <li><a href="/post/skewness-definition-and-its-importance-in-data-science/">Skewness | Definition and its Importance in Data Science</a></li>
-      
       <li><a href="/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/">Analysis of the Relationship Between Two Quantitative Variables | Correlation</a></li>
       
       <li><a href="/post/measures-of-dispersion-using-r/">Measures of Dispersion</a></li>
+      
+      <li><a href="/post/measures-of-central-tendency-using-r/">What is Central Tendency?</a></li>
+      
+      <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
+      
+      <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
       
     </ul>
   </div>

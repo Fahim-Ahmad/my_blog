@@ -552,6 +552,73 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
+      <title>Skewness | Definition and its Importance in Data Science</title>
+      <link>/post/skewness-definition-and-its-importance-in-data-science/</link>
+      <pubDate>Fri, 17 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>/post/skewness-definition-and-its-importance-in-data-science/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#what-is-skewness&#34;&gt;What is Skewness?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#calculating-skewness-using-r-and-by-hand&#34;&gt;Calculating Skewness using R and by Hand&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#importance-of-skewness-in-data-science&#34;&gt;Importance of Skewness in Data Science&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;what-is-skewness&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;What is Skewness?&lt;/h1&gt;
+&lt;p&gt;Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know. As you are reading this post, I am sure you will understand the concept of skewness and why it is important in data analytics by the end of this post.&lt;/p&gt;
+&lt;p&gt;Skewness is a measure of the asymmetry of the probability distribution. In other words, skewness is a measure to describe the deviation of the distribution of the data from a normal distribution. Have a glance at the below graphs for comparing normal distribution with the skewed distribution.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As the above plots depict, the normal distribution is symmetrical on both sides and the data points tend to fall at the center of the distribution. Whereas the positively skewed distribution has its long tail on the right side and most of the data points are concentrated around the lower values, and the distribution with its long tail on the left side is a negatively skewed distribution which most of its data points are concentrated around the higher values.&lt;/p&gt;
+&lt;p&gt;Another aspect of the normal distribution is that all measures of the central tendency &lt;strong&gt;&lt;a href=&#34;https://fahimahmad.netlify.app/post/measures-of-central-tendency-using-r/&#34;&gt;(click here to read more about the measures of central tendency)&lt;/a&gt;&lt;/strong&gt; are equal and lie in one point &lt;em&gt;(mean = mode = median)&lt;/em&gt;. While in the skewed distributions, the mean is pulled out toward the longer tail. Therefore, in the positively skewed distribution, the mean is larger than the median and mode &lt;em&gt;(mean &amp;gt; median &amp;gt; mode)&lt;/em&gt; and the opposite is the case in a negatively skewed distribution &lt;em&gt;(mean &amp;lt; median &amp;lt; mode)&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;calculating-skewness-using-r-and-by-hand&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Calculating Skewness using R and by Hand&lt;/h1&gt;
+&lt;p&gt;Skewness can be quantified to represent the extent of variation of a distribution from the normal distribution. A normal distribution has a skew of zero and is used as a reference for determining the level of skewness. When the skewness is greater than zero it shows a positively skewed distribution, whereas a negatively skewed distribution has a skewness of lower than zero.&lt;/p&gt;
+&lt;p&gt;When is the skewness too much? As a rule of thumb, the data with the skewness between -0.5 to 0.5 is assumed to be fairly symmetrical and if the skewness is greater than 1 or lower than -1, it denotes highly skewed distribution.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Skewness is defined as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{ Skewness = \frac{∑_{i=1}^{n} \ ((x_i - \bar{x})^3/n)}{(∑_{i=1}^{n} \ ((x_i - \bar{x})^2/n))^{(3/2)}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Where &lt;span class=&#34;math inline&#34;&gt;\(X_i\)&lt;/span&gt; is the &lt;span class=&#34;math inline&#34;&gt;\(i^{th}\)&lt;/span&gt; value of &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\bar{X}\)&lt;/span&gt; is the mean, and &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; is the sample size.&lt;/p&gt;
+&lt;p&gt;In R, the &lt;code&gt;skewness()&lt;/code&gt; function from the &lt;strong&gt;moments&lt;/strong&gt; package can be used to compute the skewness of a given data.&lt;/p&gt;
+&lt;p&gt;For example, let’s compute the skewness of below data using the &lt;code&gt;skewness()&lt;/code&gt; function and the aforementioned formula to confirm the consistent results.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(df &amp;lt;- data.frame(x = c(400, 300, 180, 360, 490, 400, 280, 290, 180, 110, 120, 270)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      x
+## 1  400
+## 2  300
+## 3  180
+## 4  360
+## 5  490
+## 6  400
+## 7  280
+## 8  290
+## 9  180
+## 10 110
+## 11 120
+## 12 270&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(moments)
+
+df %&amp;gt;% 
+  summarise(skewness_builtin = skewness(x),
+            skewness_by_hand = sum((x - mean(x))^3/nrow(.))/sum((x - mean(x))^2/nrow(.))^(3/2)
+            )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   skewness_builtin skewness_by_hand
+## 1       0.08316773       0.08316773&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;importance-of-skewness-in-data-science&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Importance of Skewness in Data Science&lt;/h1&gt;
+&lt;p&gt;Skewness is an important statistical concept for, at least, three reasons. &lt;strong&gt;a)&lt;/strong&gt; Many statistical models and inferences require that the distribution of the data should be normal, while the real-world data rarely follow a normal distribution. Therefore, skewness as a measure of asymmetric is essential to know the shape of the distribution of the data; &lt;strong&gt;b)&lt;/strong&gt; skewness tells us about the direction of outliers. The positive skewness is the sign of the presence of larger extreme values and the negative skewness indicates the presence lower extreme values; &lt;strong&gt;c)&lt;/strong&gt; skewness shows the location of the data points. That is, it denotes where most of the values are concentrated.&lt;/p&gt;
+&lt;p&gt;For instance, below graph depicts the density plot of GDP per capita which is skewed on the right side and the mean is more than two times higher than the median.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-07-17-skewness-definition-and-its-importance-in-data-science/index_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;In other words, most countries have a lower GDP per capita. That is, if you use this data to predict, for example, life expectancy, it can predict the life expectancy of those countries with the lower GDP per capita more accurately compare to predicting the life expectancy of the countries with the higher GDP per capita.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Analysis of the Relationship Between Two Quantitative Variables | Correlation</title>
       <link>/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/</link>
       <pubDate>Fri, 26 Jun 2020 00:00:00 +0000</pubDate>
