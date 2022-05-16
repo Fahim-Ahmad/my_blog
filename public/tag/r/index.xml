@@ -236,5 +236,92 @@ plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&am
 </description>
     </item>
     
+    <item>
+      <title>Rename Data Frame Columns</title>
+      <link>/post/rename-data-frame-columns/</link>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
+      <guid>/post/rename-data-frame-columns/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#rename-column-names-with-r-base-functions&#34;&gt;Rename column names with R base functions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#rename-column-names-with-dplyr&#34;&gt;Rename column names with dplyr&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#rename-column-names-with-data.table&#34;&gt;Rename column names with data.table&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data.table package.&lt;/p&gt;
+&lt;p&gt;I will use the R built-in &lt;strong&gt;iris&lt;/strong&gt; data frame.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(iris)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;rename-column-names-with-r-base-functions&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Rename column names with R base functions&lt;/h1&gt;
+&lt;p&gt;Let’s change &lt;strong&gt;Sepal.Length&lt;/strong&gt; to &lt;strong&gt;S.P&lt;/strong&gt;. The procedure is simple; get column names using &lt;code&gt;names()&lt;/code&gt; or &lt;code&gt;colnames&lt;/code&gt;, extract the specific column name, and assign a new name.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;colnames(iris)[colnames(iris)==&amp;quot;Sepal.Length&amp;quot;] &amp;lt;- &amp;quot;S.P&amp;quot;
+head(iris)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   S.P Sepal.Width Petal.Length Petal.Width Species
+## 1 5.1         3.5          1.4         0.2  setosa
+## 2 4.9         3.0          1.4         0.2  setosa
+## 3 4.7         3.2          1.3         0.2  setosa
+## 4 4.6         3.1          1.5         0.2  setosa
+## 5 5.0         3.6          1.4         0.2  setosa
+## 6 5.4         3.9          1.7         0.4  setosa&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The code does the following:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;code&gt;colnames(iris)&lt;/code&gt; looks into all the names in the &lt;strong&gt;iris&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;names(iris) == &amp;quot;Sepal.Length&amp;quot;&lt;/code&gt; returns a vector with true and false values to extract the variable name you want to change.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;- &amp;quot;S.P&amp;quot;&lt;/code&gt; assigns the new name.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You can also rename a variable by its index as well. For example, let’s change &lt;strong&gt;Sepal.Width&lt;/strong&gt; [the second column] to &lt;strong&gt;S.W&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;colnames(iris)[2] &amp;lt;- &amp;quot;S.W&amp;quot;
+head(iris)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   S.P S.W Petal.Length Petal.Width Species
+## 1 5.1 3.5          1.4         0.2  setosa
+## 2 4.9 3.0          1.4         0.2  setosa
+## 3 4.7 3.2          1.3         0.2  setosa
+## 4 4.6 3.1          1.5         0.2  setosa
+## 5 5.0 3.6          1.4         0.2  setosa
+## 6 5.4 3.9          1.7         0.4  setosa&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rename-column-names-with-dplyr&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Rename column names with dplyr&lt;/h1&gt;
+&lt;p&gt;You can use &lt;code&gt;rename()&lt;/code&gt; function to change column names as following. For instance, let’s change &lt;strong&gt;Petal.Length&lt;/strong&gt; to &lt;strong&gt;P.L&lt;/strong&gt; and &lt;strong&gt;Petal.Width&lt;/strong&gt; to &lt;strong&gt;P.W&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;dplyr&amp;quot;)
+library(dplyr)
+
+iris %&amp;gt;%
+  rename(
+    P.L = Petal.Length,
+    P.W = Petal.Width
+  ) %&amp;gt;%
+  head()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   S.P S.W P.L P.W Species
+## 1 5.1 3.5 1.4 0.2  setosa
+## 2 4.9 3.0 1.4 0.2  setosa
+## 3 4.7 3.2 1.3 0.2  setosa
+## 4 4.6 3.1 1.5 0.2  setosa
+## 5 5.0 3.6 1.4 0.2  setosa
+## 6 5.4 3.9 1.7 0.4  setosa&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rename-column-names-with-data.table&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Rename column names with data.table&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;setnames()&lt;/code&gt; function from &lt;strong&gt;data.table&lt;/strong&gt; package can be used to rename a variable. The syntax is &lt;code&gt;setnames(df, &amp;quot;old_name&amp;quot;, &amp;quot;new_name&amp;quot;)&lt;/code&gt;. As an example, let’s change &lt;strong&gt;Species&lt;/strong&gt; to &lt;strong&gt;SPECIES&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;data.table&amp;quot;)
+library(data.table)
+setnames(iris,
+         &amp;quot;Species&amp;quot;, &amp;quot;SPECIES&amp;quot;)
+colnames(iris)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Sepal.Length&amp;quot; &amp;quot;Sepal.Width&amp;quot;  &amp;quot;Petal.Length&amp;quot; &amp;quot;Petal.Width&amp;quot;  &amp;quot;SPECIES&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>

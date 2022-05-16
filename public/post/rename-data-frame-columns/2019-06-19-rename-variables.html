@@ -1,0 +1,78 @@
+
+<div id="TOC">
+<ul>
+<li><a href="#rename-column-names-with-r-base-functions">Rename column names with R base functions</a></li>
+<li><a href="#rename-column-names-with-dplyr">Rename column names with dplyr</a></li>
+<li><a href="#rename-column-names-with-data.table">Rename column names with data.table</a></li>
+</ul>
+</div>
+
+<p>There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data.table package.</p>
+<p>I will use the R built-in <strong>iris</strong> data frame.</p>
+<pre class="r"><code>head(iris)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<div id="rename-column-names-with-r-base-functions" class="section level1">
+<h1>Rename column names with R base functions</h1>
+<p>Let’s change <strong>Sepal.Length</strong> to <strong>S.P</strong>. The procedure is simple; get column names using <code>names()</code> or <code>colnames</code>, extract the specific column name, and assign a new name.</p>
+<pre class="r"><code>colnames(iris)[colnames(iris)==&quot;Sepal.Length&quot;] &lt;- &quot;S.P&quot;
+head(iris)</code></pre>
+<pre><code>##   S.P Sepal.Width Petal.Length Petal.Width Species
+## 1 5.1         3.5          1.4         0.2  setosa
+## 2 4.9         3.0          1.4         0.2  setosa
+## 3 4.7         3.2          1.3         0.2  setosa
+## 4 4.6         3.1          1.5         0.2  setosa
+## 5 5.0         3.6          1.4         0.2  setosa
+## 6 5.4         3.9          1.7         0.4  setosa</code></pre>
+<p>The code does the following:</p>
+<ol style="list-style-type: decimal">
+<li><code>colnames(iris)</code> looks into all the names in the <strong>iris</strong>.</li>
+<li><code>names(iris) == &quot;Sepal.Length&quot;</code> returns a vector with true and false values to extract the variable name you want to change.</li>
+<li><code>&lt;- &quot;S.P&quot;</code> assigns the new name.</li>
+</ol>
+<p>You can also rename a variable by its index as well. For example, let’s change <strong>Sepal.Width</strong> [the second column] to <strong>S.W</strong>.</p>
+<pre class="r"><code>colnames(iris)[2] &lt;- &quot;S.W&quot;
+head(iris)</code></pre>
+<pre><code>##   S.P S.W Petal.Length Petal.Width Species
+## 1 5.1 3.5          1.4         0.2  setosa
+## 2 4.9 3.0          1.4         0.2  setosa
+## 3 4.7 3.2          1.3         0.2  setosa
+## 4 4.6 3.1          1.5         0.2  setosa
+## 5 5.0 3.6          1.4         0.2  setosa
+## 6 5.4 3.9          1.7         0.4  setosa</code></pre>
+</div>
+<div id="rename-column-names-with-dplyr" class="section level1">
+<h1>Rename column names with dplyr</h1>
+<p>You can use <code>rename()</code> function to change column names as following. For instance, let’s change <strong>Petal.Length</strong> to <strong>P.L</strong> and <strong>Petal.Width</strong> to <strong>P.W</strong>.</p>
+<pre class="r"><code># install.packages(&quot;dplyr&quot;)
+library(dplyr)
+
+iris %&gt;%
+  rename(
+    P.L = Petal.Length,
+    P.W = Petal.Width
+  ) %&gt;%
+  head()</code></pre>
+<pre><code>##   S.P S.W P.L P.W Species
+## 1 5.1 3.5 1.4 0.2  setosa
+## 2 4.9 3.0 1.4 0.2  setosa
+## 3 4.7 3.2 1.3 0.2  setosa
+## 4 4.6 3.1 1.5 0.2  setosa
+## 5 5.0 3.6 1.4 0.2  setosa
+## 6 5.4 3.9 1.7 0.4  setosa</code></pre>
+</div>
+<div id="rename-column-names-with-data.table" class="section level1">
+<h1>Rename column names with data.table</h1>
+<p><code>setnames()</code> function from <strong>data.table</strong> package can be used to rename a variable. The syntax is <code>setnames(df, &quot;old_name&quot;, &quot;new_name&quot;)</code>. As an example, let’s change <strong>Species</strong> to <strong>SPECIES</strong>.</p>
+<pre class="r"><code># install.packages(&quot;data.table&quot;)
+library(data.table)
+setnames(iris,
+         &quot;Species&quot;, &quot;SPECIES&quot;)
+colnames(iris)</code></pre>
+<pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot;  &quot;SPECIES&quot;</code></pre>
+</div>
