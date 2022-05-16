@@ -73,17 +73,22 @@
   </url>
   
   <url>
-    <loc>/post/methods-for-transforming-data-to-normal-distribution-in-r/</loc>
-    <lastmod>2020-07-31T00:00:00+00:00</lastmod>
+    <loc>/post/using-linear-regression-to-make-predictions-in-r/</loc>
+    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tag/statistics/</loc>
-    <lastmod>2020-07-31T00:00:00+00:00</lastmod>
+    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/category/statistics/</loc>
+    <lastmod>2020-08-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/methods-for-transforming-data-to-normal-distribution-in-r/</loc>
     <lastmod>2020-07-31T00:00:00+00:00</lastmod>
   </url>
   

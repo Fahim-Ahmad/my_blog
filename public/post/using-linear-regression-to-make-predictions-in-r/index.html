@@ -1,0 +1,1241 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Fahim Ahmad" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/using-linear-regression-to-make-predictions-in-r/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#1565c0" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.d352920a30b0d11fb8c727d5fc7d0978.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="/post/using-linear-regression-to-make-predictions-in-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Fahim Ahmad" />
+  <meta property="og:url" content="/post/using-linear-regression-to-make-predictions-in-r/" />
+  <meta property="og:title" content="Making Predictions with Linear Regression | Fahim Ahmad" />
+  <meta property="og:description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2020-08-20T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2020-08-20T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/using-linear-regression-to-make-predictions-in-r/"
+  },
+  "headline": "Making Predictions with Linear Regression",
+  
+  "datePublished": "2020-08-20T00:00:00Z",
+  "dateModified": "2020-08-20T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Fahim Ahmad"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Fahim Ahmad",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Making Predictions with Linear Regression | Fahim Ahmad</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="51510359958f47d4cf40112834d42d8a" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.82a2df885514d7a8250a5a85f0335ab9.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Fahim Ahmad</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Fahim Ahmad</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="/post/"><span>Blog posts</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Making Predictions with Linear Regression</h1>
+
+  
+
+  
+    
+    
+    
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Aug 20, 2020
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    8 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a>, <a href="/category/statistics/">Statistics</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+
+ 
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#building-the-linear-regression-model">Building the Linear Regression Model</a></li>
+<li><a href="#model-assessment">Model Assessment</a><ul>
+<li><a href="#coefficients">Coefficients</a></li>
+<li><a href="#model-accuracy">Model Accuracy</a></li>
+</ul></li>
+<li><a href="#assumptions">Assumptions</a></li>
+<li><a href="#making-predictions">Making Predictions</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In previous posts, I discussed <a href="https://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">visualizing</a> the relationship between two quantitative variables through a scatter plot and <a href="https://fahimahmad.netlify.app/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/">quantifying</a> the strength of the relationship through different types of correlation.</p>
+<blockquote>
+<p>A scatter plot uses dots to represent the values of two numeric variables. If the dots move from the lower-left to the upper-right corner of the plot, it depicts a positive correlation; if the dots move from upper-left to lower-right corner, it illustrates a negative correlation; if the dots do not form any pattern, it shows no relationship between the two variables.</p>
+</blockquote>
+<blockquote>
+<p>The correlation coefficient quantifies the extent of interrelation between two numeric variables. The higher the correlation coefficient in absolute value, the stronger the degree of association.</p>
+</blockquote>
+<p>Correlation shows whether or not a change in one variable is followed by changes in another variable, or vice versa, without making any distinction between dependent or independent variables. The linear regression predicts the numeric response in the dependent variable that is triggered based on the changes in the independent variable(s). In other words, the correlation between <code>x</code> and <code>y</code> is identical to the correlation between <code>y</code> and <code>x</code>. While regressions of <code>y</code> on <code>x</code> and <code>x</code> on <code>y</code> yield completely different results.</p>
+</div>
+<div id="building-the-linear-regression-model" class="section level1">
+<h1>Building the Linear Regression Model</h1>
+<p>There are two main types of linear regression: 1) Simple linear regression that predicts the value of the dependent variable on the basis of one explanatory variable and 2) Multiple linear regression that predicts the value of the dependent variable on the basis of two or more than two explanatory variables.</p>
+<p>For this analysis, I use the <strong>mtcars</strong> dataset to build a simple linear model for <code>mpg</code> (miles a car travels per gallon of gasoline) as a function of <code>wt</code> (weight of a car), so you can use it to predict how many miles a car travels when the weight is known.</p>
+<p>Mathematically, the regression equation is expressed as below:</p>
+<p><span class="math display">\[y = \beta0+\beta1 \space x + e\]</span></p>
+<p>Where <span class="math inline">\(\beta0\)</span> and <span class="math inline">\(\beta1\)</span> are regression coefficients and <span class="math inline">\(e\)</span> is the error term.
+The <code>lm()</code> function is used to estimate the coefficients of linear regression:</p>
+<pre class="r"><code>lm(mpg~wt, mtcars)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)           wt  
+##      37.285       -5.344</code></pre>
+<p>Since the coefficient for <code>wt</code> is negative, it denotes a negative relationship between <code>mpg</code> and <code>wt</code>. That is, a unit increase in <code>wt</code> is followed by 5.344 units decrease in <code>mpg</code>.</p>
+</div>
+<div id="model-assessment" class="section level1">
+<h1>Model Assessment</h1>
+<p>Before using the model for predictions, we should make sure the model is statistically significant. The <code>summary()</code> function displays the significance level of each coefficient alongside other useful information such as residuals and R-squared to test the model accuracy.</p>
+<pre class="r"><code>summary(lm(mpg~wt, mtcars))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+<p>It displays the model equation <code>lm(formula = mpg ~ wt, data = mtcars)</code> followed by a glimpse of the distribution of the residuals.</p>
+<div id="coefficients" class="section level2">
+<h2>Coefficients</h2>
+<p>The <strong>Coefficients</strong> part shows the estimates and their attributes such as standard error, t value, and p-value for each beta coefficient to assess the extent and the significance level of numeric response in the dependent variable based on the changes of the independent variable(s).</p>
+<ul>
+<li><p><strong>Estimates:</strong> The y-intercept and the estimated effect of the explanatory variable(s) on the dependent variable are displayed in this part. (<em>The closer to zero, the weaker its effect on the outcome</em>)</p></li>
+<li><p><strong>Std. Error:</strong> It indicates how precisely the estimates are measured by quantifying the uncertainty of the estimates. It can be used to calculate the confidence interval and t-value as well. (<em>The lower the standard error, the better the estimates</em>)</p></li>
+<li><p><strong>t-value:</strong> It is the ratio of the beta coefficient and standard error <span class="math inline">\(t = \frac {\beta}{Std. \space Error}\)</span>. A higher standard error, therefore, yields a lower t-value. (<em>The higher t-value is better</em>)</p></li>
+<li><p><strong>Pr(&gt;|t|):</strong> It shows the significance level of the coefficient, and tests whether or not it is significantly different from zero. (<em>The closer to zero is better</em>)</p></li>
+</ul>
+</div>
+<div id="model-accuracy" class="section level2">
+<h2>Model Accuracy</h2>
+<p>The <code>summary()</code> function also provides additional information such as RSE, R-squared, and the p-value to test how well the model fits the data.</p>
+<ul>
+<li><p><strong>Residual standard error (RSE)</strong>: It shows the average variation of the observed values from the predicted values. For example, the RSE is 3.046 in the above model that indicates the observed values of the dependent variable deviate from the regression line, on average, by 3.046 units. The ratio of RSE and mean of the dependent variable results in a percentage error. In the above model the percentage error is <code>3.046*100/mean(mtcars$mpg)</code> = 15.2%. (<em>The lower RSE is better</em>)</p></li>
+<li><p><strong>R-squared</strong>: It indicates the proportion of variance of the dependent variable that can be explained by the explanatory variable(s) which ranges from 0 to 1<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. (<em>The closer to one is better</em>)</p></li>
+<li><p><strong>p-value</strong>: It shows the overall significance level of the model. (<em>The closer to zero is better</em>)</p></li>
+</ul>
+</div>
+</div>
+<div id="assumptions" class="section level1">
+<h1>Assumptions</h1>
+<ul>
+<li><strong>Linearity</strong>: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post <a href="http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">here</a> for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.</li>
+</ul>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() + 
+  geom_smooth(method = &quot;lm&quot;, se = F) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The above graph depicts a linearly decreasing relationship between <code>mpg</code> and <code>wt</code>.</p>
+<ul>
+<li><strong>Normality</strong>: This indicates that the distribution of the data is close to the normal distribution. I use the QQ-plot to visually evaluate whether or not the data fit a normal distribution.</li>
+</ul>
+<blockquote>
+<p>If the vast majority of points are very near the line, it depicts a normal distribution. If the data do not follow a normal distribution, you can use the methods described <a href="https://fahimahmad.netlify.app/post/methods-for-transforming-data-to-normal-distribution-in-r/">here</a> to transform the data into a normal distribution.</p>
+</blockquote>
+<pre class="r"><code>mtcars %&gt;% 
+  select(mpg, wt) %&gt;%
+  pivot_longer(names_to = &quot;vars&quot;, values_to = &quot;values&quot;, cols = everything()) %&gt;% 
+  ggplot(aes(sample = values)) +
+  geom_qq(color = &quot;steelblue&quot;) +
+  geom_qq_line() +
+  facet_wrap(~vars, scales = &quot;free&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The above graphs illustrate that <code>mpg</code> and <code>wt</code> are moderately skewed to the right side.</p>
+<ul>
+<li><p><strong>Multicollinearity</strong>: Multicollinearity indicates the presence of a strong correlation among independent variables. You should check this assumption while using multiple linear regression. Since there is only one explanatory variable in our model, we can skip this assumption<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p></li>
+<li><p><strong>Homoscedasticity</strong>: It stands for homogeneity of variance of residuals. We can test this assumption by plotting the fitted values against the residuals.</p></li>
+</ul>
+<blockquote>
+<p>If the points form any systematic pattern, it depicts the violation of homoscedasticity.</p>
+</blockquote>
+<pre class="r"><code># The residuals and fitted values can also be obtained if you feed the linear regression model into `augment()` function from the **broom** package.
+
+data.frame(
+  fitted = fitted(lm(mpg~wt, mtcars)),
+  residuals = resid(lm(mpg~wt, mtcars))
+) %&gt;% 
+  ggplot(aes(x = fitted, y = residuals)) +
+  geom_point(color = &quot;steelblue&quot;) +
+  geom_hline(yintercept = 0, linetype = &quot;dotted&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>After determining that the data do not violate any of the above assumptions, you can proceed to make predictions based on new values of the explanatory variable(s).</p>
+</div>
+<div id="making-predictions" class="section level1">
+<h1>Making Predictions</h1>
+<p>As mentioned earlier, if the dependent and independent variables are denoted by <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>, the regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> is expressed as follow: <span class="math display">\[y = \beta 0 + \beta 1\space x\]</span></p>
+<p>where <span class="math inline">\(\beta 0\)</span> and <span class="math inline">\(\beta 1\)</span> are unknown parameters that can be estimated using the sample data. <span class="math inline">\(\beta 0\)</span> indicates the y-intercept and <span class="math inline">\(\beta 1\)</span> shows the slope of the regression line, respectively. That is, <span class="math inline">\(\beta 0\)</span> represents the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is 0 and <span class="math inline">\(\beta 1\)</span> indicates the estimated effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>.</p>
+<p>Making predictions with linear regression is as simple as solving the above equation. For instance, consider the model we built earlier: <span class="math display">\[mpg = 37.285 - 5.344 × wt\]</span></p>
+<p>You can enter different values for the explanatory variable in the above equation to predict the dependent variable. For example, let’s predict the value of <code>mpg</code> if <code>wt</code> is 5: <span class="math display">\[mpg = 37.285 - 5.344 × 5 = 10.565\]</span></p>
+<p>Nevertheless, if you have multiple explanatory variables, solving the the above equation by hand would be time-consuming. Instead, you can use the <code>predict.lm()</code> function for the predictions based on the linear model.</p>
+<pre class="r"><code># predicting &#39;mpg&#39; if &#39;wt&#39; is equal to 10
+predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))</code></pre>
+<pre><code>##        1 
+## 10.56277</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The R-squared in a linear regression with one independent variable is the square of the Pearson correlation coefficient.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>We can test multicollinearity through correlation matrix or computing Variance Influential Factor which I will discuss it in the next post.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/statistics/">Statistics</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/using-linear-regression-to-make-predictions-in-r/&amp;text=Making%20Predictions%20with%20Linear%20Regression" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/using-linear-regression-to-make-predictions-in-r/&amp;t=Making%20Predictions%20with%20Linear%20Regression" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Making%20Predictions%20with%20Linear%20Regression&amp;body=/post/using-linear-regression-to-make-predictions-in-r/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/using-linear-regression-to-make-predictions-in-r/&amp;title=Making%20Predictions%20with%20Linear%20Regression" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Making%20Predictions%20with%20Linear%20Regression%20/post/using-linear-regression-to-make-predictions-in-r/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/using-linear-regression-to-make-predictions-in-r/&amp;title=Making%20Predictions%20with%20Linear%20Regression" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/"><img class="avatar mr-3 avatar-circle" src="/author/fahim-ahmad/avatar_hu943ba8eb54126f053ce52e97313e0c4b_160404_270x270_fill_q75_lanczos_center.jpg" alt="Fahim Ahmad"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Fahim Ahmad</a></h5>
+      
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Fahim-Ahmad" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/Fahim_AY" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/methods-for-transforming-data-to-normal-distribution-in-r/">Methods for Transforming Data to Normal Distribution</a></li>
+      
+      <li><a href="/post/skewness-definition-and-its-importance-in-data-science/">Skewness | Definition and its Importance in Data Science</a></li>
+      
+      <li><a href="/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/">Analysis of the Relationship Between Two Quantitative Variables | Correlation</a></li>
+      
+      <li><a href="/post/measures-of-dispersion-using-r/">Measures of Dispersion</a></li>
+      
+      <li><a href="/post/measures-of-central-tendency-using-r/">What is Central Tendency?</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+  <p class="powered-by">
+    
+      <a href="/privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="/terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    © Fahim Ahmad (2020)
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+
+
+
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.0ec27d544fa14954a0166fde0a7ce919.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+---
+title: Making Predictions with Linear Regression
+author: Fahim
+date: '2020-08-20'
+slug: using-linear-regression-to-make-predictions-in-r
+categories:
+  - R
+  - Statistics
+tags:
+  - R
+  - Statistics
+
+output:
+  blogdown::html_page:
+    toc: yes
+    number_sections: false
+
+Description: In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#building-the-linear-regression-model">Building the Linear Regression Model</a></li>
+<li><a href="#model-assessment">Model Assessment</a><ul>
+<li><a href="#coefficients">Coefficients</a></li>
+<li><a href="#model-accuracy">Model Accuracy</a></li>
+</ul></li>
+<li><a href="#assumptions">Assumptions</a></li>
+<li><a href="#making-predictions">Making Predictions</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In previous posts, I discussed <a href="https://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">visualizing</a> the relationship between two quantitative variables through a scatter plot and <a href="https://fahimahmad.netlify.app/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/">quantifying</a> the strength of the relationship through different types of correlation.</p>
+<blockquote>
+<p>A scatter plot uses dots to represent the values of two numeric variables. If the dots move from the lower-left to the upper-right corner of the plot, it depicts a positive correlation; if the dots move from upper-left to lower-right corner, it illustrates a negative correlation; if the dots do not form any pattern, it shows no relationship between the two variables.</p>
+</blockquote>
+<blockquote>
+<p>The correlation coefficient quantifies the extent of interrelation between two numeric variables. The higher the correlation coefficient in absolute value, the stronger the degree of association.</p>
+</blockquote>
+<p>Correlation shows whether or not a change in one variable is followed by changes in another variable, or vice versa, without making any distinction between dependent or independent variables. The linear regression predicts the numeric response in the dependent variable that is triggered based on the changes in the independent variable(s). In other words, the correlation between <code>x</code> and <code>y</code> is identical to the correlation between <code>y</code> and <code>x</code>. While regressions of <code>y</code> on <code>x</code> and <code>x</code> on <code>y</code> yield completely different results.</p>
+</div>
+<div id="building-the-linear-regression-model" class="section level1">
+<h1>Building the Linear Regression Model</h1>
+<p>There are two main types of linear regression: 1) Simple linear regression that predicts the value of the dependent variable on the basis of one explanatory variable and 2) Multiple linear regression that predicts the value of the dependent variable on the basis of two or more than two explanatory variables.</p>
+<p>For this analysis, I use the <strong>mtcars</strong> dataset to build a simple linear model for <code>mpg</code> (miles a car travels per gallon of gasoline) as a function of <code>wt</code> (weight of a car), so you can use it to predict how many miles a car travels when the weight is known.</p>
+<p>Mathematically, the regression equation is expressed as below:</p>
+<p><span class="math display">\[y = \beta0+\beta1 \space x + e\]</span></p>
+<p>Where <span class="math inline">\(\beta0\)</span> and <span class="math inline">\(\beta1\)</span> are regression coefficients and <span class="math inline">\(e\)</span> is the error term.
+The <code>lm()</code> function is used to estimate the coefficients of linear regression:</p>
+<pre class="r"><code>lm(mpg~wt, mtcars)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)           wt  
+##      37.285       -5.344</code></pre>
+<p>Since the coefficient for <code>wt</code> is negative, it denotes a negative relationship between <code>mpg</code> and <code>wt</code>. That is, a unit increase in <code>wt</code> is followed by 5.344 units decrease in <code>mpg</code>.</p>
+</div>
+<div id="model-assessment" class="section level1">
+<h1>Model Assessment</h1>
+<p>Before using the model for predictions, we should make sure the model is statistically significant. The <code>summary()</code> function displays the significance level of each coefficient alongside other useful information such as residuals and R-squared to test the model accuracy.</p>
+<pre class="r"><code>summary(lm(mpg~wt, mtcars))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+<p>It displays the model equation <code>lm(formula = mpg ~ wt, data = mtcars)</code> followed by a glimpse of the distribution of the residuals.</p>
+<div id="coefficients" class="section level2">
+<h2>Coefficients</h2>
+<p>The <strong>Coefficients</strong> part shows the estimates and their attributes such as standard error, t value, and p-value for each beta coefficient to assess the extent and the significance level of numeric response in the dependent variable based on the changes of the independent variable(s).</p>
+<ul>
+<li><p><strong>Estimates:</strong> The y-intercept and the estimated effect of the explanatory variable(s) on the dependent variable are displayed in this part. (<em>The closer to zero, the weaker its effect on the outcome</em>)</p></li>
+<li><p><strong>Std. Error:</strong> It indicates how precisely the estimates are measured by quantifying the uncertainty of the estimates. It can be used to calculate the confidence interval and t-value as well. (<em>The lower the standard error, the better the estimates</em>)</p></li>
+<li><p><strong>t-value:</strong> It is the ratio of the beta coefficient and standard error <span class="math inline">\(t = \frac {\beta}{Std. \space Error}\)</span>. A higher standard error, therefore, yields a lower t-value. (<em>The higher t-value is better</em>)</p></li>
+<li><p><strong>Pr(&gt;|t|):</strong> It shows the significance level of the coefficient, and tests whether or not it is significantly different from zero. (<em>The closer to zero is better</em>)</p></li>
+</ul>
+</div>
+<div id="model-accuracy" class="section level2">
+<h2>Model Accuracy</h2>
+<p>The <code>summary()</code> function also provides additional information such as RSE, R-squared, and the p-value to test how well the model fits the data.</p>
+<ul>
+<li><p><strong>Residual standard error (RSE)</strong>: It shows the average variation of the observed values from the predicted values. For example, the RSE is 3.046 in the above model that indicates the observed values of the dependent variable deviate from the regression line, on average, by 3.046 units. The ratio of RSE and mean of the dependent variable results in a percentage error. In the above model the percentage error is <code>3.046*100/mean(mtcars$mpg)</code> = 15.2%. (<em>The lower RSE is better</em>)</p></li>
+<li><p><strong>R-squared</strong>: It indicates the proportion of variance of the dependent variable that can be explained by the explanatory variable(s) which ranges from 0 to 1<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. (<em>The closer to one is better</em>)</p></li>
+<li><p><strong>p-value</strong>: It shows the overall significance level of the model. (<em>The closer to zero is better</em>)</p></li>
+</ul>
+</div>
+</div>
+<div id="assumptions" class="section level1">
+<h1>Assumptions</h1>
+<ul>
+<li><strong>Linearity</strong>: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post <a href="http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">here</a> for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.</li>
+</ul>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() + 
+  geom_smooth(method = &quot;lm&quot;, se = F) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The above graph depicts a linearly decreasing relationship between <code>mpg</code> and <code>wt</code>.</p>
+<ul>
+<li><strong>Normality</strong>: This indicates that the distribution of the data is close to the normal distribution. I use the QQ-plot to visually evaluate whether or not the data fit a normal distribution.</li>
+</ul>
+<blockquote>
+<p>If the vast majority of points are very near the line, it depicts a normal distribution. If the data do not follow a normal distribution, you can use the methods described <a href="https://fahimahmad.netlify.app/post/methods-for-transforming-data-to-normal-distribution-in-r/">here</a> to transform the data into a normal distribution.</p>
+</blockquote>
+<pre class="r"><code>mtcars %&gt;% 
+  select(mpg, wt) %&gt;%
+  pivot_longer(names_to = &quot;vars&quot;, values_to = &quot;values&quot;, cols = everything()) %&gt;% 
+  ggplot(aes(sample = values)) +
+  geom_qq(color = &quot;steelblue&quot;) +
+  geom_qq_line() +
+  facet_wrap(~vars, scales = &quot;free&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The above graphs illustrate that <code>mpg</code> and <code>wt</code> are moderately skewed to the right side.</p>
+<ul>
+<li><p><strong>Multicollinearity</strong>: Multicollinearity indicates the presence of a strong correlation among independent variables. You should check this assumption while using multiple linear regression. Since there is only one explanatory variable in our model, we can skip this assumption<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p></li>
+<li><p><strong>Homoscedasticity</strong>: It stands for homogeneity of variance of residuals. We can test this assumption by plotting the fitted values against the residuals.</p></li>
+</ul>
+<blockquote>
+<p>If the points form any systematic pattern, it depicts the violation of homoscedasticity.</p>
+</blockquote>
+<pre class="r"><code># The residuals and fitted values can also be obtained if you feed the linear regression model into `augment()` function from the **broom** package.
+
+data.frame(
+  fitted = fitted(lm(mpg~wt, mtcars)),
+  residuals = resid(lm(mpg~wt, mtcars))
+) %&gt;% 
+  ggplot(aes(x = fitted, y = residuals)) +
+  geom_point(color = &quot;steelblue&quot;) +
+  geom_hline(yintercept = 0, linetype = &quot;dotted&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>After determining that the data do not violate any of the above assumptions, you can proceed to make predictions based on new values of the explanatory variable(s).</p>
+</div>
+<div id="making-predictions" class="section level1">
+<h1>Making Predictions</h1>
+<p>As mentioned earlier, if the dependent and independent variables are denoted by <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>, the regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> is expressed as follow: <span class="math display">\[y = \beta 0 + \beta 1\space x\]</span></p>
+<p>where <span class="math inline">\(\beta 0\)</span> and <span class="math inline">\(\beta 1\)</span> are unknown parameters that can be estimated using the sample data. <span class="math inline">\(\beta 0\)</span> indicates the y-intercept and <span class="math inline">\(\beta 1\)</span> shows the slope of the regression line, respectively. That is, <span class="math inline">\(\beta 0\)</span> represents the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is 0 and <span class="math inline">\(\beta 1\)</span> indicates the estimated effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>.</p>
+<p>Making predictions with linear regression is as simple as solving the above equation. For instance, consider the model we built earlier: <span class="math display">\[mpg = 37.285 - 5.344 × wt\]</span></p>
+<p>You can enter different values for the explanatory variable in the above equation to predict the dependent variable. For example, let’s predict the value of <code>mpg</code> if <code>wt</code> is 5: <span class="math display">\[mpg = 37.285 - 5.344 × 5 = 10.565\]</span></p>
+<p>Nevertheless, if you have multiple explanatory variables, solving the the above equation by hand would be time-consuming. Instead, you can use the <code>predict.lm()</code> function for the predictions based on the linear model.</p>
+<pre class="r"><code># predicting &#39;mpg&#39; if &#39;wt&#39; is equal to 10
+predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))</code></pre>
+<pre><code>##        1 
+## 10.56277</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The R-squared in a linear regression with one independent variable is the square of the Pearson correlation coefficient.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>We can test multicollinearity through correlation matrix or computing Variance Influential Factor which I will discuss it in the next post.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
