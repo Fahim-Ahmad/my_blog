@@ -1,0 +1,2087 @@
+---
+title: Methods for Transforming Data to Normal Distribution
+author: Fahim Ahmad
+date: '2020-07-31'
+slug: methods-for-transforming-data-to-normal-distribution-in-r
+categories:
+  - R
+  - Statistics
+tags:
+  - R
+  - Statistics
+
+output:
+  blogdown::html_page:
+    toc: yes
+
+Description: In this post, I try to cover the most common methods of transforming a skewed distribution into a normal distribution, and the foundational step that you must consider prior deciding which method to apply.
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#dealing-with-the-positive-skewness">Dealing with the positive skewness</a></li>
+<li><a href="#dealing-with-the-negative-skewness">Dealing with the negative skewness</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Before we get deep into transforming skewed data, let’s quickly talk around the normal distribution and skewness coefficient, or have a look at my previous post to have a detailed insight on different types of distribution of data <a href="https://fahimahmad.netlify.app/post/skewness-definition-and-its-importance-in-data-science/">here</a>.</p>
+<p>The normal distribution is a statistical concept that denotes the probability distribution of data which has a bell-shaped curve. That is, the normal distribution is symmetrical on both sides where mean, median, and mode are equal. The skewness coefficient of a normal distribution is 0 that can be used as a reference to measure the extent and direction of deviation of the distribution of a given data from the normal distribution.</p>
+<p>A positively skewed data has a skewness of greater than 0, whereas the negatively skewed data has a skewness of lower than 0. In other words, the data points tend to concentrate around the lower values in a positively skewed data and the mean is greater than the median, where the opposite is true in a negatively skewed data.</p>
+<p>Oftentimes the real-life data do not follow the normal distribution which undermines the validity of the parametric statistical models and inferences. Thus, some sort of modification is needed. That is where the data transformation comes in to make the distribution of the data as normal as possible so that the statistical inferences drawn from the data become more valid by reducing the skewness of the original data.</p>
+<p>In this post, I try to cover the most common methods of transforming a skewed distribution into a normal distribution, and the foundational step you must consider before deciding which method to apply.</p>
+<p>Loading required packages:</p>
+<pre class="r"><code>  library(data.table) # Enhanced data.frame
+  library(dplyr) # Data manipulation
+  library(tidyr) # Reshape the data between wide and long formats
+  library(ggplot2) # Data visualization
+  library(patchwork) # Re-arrange ggplot2 plots
+  library(moments) # Calculating skewness coefficient
+  library(gt) # Creating an object of class &quot;gt&quot; table</code></pre>
+</div>
+<div id="dealing-with-the-positive-skewness" class="section level1">
+<h1>Dealing with the positive skewness</h1>
+<p>The common methods for transforming positively skewed data to normal distribution are, but not limited to, square root transformation, cube root transformation, and log transformation.</p>
+<p>I use the GDP per capita as an example. You can download the data from <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD">here</a>.</p>
+<div id="toybytjxst" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#toybytjxst .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#toybytjxst .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#toybytjxst .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#toybytjxst .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#toybytjxst .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#toybytjxst .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#toybytjxst .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#toybytjxst .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#toybytjxst .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#toybytjxst .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#toybytjxst .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#toybytjxst .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#toybytjxst .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#toybytjxst .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#toybytjxst .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#toybytjxst .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#toybytjxst .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#toybytjxst .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#toybytjxst .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#toybytjxst .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#toybytjxst .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#toybytjxst .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#toybytjxst .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#toybytjxst .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#toybytjxst .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#toybytjxst .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#toybytjxst .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#toybytjxst .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#toybytjxst .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#toybytjxst .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#toybytjxst .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#toybytjxst .gt_left {
+  text-align: left;
+}
+
+#toybytjxst .gt_center {
+  text-align: center;
+}
+
+#toybytjxst .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#toybytjxst .gt_font_normal {
+  font-weight: normal;
+}
+
+#toybytjxst .gt_font_bold {
+  font-weight: bold;
+}
+
+#toybytjxst .gt_font_italic {
+  font-style: italic;
+}
+
+#toybytjxst .gt_super {
+  font-size: 65%;
+}
+
+#toybytjxst .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#toybytjxst .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#toybytjxst .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#toybytjxst .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#toybytjxst .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#toybytjxst .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Country Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Indicator Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">value</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">1</td>
+<td class="gt_row gt_left">Afghanistan</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">502.1</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">2</td>
+<td class="gt_row gt_left">Angola</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">2,973.6</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">3</td>
+<td class="gt_row gt_left">Albania</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">5,352.9</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">4</td>
+<td class="gt_row gt_left">Andorra</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">40,886.4</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">5</td>
+<td class="gt_row gt_left">Arab World</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">6,580.1</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">6</td>
+<td class="gt_row gt_left">United Arab Emirates</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">43,103.3</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">7</td>
+<td class="gt_row gt_left">Argentina</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">10,006.1</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier; font-size: x-small; background-color: #E4E4E4;">8..214</td>
+<td class="gt_row gt_left" style="background-color: #E4E4E4;"></td>
+<td class="gt_row gt_left" style="background-color: #E4E4E4;"></td>
+<td class="gt_row gt_right" style="background-color: #E4E4E4;"></td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">215</td>
+<td class="gt_row gt_left">Vietnam</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">2,715.3</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">216</td>
+<td class="gt_row gt_left">Vanuatu</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">3,058.1</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">217</td>
+<td class="gt_row gt_left">Samoa</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">4,315.9</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">218</td>
+<td class="gt_row gt_left">Kosovo</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">4,417.5</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">219</td>
+<td class="gt_row gt_left">South Africa</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">6,001.4</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">220</td>
+<td class="gt_row gt_left">Zambia</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">1,291.3</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">221</td>
+<td class="gt_row gt_left">Zimbabwe</td>
+<td class="gt_row gt_left">GDP per capita (current US$)</td>
+<td class="gt_row gt_right">1,464.0</td></tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="4">Source: <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD">The World Bank</a></td>
+    </tr>
+    <tr>
+      <td class="gt_sourcenote" colspan="4">Last update: 2020-07-01.</td>
+    </tr>
+  </tfoot>
+  
+</table>
+</div>
+<p>Let’s illustrate the distribution of the above data to see what we are dealing with.</p>
+<pre class="r"><code>df &lt;- select(gdp_pc, gdp_pc = value)
+
+ggplot(df, aes(x = gdp_pc)) +
+  geom_histogram(aes(y = ..density..), fill = &quot;coral&quot;, color = &quot;gray&quot;, alpha = 0.8) +
+  geom_density() +
+  theme_bw() + labs(x = NULL, title = &#39;GDP Per Capita&#39;)</code></pre>
+<p><img src="/post/2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+<p>It certainly does not follow the normal distribution and is positively skewed and most of the data points tend to concentrate around the lower values. That is, most countries have a lower GDP per capita.<br />
+The extent of the skewness, however, is not known yet. To measure the skewness you can use <code>skewness()</code> function from the <strong>moments</strong> package.</p>
+<pre class="r"><code>skewness(df$gdp_pc)</code></pre>
+<pre><code>## [1] 2.096777</code></pre>
+<p>Since the skewness coefficient is greater than one, it denotes the data is highly skewed. Let’s transform the data into normal distribution using different methods.</p>
+<p><strong>1) Square root transformation: </strong> The square root transformation involves converting each value to its square root. That is, converting <span class="math inline">\({(x)}\)</span> to <span class="math inline">\({({x}^{1/2})}\)</span>.<br />
+<strong>2) Cube root transformation: </strong> This method involves converting <span class="math inline">\({(x)}\)</span> to <span class="math inline">\({(x^{1/3})}\)</span>.<br />
+<strong>3) Log transformation: </strong> Different types of logarithmic transformation can be applied, including <span class="math inline">\(x\)</span> to <span class="math inline">\({log_{10}x}\)</span>; <span class="math inline">\(x\)</span> to <span class="math inline">\({log_{2}x}\)</span>, <span class="math inline">\(x\)</span> to <span class="math inline">\({log_{e}x}\)</span> or <span class="math inline">\({ln}\ {x}\)</span>.</p>
+<pre class="r"><code>df &lt;- df %&gt;% 
+  mutate(sqrt_gdp_pc = sqrt(gdp_pc),
+         cbrt_gdp_pc = (gdp_pc)^(1/3),
+         log_gdp_pc = log(gdp_pc)
+         )
+
+do.call(rbind, (lapply(df, skewness))) %&gt;% 
+  data.table(keep.rownames = T) %&gt;%
+  mutate(Method = factor(case_when(rn %in% &quot;gdp_pc&quot; ~ 1, rn %in% &quot;sqrt_gdp_pc&quot; ~ 2, rn %in% &quot;cbrt_gdp_pc&quot; ~ 3, rn %in% &quot;log_gdp_pc&quot; ~ 4),
+                         labels = c(&quot;Original data&quot;, &quot;Square Root Transformation&quot;, &quot;Cube Root Transformation&quot;, &quot;Log Transformation&quot;),
+                         ordered = T)) %&gt;% 
+  gt() %&gt;% 
+  cols_hide(columns = vars(rn)) %&gt;% 
+  cols_move_to_start(columns = vars(Method)) %&gt;% 
+  # tab_row_group(group = &quot;Methods to reduce skewness&quot;, rows = 2:4) %&gt;% 
+  # tab_row_group(group = &quot;Original Dat&quot;, rows = 1) %&gt;% 
+  fmt_number(columns = vars(V1),decimals = 3) %&gt;% 
+  cols_label(V1 = &quot;Skewness Coefficient&quot;) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 1), locations = cells_body(columns = vars(V1), rows = V1 &gt; 2)) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.7), locations = cells_body(columns = vars(V1), rows = V1 &gt; 1 &amp; V1 &lt; 2)) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.5), locations = cells_body(columns = vars(V1), rows = V1 &gt; 0.5 &amp; V1 &lt; 1)) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.3), locations = cells_body(columns = vars(V1), rows = V1 &lt; 0.5))</code></pre>
+<div id="huvbobxmlt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#huvbobxmlt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#huvbobxmlt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#huvbobxmlt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#huvbobxmlt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#huvbobxmlt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#huvbobxmlt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#huvbobxmlt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#huvbobxmlt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#huvbobxmlt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#huvbobxmlt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#huvbobxmlt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#huvbobxmlt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#huvbobxmlt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#huvbobxmlt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#huvbobxmlt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#huvbobxmlt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#huvbobxmlt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#huvbobxmlt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#huvbobxmlt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#huvbobxmlt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#huvbobxmlt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#huvbobxmlt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#huvbobxmlt .gt_left {
+  text-align: left;
+}
+
+#huvbobxmlt .gt_center {
+  text-align: center;
+}
+
+#huvbobxmlt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#huvbobxmlt .gt_font_normal {
+  font-weight: normal;
+}
+
+#huvbobxmlt .gt_font_bold {
+  font-weight: bold;
+}
+
+#huvbobxmlt .gt_font_italic {
+  font-style: italic;
+}
+
+#huvbobxmlt .gt_super {
+  font-size: 65%;
+}
+
+#huvbobxmlt .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#huvbobxmlt .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#huvbobxmlt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#huvbobxmlt .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#huvbobxmlt .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#huvbobxmlt .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Method</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Skewness Coefficient</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_center">Original data</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">2.097</td></tr>
+    <tr><td class="gt_row gt_center">Square Root Transformation</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">1.092</td></tr>
+    <tr><td class="gt_row gt_center">Cube Root Transformation</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">0.737</td></tr>
+    <tr><td class="gt_row gt_center">Log Transformation</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">&minus;0.032</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<p>The square root transformation reduces the skewness coefficient remarkably from <strong>2.1</strong> to <strong>1.09</strong>, however, it is still greater than <strong>1</strong>. It is reduced to <strong>0.74</strong> by applying the cube root transformation, whereas the log transformation reduces the skewness to <strong>-0.032</strong>.</p>
+<p>Let’s explore more the variability of the data.</p>
+<pre class="r"><code>do.call(cbind, (lapply(df, summary))) %&gt;%
+  data.table(keep.rownames = T) %&gt;% 
+  gt(rowname_col = &quot;rn&quot;) %&gt;% 
+  tab_spanner(label = &quot;Methods to Reduce Skewness&quot;, columns = vars(&quot;sqrt_gdp_pc&quot;, &quot;cbrt_gdp_pc&quot;, &quot;log_gdp_pc&quot;)) %&gt;% 
+  tab_spanner(label = &quot;Original Data&quot;, columns = vars(&quot;gdp_pc&quot;)) %&gt;% 
+  fmt_number(columns = ends_with(&quot;gdp_pc&quot;), decimals = 3) %&gt;% 
+  cols_label(gdp_pc = &quot;GDP per capita&quot;, sqrt_gdp_pc = &quot;Square root transformation&quot;, cbrt_gdp_pc = &quot;Cube root transformaiton&quot;, log_gdp_pc = &quot;Log transformation&quot;) %&gt;%
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 1), locations = cells_body(columns = vars(gdp_pc))) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.7), locations = cells_body(columns = vars(sqrt_gdp_pc))) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.5), locations = cells_body(columns = vars(cbrt_gdp_pc))) %&gt;% 
+  tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.3), locations = cells_body(columns = vars(log_gdp_pc)))</code></pre>
+<pre><code>## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead
+
+## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead
+
+## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead
+
+## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead
+
+## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead
+
+## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
+## * please use `columns = c(...)` instead</code></pre>
+<div id="tfyuvvwwyq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#tfyuvvwwyq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tfyuvvwwyq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tfyuvvwwyq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tfyuvvwwyq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tfyuvvwwyq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tfyuvvwwyq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tfyuvvwwyq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tfyuvvwwyq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tfyuvvwwyq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tfyuvvwwyq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tfyuvvwwyq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tfyuvvwwyq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tfyuvvwwyq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tfyuvvwwyq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#tfyuvvwwyq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#tfyuvvwwyq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tfyuvvwwyq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#tfyuvvwwyq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tfyuvvwwyq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tfyuvvwwyq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tfyuvvwwyq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tfyuvvwwyq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tfyuvvwwyq .gt_left {
+  text-align: left;
+}
+
+#tfyuvvwwyq .gt_center {
+  text-align: center;
+}
+
+#tfyuvvwwyq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tfyuvvwwyq .gt_font_normal {
+  font-weight: normal;
+}
+
+#tfyuvvwwyq .gt_font_bold {
+  font-weight: bold;
+}
+
+#tfyuvvwwyq .gt_font_italic {
+  font-style: italic;
+}
+
+#tfyuvvwwyq .gt_super {
+  font-size: 65%;
+}
+
+#tfyuvvwwyq .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#tfyuvvwwyq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#tfyuvvwwyq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#tfyuvvwwyq .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#tfyuvvwwyq .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#tfyuvvwwyq .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1"></th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1">
+        <span class="gt_column_spanner">Original Data</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">Methods to Reduce Skewness</span>
+      </th>
+    </tr>
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">GDP per capita</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Square root transformation</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Cube root transformaiton</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Log transformation</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_right gt_stub">Min.</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">261.247</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">16.163</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">6.393</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">5.565</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">1st Qu.</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">1,994.906</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">44.664</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">12.589</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">7.598</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">Median</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">6,564.920</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">81.024</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">18.724</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">8.789</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">Mean</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">14,536.951</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">99.495</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">20.439</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">8.738</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">3rd Qu.</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">17,401.722</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">131.916</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">25.914</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">9.764</td></tr>
+    <tr><td class="gt_row gt_right gt_stub">Max.</td>
+<td class="gt_row gt_right" style="background-color: #B03060;">114,704.594</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.7);">338.681</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.5);">48.588</td>
+<td class="gt_row gt_right" style="background-color: rgba(176,48,96,0.3);">11.650</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<p>In the original data, the distance between the 1st quartile and the minimum value is 1733.7 and the distance between the 3rd quartile and the maximum value is 97302.9 prior to any kind of transformations. Nevertheless, it decreases at different levels after applying various forms of transformation. For instance, the difference between the 3rd quartile and the maximum value is 206.8 after the square root transformation, it is 22.7 after the cube root transformation, and it is 1.9 after the log transformation.</p>
+<p>Another point of consideration is the distance between the mean and the median. The mean is 7972.03 points away from the median in the original data, whereas it is 18.5 after the square root transformation, 1.71 after the cube root transformation, and -0.05 after the log transformation.</p>
+<p>Let’s make a quick visualization to better understand the shape of the distribution after applying each kind of above-mentioned methods.</p>
+<pre class="r"><code>df &lt;- df %&gt;% 
+  pivot_longer(cols = everything(), names_to = &quot;method&quot;, values_to = &quot;values&quot;) %&gt;% 
+  mutate(method = factor(case_when(method == &quot;gdp_pc&quot; ~ 1, method == &quot;sqrt_gdp_pc&quot; ~ 2, method == &quot;cbrt_gdp_pc&quot; ~ 3, method == &quot;log_gdp_pc&quot; ~ 4),
+                          labels = c(&quot;Original data&quot;, &quot;Square root transformation&quot;, &quot;Cube root transformation&quot;, &quot;Log transformation&quot;)))
+
+vline &lt;- summarise(group_by(df, method), mean = mean(values), median = median(values))
+
+df %&gt;% 
+  ggplot(aes(x = values)) +
+  geom_histogram(aes(y = ..density..), fill = &quot;coral&quot;, alpha = 0.8, color = &quot;gray&quot;) +
+  geom_density() + theme_bw() +
+  facet_wrap(~method, nrow = 2, scales = &quot;free&quot;) +
+  geom_vline(data = vline, aes(xintercept = mean), linetype = &quot;dotted&quot;) +
+  geom_vline(data = vline, aes(xintercept = median), linetype = &quot;dashed&quot;) +
+  labs(x = NULL, caption = &quot;Mean = Dotted line\nMedian = Dashed line&quot;) +
+  theme(strip.text = element_text(size = 15, face = &quot;bold&quot;))</code></pre>
+<p><img src="/post/2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/index_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
+<p>As the above plots depict, the log transformation is pretty awesome. It reduces the skewness and improves the normality of the data more rapidly compared to the cube root or square root transformation.</p>
+</div>
+<div id="dealing-with-the-negative-skewness" class="section level1">
+<h1>Dealing with the negative skewness</h1>
+<p>The important caveat in applying the above methods to reduce the skewness is the data should be skewed to the right side, otherwise those methods do not transform the distribution of the data to normal.</p>
+<p>Let’s use the life expectancy data from the World Bank as an example. You can download the data from <a href="https://data.worldbank.org/indicator/SP.DYN.LE00.IN">here</a>.</p>
+<div id="qzghdmrtjl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#qzghdmrtjl .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qzghdmrtjl .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qzghdmrtjl .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qzghdmrtjl .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qzghdmrtjl .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qzghdmrtjl .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qzghdmrtjl .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qzghdmrtjl .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qzghdmrtjl .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qzghdmrtjl .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qzghdmrtjl .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qzghdmrtjl .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qzghdmrtjl .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzghdmrtjl .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qzghdmrtjl .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qzghdmrtjl .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzghdmrtjl .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qzghdmrtjl .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzghdmrtjl .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#qzghdmrtjl .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzghdmrtjl .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qzghdmrtjl .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzghdmrtjl .gt_left {
+  text-align: left;
+}
+
+#qzghdmrtjl .gt_center {
+  text-align: center;
+}
+
+#qzghdmrtjl .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qzghdmrtjl .gt_font_normal {
+  font-weight: normal;
+}
+
+#qzghdmrtjl .gt_font_bold {
+  font-weight: bold;
+}
+
+#qzghdmrtjl .gt_font_italic {
+  font-style: italic;
+}
+
+#qzghdmrtjl .gt_super {
+  font-size: 65%;
+}
+
+#qzghdmrtjl .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#qzghdmrtjl .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#qzghdmrtjl .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qzghdmrtjl .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#qzghdmrtjl .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#qzghdmrtjl .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Country Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Indicator Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">value</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">1</td>
+<td class="gt_row gt_left">Aruba</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">76.2</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">2</td>
+<td class="gt_row gt_left">Afghanistan</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">64.5</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">3</td>
+<td class="gt_row gt_left">Angola</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">60.8</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">4</td>
+<td class="gt_row gt_left">Albania</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">78.5</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">5</td>
+<td class="gt_row gt_left">Arab World</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">71.8</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">6</td>
+<td class="gt_row gt_left">United Arab Emirates</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">77.8</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">7</td>
+<td class="gt_row gt_left">Argentina</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">76.5</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier; font-size: x-small; background-color: #E4E4E4;">8..236</td>
+<td class="gt_row gt_left" style="background-color: #E4E4E4;"></td>
+<td class="gt_row gt_left" style="background-color: #E4E4E4;"></td>
+<td class="gt_row gt_right" style="background-color: #E4E4E4;"></td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">237</td>
+<td class="gt_row gt_left">Vanuatu</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">70.3</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">238</td>
+<td class="gt_row gt_left">Samoa</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">73.2</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">239</td>
+<td class="gt_row gt_left">Kosovo</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">72.2</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">240</td>
+<td class="gt_row gt_left">Yemen, Rep.</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">66.1</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">241</td>
+<td class="gt_row gt_left">South Africa</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">63.9</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">242</td>
+<td class="gt_row gt_left">Zambia</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">63.5</td></tr>
+    <tr><td class="gt_row gt_right gt_stub" style="font-family: Courier;">243</td>
+<td class="gt_row gt_left">Zimbabwe</td>
+<td class="gt_row gt_left">Life expectancy at birth, total (years)</td>
+<td class="gt_row gt_right">61.2</td></tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="4">Source: <a href="https://data.worldbank.org/indicator/SP.DYN.LE00.IN">The World Bank</a></td>
+    </tr>
+    <tr>
+      <td class="gt_sourcenote" colspan="4">Last update: 2020-07-01.</td>
+    </tr>
+  </tfoot>
+  
+</table>
+</div>
+<p>Below is the distribution of the above data which is moderately skewed to the left side with a skewness coefficient of -0.532.</p>
+<pre class="r"><code>df &lt;- select(life_exp, life_exp = value)
+
+ggplot(df, aes(x = life_exp)) +
+  geom_histogram(aes(y = ..density..), fill = &quot;coral&quot;, color = &quot;gray&quot;, alpha = 0.8) +
+  geom_density() +
+  theme_bw() + labs(x = NULL, title = &#39;Life expectancy&#39;)</code></pre>
+<p><img src="/post/2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/index_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<p>One solution when dealing with the negatively skewed data is to reflect the values and apply the methods that are used to reduce the positive skewness on the reflected values. That is, subtract each value from a constant which is larger than the maximum value prior to transformation. The highest value in the above data is 84.9. Thus, I subtract each value from 86.</p>
+<p>The point to notice after reflecting the data is that the extent of the skewness remains the same and the distribution of the data is as skewed as it was, though in the opposite direction.</p>
+<p>Let’s apply the above methods to the reflected data.</p>
+<pre class="r"><code>df &lt;- df %&gt;% 
+  mutate(reflected_life_exp = 86-life_exp,
+         sqrt_reflected_life_exp = sqrt(reflected_life_exp),
+         cbrt_reflected_life_exp = (reflected_life_exp)^(1/3),
+         log_reflected_life_exp = log(reflected_life_exp),
+         life_exp = NULL) %&gt;% 
+  pivot_longer(cols = everything(), names_to = &quot;method&quot;, values_to = &quot;values&quot;) %&gt;% 
+  mutate(method = factor(case_when(method == &quot;reflected_life_exp&quot; ~ 1, method == &quot;sqrt_reflected_life_exp&quot; ~ 2, method == &quot;cbrt_reflected_life_exp&quot; ~ 3, method == &quot;log_reflected_life_exp&quot; ~ 4),
+                          labels = c(&quot;Reflected data&quot;, &quot;Square root transformation&quot;, &quot;Cube root transformation&quot;, &quot;Log transformation&quot;)))
+
+vline &lt;- summarise(group_by(df, method), mean = mean(values), median = median(values))
+
+df %&gt;% 
+  ggplot(aes(x = values)) +
+  geom_histogram(aes(y = ..density..), fill = &quot;coral&quot;, alpha = 0.8, color = &quot;gray&quot;) +
+  geom_density() + theme_bw() +
+  facet_wrap(~method, nrow = 2, scales = &quot;free&quot;) +
+  geom_vline(data = vline, aes(xintercept = mean), linetype = &quot;dotted&quot;) +
+  geom_vline(data = vline, aes(xintercept = median), linetype = &quot;dashed&quot;) +
+  labs(x = NULL, caption = &quot;Mean = Dotted line\nMedian = Dashed line&quot;) +
+  theme(strip.text = element_text(size = 15, face = &quot;bold&quot;))</code></pre>
+<p><img src="/post/2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/index_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
+<p>Surprisingly, the square root and cube root transformation convert the distribution of the above data closer to the normal distribution compare to log transformation.</p>
+<blockquote>
+<p>The important point to consider is that the values have been reflected. That is, the lower values represent high values and the higher values represent low values.</p>
+</blockquote>
+<p>Other approaches to dealing with the negative skewness can be the inverse of the transformations that are used to reduce the positive skewness. For example, instead of computing square root convert <span class="math inline">\(x\)</span> to <span class="math inline">\(x^2\)</span> and instead of cube root convert <span class="math inline">\(x\)</span> to <span class="math inline">\(x^{3}\)</span>.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Different approaches reduce the extent of the skewness and boost the validity of the statistical inferences at different levels. Whatever method you use to transform the data into a normal distribution, the points you have to consider are <strong>a)</strong> never limit yourself to one standard method and examine several options before deciding which approach to use <strong>b)</strong> be cautious and always explore the math behind each approach. For example, let’s have a glance at the below graphs that illustrate the domain of log, square root, and cube root functions.</p>
+<pre class="r"><code>plot &lt;- ggplot(data.frame(x = c(-25,25)), aes(x = x)) +
+  theme_bw() + geom_vline(xintercept = 0) + geom_hline(yintercept = 0)
+
+sqrt &lt;- plot + stat_function(fun = function(x){sqrt(x)}, color = &#39;maroon&#39;) + labs(title = &quot;Square root&quot;)
+cbrt &lt;- plot + stat_function(fun = function(x){sign(x) * abs((x))^(1/3)}, color = &#39;maroon&#39;) + labs(title = &quot;Cube root&quot;)  + xlim(c(-50, 50))
+log &lt;- plot + stat_function(fun = function(x){log10(x)}, color = &#39;maroon&#39;) + labs(title = &quot;Log&quot;)
+
+(log | sqrt) / (cbrt)</code></pre>
+<p><img src="/post/2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Since the domain for log is strictly greater than zero, it is reasonable to use log+1 instead of log transformation if the data have meaningful zero values. Furthermore, the square root is not defined for the negative numbers, thus you can consider adding a constant to convert the negative values to positive values prior to transformation or use cube root transformation instead of square root transformation. The kind of data you are working with, therefore, is literally foundational in deciding which method to use.</p>
+</div>
