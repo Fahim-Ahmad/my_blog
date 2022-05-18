@@ -10,6 +10,9 @@ main:
   - name: Blog posts
     url: post/
     weight: 2
+  - name: Dashboards
+    url: dashboard/
+    weight: 3    
 #  - name: new section
 #    url: new_section/
 #    weight: 3
