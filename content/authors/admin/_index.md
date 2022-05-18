@@ -23,7 +23,7 @@ interests:
 - Extract Knowledge from Data
     
 organizations:
-  - name: Economist & Data Analyst
+  - name: Data Analyst
 
 social:
 # - icon: envelope
