@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="" />
+  <meta name="description" content="Rename column names with R base functions Rename column names with dplyr Rename column names with data.table   There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/dashboard/" />
+  <link rel="alternate" hreflang="en-us" href="/dashboard/rename-data-frame-columns/" />
 
   
 
@@ -270,8 +270,6 @@
   
 
   
-    <link rel="alternate" href="/dashboard/index.xml" type="application/rss+xml" title="Fahim Ahmad" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -280,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/dashboard/" />
+  <link rel="canonical" href="/dashboard/rename-data-frame-columns/" />
 
   
   
@@ -297,12 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/dashboard/" />
-  <meta property="og:title" content=" | Fahim Ahmad" />
-  <meta property="og:description" content="" /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/dashboard/rename-data-frame-columns/" />
+  <meta property="og:title" content="Rename Data Frame Columns | Fahim Ahmad" />
+  <meta property="og:description" content="Rename column names with R base functions Rename column names with dplyr Rename column names with data.table   There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
+      <meta
+        property="article:published_time"
+        content="2019-06-19T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2019-06-19T00:00:00&#43;00:00">
   
 
   
@@ -313,15 +317,17 @@
 
   
 
+  
 
 
 
 
-  <title> | Fahim Ahmad</title>
+
+  <title>Rename Data Frame Columns | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="cafc62ad306046ec52deaf950b2709c5" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="2ec48fbcf711e165d5c9513ee5723bc7" >
 
   
   
@@ -568,32 +574,78 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Rename Data Frame Columns</h1>
+
+  
+
+  
+    
+    
+    
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jun 19, 2019
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a></span>
+  
+
+</div>
+
     
 
 
 
 
-
-
-  
-
-
-
-
-
-
-
-  
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1></h1>
-
-  
 
   
 </div>
@@ -603,21 +655,284 @@
 
  
 
-<div class="universal-wrapper">
-  
-  <div class="article-style"><h2 id="--compare-datasets">- Compare datasets</h2>
-<p>The purpose of developing this app is to compare two versions of the same dataset. It takes the data sets in the form of .csv files as input and compares them column by column and row by row and generates the differences, if any. You can then copy the differences or download it as a csv file. Source code: <a href="https://github.com/Fahim-Ahmad/compare_df_shiny_app">https://github.com/Fahim-Ahmad/compare_df_shiny_app</a></p>
-<p>Please click to below image to use the app.</p>
-<p><a href="https://fahim-ahmad.shinyapps.io/compare_df/" target="_blank" rel="noopener"><img src="imgs/compare_df_shiny.png" alt="drawing" style="width:70%;"/></a></p>
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+<div id="TOC">
+<ul>
+<li><a href="#rename-column-names-with-r-base-functions">Rename column names with R base functions</a></li>
+<li><a href="#rename-column-names-with-dplyr">Rename column names with dplyr</a></li>
+<li><a href="#rename-column-names-with-data.table">Rename column names with data.table</a></li>
+</ul>
 </div>
-  
 
-  
-  
-
-  
-
+<p>There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data.table package.</p>
+<p>I will use the R built-in <strong>iris</strong> data frame.</p>
+<pre class="r"><code>head(iris)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<div id="rename-column-names-with-r-base-functions" class="section level1">
+<h1>Rename column names with R base functions</h1>
+<p>Let’s change <strong>Sepal.Length</strong> to <strong>S.P</strong>. The procedure is simple; get column names using <code>names()</code> or <code>colnames</code>, extract the specific column name, and assign a new name.</p>
+<pre class="r"><code>colnames(iris)[colnames(iris)==&quot;Sepal.Length&quot;] &lt;- &quot;S.P&quot;
+head(iris)</code></pre>
+<pre><code>##   S.P Sepal.Width Petal.Length Petal.Width Species
+## 1 5.1         3.5          1.4         0.2  setosa
+## 2 4.9         3.0          1.4         0.2  setosa
+## 3 4.7         3.2          1.3         0.2  setosa
+## 4 4.6         3.1          1.5         0.2  setosa
+## 5 5.0         3.6          1.4         0.2  setosa
+## 6 5.4         3.9          1.7         0.4  setosa</code></pre>
+<p>The code does the following:</p>
+<ol style="list-style-type: decimal">
+<li><code>colnames(iris)</code> looks into all the names in the <strong>iris</strong>.</li>
+<li><code>names(iris) == &quot;Sepal.Length&quot;</code> returns a vector with true and false values to extract the variable name you want to change.</li>
+<li><code>&lt;- &quot;S.P&quot;</code> assigns the new name.</li>
+</ol>
+<p>You can also rename a variable by its index as well. For example, let’s change <strong>Sepal.Width</strong> [the second column] to <strong>S.W</strong>.</p>
+<pre class="r"><code>colnames(iris)[2] &lt;- &quot;S.W&quot;
+head(iris)</code></pre>
+<pre><code>##   S.P S.W Petal.Length Petal.Width Species
+## 1 5.1 3.5          1.4         0.2  setosa
+## 2 4.9 3.0          1.4         0.2  setosa
+## 3 4.7 3.2          1.3         0.2  setosa
+## 4 4.6 3.1          1.5         0.2  setosa
+## 5 5.0 3.6          1.4         0.2  setosa
+## 6 5.4 3.9          1.7         0.4  setosa</code></pre>
 </div>
+<div id="rename-column-names-with-dplyr" class="section level1">
+<h1>Rename column names with dplyr</h1>
+<p>You can use <code>rename()</code> function to change column names as following. For instance, let’s change <strong>Petal.Length</strong> to <strong>P.L</strong> and <strong>Petal.Width</strong> to <strong>P.W</strong>.</p>
+<pre class="r"><code># install.packages(&quot;dplyr&quot;)
+library(dplyr)
+
+iris %&gt;%
+  rename(
+    P.L = Petal.Length,
+    P.W = Petal.Width
+  ) %&gt;%
+  head()</code></pre>
+<pre><code>##   S.P S.W P.L P.W Species
+## 1 5.1 3.5 1.4 0.2  setosa
+## 2 4.9 3.0 1.4 0.2  setosa
+## 3 4.7 3.2 1.3 0.2  setosa
+## 4 4.6 3.1 1.5 0.2  setosa
+## 5 5.0 3.6 1.4 0.2  setosa
+## 6 5.4 3.9 1.7 0.4  setosa</code></pre>
+</div>
+<div id="rename-column-names-with-data.table" class="section level1">
+<h1>Rename column names with data.table</h1>
+<p><code>setnames()</code> function from <strong>data.table</strong> package can be used to rename a variable. The syntax is <code>setnames(df, &quot;old_name&quot;, &quot;new_name&quot;)</code>. As an example, let’s change <strong>Species</strong> to <strong>SPECIES</strong>.</p>
+<pre class="r"><code># install.packages(&quot;data.table&quot;)
+library(data.table)
+setnames(iris,
+         &quot;Species&quot;, &quot;SPECIES&quot;)
+colnames(iris)</code></pre>
+<pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot;  &quot;SPECIES&quot;</code></pre>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/dashboard/rename-data-frame-columns/&amp;text=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/dashboard/rename-data-frame-columns/&amp;t=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Rename%20Data%20Frame%20Columns&amp;body=/dashboard/rename-data-frame-columns/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/dashboard/rename-data-frame-columns/&amp;title=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Rename%20Data%20Frame%20Columns%20/dashboard/rename-data-frame-columns/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/dashboard/rename-data-frame-columns/&amp;title=Rename%20Data%20Frame%20Columns" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/"><img class="avatar mr-3 avatar-circle" src="/author/fahim-ahmad/avatar_hu943ba8eb54126f053ce52e97313e0c4b_160404_270x270_fill_q75_lanczos_center.jpg" alt="Fahim Ahmad"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Fahim Ahmad</a></h5>
+      
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Fahim-Ahmad" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/Fahim_AY" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">
