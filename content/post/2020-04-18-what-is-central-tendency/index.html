@@ -19,6 +19,7 @@ Description: The most common types of measure of central tendency are mean, medi
 
 
 <p>Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks. Now tell me which one is cost-efficient than the other, or both are the same?</p>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -93,7 +94,6 @@ Description: The most common types of measure of central tendency are mean, medi
 <ul>
 <li><strong>Mean:</strong> Mean is the measure of central tendency that you are most familiar with. Its use is most often with continuous data. You just add up all of the values and divide by the number of observations in the data. The mean locates the center accurately when the data is normally distributed. In fact, in any symmetrical distribution the mean, median and mode are equal. You can, therefore, use any of the measures of the central tendency to locate the center of the data. However, the presence of extreme values pulls the mean away from the center while the median is less affected by outliers.</li>
 </ul>
-<p><img src="imgs\measuresofcentraltendency.jpg" /></p>
 <p>As mean is susceptible to the presence of outliers<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.</p>
 <p>In R, the <code>mean()</code> function can be used to calculate the arithmetic mean. It takes a vector of values as input and returns the average.</p>
 <pre class="r"><code># use (na.rm = TRUE) if there is any missing value in the list of values

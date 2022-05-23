@@ -607,7 +607,6 @@ plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&am
 &lt;/ul&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&#34;imgs/Duplicates.jpg&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data. In this post, I provide an overview of &lt;code&gt;duplicated()&lt;/code&gt; function from base R and the &lt;code&gt;distinct()&lt;/code&gt; function from &lt;strong&gt;dplyr&lt;/strong&gt; package to detect and remove duplicates.&lt;/p&gt;
 &lt;p&gt;I will be using the following data frame as an example in this post.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1000)
@@ -3920,6 +3919,7 @@ df %&amp;gt;%
 
 
 &lt;p&gt;Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks. Now tell me which one is cost-efficient than the other, or both are the same?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr class=&#34;header&#34;&gt;
@@ -3994,7 +3994,6 @@ df %&amp;gt;%
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Mean:&lt;/strong&gt; Mean is the measure of central tendency that you are most familiar with. Its use is most often with continuous data. You just add up all of the values and divide by the number of observations in the data. The mean locates the center accurately when the data is normally distributed. In fact, in any symmetrical distribution the mean, median and mode are equal. You can, therefore, use any of the measures of the central tendency to locate the center of the data. However, the presence of extreme values pulls the mean away from the center while the median is less affected by outliers.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;imgs\measuresofcentraltendency.jpg&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;As mean is susceptible to the presence of outliers&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;, it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.&lt;/p&gt;
 &lt;p&gt;In R, the &lt;code&gt;mean()&lt;/code&gt; function can be used to calculate the arithmetic mean. It takes a vector of values as input and returns the average.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# use (na.rm = TRUE) if there is any missing value in the list of values

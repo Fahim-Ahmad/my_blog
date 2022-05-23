@@ -48,10 +48,7 @@ Measures of central tendency show the point where most values of a the data fall
 
   * **Mean:** Mean is the measure of central tendency that you are most familiar with. Its use is most often with continuous data. You just add up all of the values and divide by the number of observations in the data. The mean locates the center accurately when the data is normally distributed. In fact, in any symmetrical distribution the mean, median and mode are equal. You can, therefore, use any of the measures of the central tendency to locate the center of the data. However, the presence of extreme values pulls the mean away from the center while the median is less affected by outliers.
   
-  ![](imgs\measuresofcentraltendency.jpg)
-
-  
-  As mean is susceptible to the presence of outliers^[Outliers are values that are notably different from the rest of the data. Usually, any value larger than 1.5IQR above the third quartile or lower than 1.5IQR below the first quartile is considered as outlier.], it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.
+As mean is susceptible to the presence of outliers^[Outliers are values that are notably different from the rest of the data. Usually, any value larger than 1.5IQR above the third quartile or lower than 1.5IQR below the first quartile is considered as outlier.], it loses its ability to provide the best central location when the data is skewed. As the above figures show that mean is dragged in the direction of the skew. Thus, using only the mean to approximate the center of the data can often be misleading.
   
   In R, the `mean()` function can be used to calculate the arithmetic mean. It takes a vector of values as input and returns the average. 
   
