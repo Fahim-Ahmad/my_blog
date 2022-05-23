@@ -289,16 +289,15 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
   <meta property="og:url" content="/post/using-linear-regression-to-make-predictions-in-r/" />
   <meta property="og:title" content="Making Predictions with Linear Regression | Fahim Ahmad" />
-  <meta property="og:description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." /><meta property="og:image" content="/post/using-linear-regression-to-make-predictions-in-r/featured.png" />
+    <meta property="twitter:image" content="/post/using-linear-regression-to-make-predictions-in-r/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
@@ -333,6 +332,10 @@
     "@id": "/post/using-linear-regression-to-make-predictions-in-r/"
   },
   "headline": "Making Predictions with Linear Regression",
+  
+  "image": [
+    "/post/using-linear-regression-to-make-predictions-in-r/featured.png"
+  ],
   
   "datePublished": "2022-05-15T00:00:00Z",
   "dateModified": "2022-05-15T00:00:00Z",
@@ -632,21 +635,28 @@
 
 
 
-  
+
+
+
+
+
+
+
 
   
   
+    
   
+
+
 <div class="article-container pt-3">
   <h1>Making Predictions with Linear Regression</h1>
 
   
+  
+  
 
   
-    
-    
-    
-    
 
 
 <div class="article-metadata">
@@ -689,13 +699,20 @@
 
 </div>
 
-    
-
-
-
-
-
   
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 514px;">
+  <div style="position: relative">
+    <img src="/post/using-linear-regression-to-make-predictions-in-r/featured_hu79f003055f26dd46849468b8a17272d4_76115_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    
+  </div>
 </div>
 
 
@@ -804,7 +821,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;, se = F) +
   theme_bw()</code></pre>
-<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>The above graph depicts a linearly decreasing relationship between <code>mpg</code> and <code>wt</code>.</p>
 <ul>
 <li><strong>Normality</strong>: This indicates that the distribution of the data is close to the normal distribution. I use the QQ-plot to visually evaluate whether or not the data fit a normal distribution.</li>
@@ -820,7 +837,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
   geom_qq_line() +
   facet_wrap(~vars, scales = &quot;free&quot;) +
   theme_bw()</code></pre>
-<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>The above graphs illustrate that <code>mpg</code> and <code>wt</code> are moderately skewed to the right side.</p>
 <ul>
 <li><p><strong>Multicollinearity</strong>: Multicollinearity indicates the presence of a strong correlation among independent variables. You should check this assumption while using multiple linear regression. Since there is only one explanatory variable in our model, we can skip this assumption<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p></li>
@@ -839,7 +856,7 @@ data.frame(
   geom_point(color = &quot;steelblue&quot;) +
   geom_hline(yintercept = 0, linetype = &quot;dotted&quot;) +
   theme_bw()</code></pre>
-<p><img src="/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>After determining that the data do not violate any of the above assumptions, you can proceed to make predictions based on new values of the explanatory variable(s).</p>
 </div>
 <div id="making-predictions" class="section level1">

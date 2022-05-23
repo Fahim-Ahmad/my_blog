@@ -14,6 +14,11 @@ output:
   blogdown::html_page:
     toc: yes
 
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+
 Description: In this post, I try to cover the most common methods of transforming a skewed distribution into a normal distribution, and the foundational step that you must consider prior deciding which method to apply.
 ---
 

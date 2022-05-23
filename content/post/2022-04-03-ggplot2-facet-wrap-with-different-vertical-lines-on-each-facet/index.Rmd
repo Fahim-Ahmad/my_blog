@@ -13,6 +13,11 @@ Description: ""
 output:
   blogdown::html_page: 
     toc: yes
+    
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no    
 ---
 
 

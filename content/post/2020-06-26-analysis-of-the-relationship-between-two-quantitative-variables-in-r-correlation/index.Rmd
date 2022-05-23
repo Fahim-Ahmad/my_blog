@@ -12,7 +12,12 @@ tags:
 output:
   blogdown::html_page:
     toc: yes
- 
+
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no 
+
 Description: While studying, for example, the relationship between GDP and life expectancy, you might be interested to know whether there exists any relationship between the two indicators? is it a positive relationship or a negative relationship? and how strong the association is? These questions can be answered by computing the correlation coefficient between the two indicators. Depending on the type of data, different methods of correlation exist. In this post, you will learn the Pearson correlation coefficient and the Spearman correlation coefficient.
 
 katex: false

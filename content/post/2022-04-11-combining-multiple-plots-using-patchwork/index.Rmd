@@ -12,6 +12,12 @@ tags:
 output:
   blogdown::html_page:
     toc: yes
+
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+  
 Description : In this post, I explore different ways to combine multiple ggplot plots using patchwork package to produce publication-ready plots
 ---
 

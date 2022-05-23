@@ -289,16 +289,15 @@
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
   <meta property="og:url" content="/post/combining-multiple-plots-using-patchwork/" />
   <meta property="og:title" content="Combining Multiple Plots using Patchwork | Fahim Ahmad" />
-  <meta property="og:description" content="Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:description" content="Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story." /><meta property="og:image" content="/post/combining-multiple-plots-using-patchwork/featured.png" />
+    <meta property="twitter:image" content="/post/combining-multiple-plots-using-patchwork/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
@@ -333,6 +332,10 @@
     "@id": "/post/combining-multiple-plots-using-patchwork/"
   },
   "headline": "Combining Multiple Plots using Patchwork",
+  
+  "image": [
+    "/post/combining-multiple-plots-using-patchwork/featured.png"
+  ],
   
   "datePublished": "2022-04-11T00:00:00Z",
   "dateModified": "2022-04-11T00:00:00Z",
@@ -632,21 +635,28 @@
 
 
 
-  
+
+
+
+
+
+
+
 
   
   
+    
   
+
+
 <div class="article-container pt-3">
   <h1>Combining Multiple Plots using Patchwork</h1>
 
   
+  
+  
 
   
-    
-    
-    
-    
 
 
 <div class="article-metadata">
@@ -689,13 +699,20 @@
 
 </div>
 
-    
-
-
-
-
-
   
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 514px;">
+  <div style="position: relative">
+    <img src="/post/combining-multiple-plots-using-patchwork/featured_huc49ccb4d6a60b19e0248694764781c2c_279992_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    
+  </div>
 </div>
 
 
@@ -735,8 +752,9 @@ library(patchwork)
 # install.packages(&quot;gapminder&quot;)
 library(gapminder)
 # install.packages(&quot;dplyr&quot;)
-library(dplyr)
-# install.packages()
+library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code># install.packages()
 library(ggplot2)</code></pre>
 </div>
 <div id="creating-example-plots" class="section level3">

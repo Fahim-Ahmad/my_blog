@@ -115,7 +115,7 @@ The &lt;code&gt;lm()&lt;/code&gt; function is used to estimate the coefficients 
   geom_point() + 
   geom_smooth(method = &amp;quot;lm&amp;quot;, se = F) +
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The above graph depicts a linearly decreasing relationship between &lt;code&gt;mpg&lt;/code&gt; and &lt;code&gt;wt&lt;/code&gt;.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Normality&lt;/strong&gt;: This indicates that the distribution of the data is close to the normal distribution. I use the QQ-plot to visually evaluate whether or not the data fit a normal distribution.&lt;/li&gt;
@@ -131,7 +131,7 @@ The &lt;code&gt;lm()&lt;/code&gt; function is used to estimate the coefficients 
   geom_qq_line() +
   facet_wrap(~vars, scales = &amp;quot;free&amp;quot;) +
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The above graphs illustrate that &lt;code&gt;mpg&lt;/code&gt; and &lt;code&gt;wt&lt;/code&gt; are moderately skewed to the right side.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;Multicollinearity&lt;/strong&gt;: Multicollinearity indicates the presence of a strong correlation among independent variables. You should check this assumption while using multiple linear regression. Since there is only one explanatory variable in our model, we can skip this assumption&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
@@ -150,7 +150,7 @@ data.frame(
   geom_point(color = &amp;quot;steelblue&amp;quot;) +
   geom_hline(yintercept = 0, linetype = &amp;quot;dotted&amp;quot;) +
   theme_bw()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-08-18-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;After determining that the data do not violate any of the above assumptions, you can proceed to make predictions based on new values of the explanatory variable(s).&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;making-predictions&#34; class=&#34;section level1&#34;&gt;
@@ -211,12 +211,12 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Dealing with the positive skewness&lt;/h1&gt;
 &lt;p&gt;The common methods for transforming positively skewed data to normal distribution are, but not limited to, square root transformation, cube root transformation, and log transformation.&lt;/p&gt;
 &lt;p&gt;I use the GDP per capita as an example. You can download the data from &lt;a href=&#34;https://data.worldbank.org/indicator/NY.GDP.PCAP.CD&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;div id=&#34;toybytjxst&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;qtdvtmrmuh&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#toybytjxst .gt_table {
+#qtdvtmrmuh .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -241,7 +241,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-left-color: #D3D3D3;
 }
 
-#toybytjxst .gt_heading {
+#qtdvtmrmuh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -253,7 +253,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_title {
+#qtdvtmrmuh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -265,7 +265,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-bottom-width: 0;
 }
 
-#toybytjxst .gt_subtitle {
+#qtdvtmrmuh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -277,13 +277,13 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-top-width: 0;
 }
 
-#toybytjxst .gt_bottom_border {
+#qtdvtmrmuh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_col_headings {
+#qtdvtmrmuh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -298,7 +298,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_col_heading {
+#qtdvtmrmuh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -318,7 +318,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   overflow-x: hidden;
 }
 
-#toybytjxst .gt_column_spanner_outer {
+#qtdvtmrmuh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -330,15 +330,15 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 4px;
 }
 
-#toybytjxst .gt_column_spanner_outer:first-child {
+#qtdvtmrmuh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#toybytjxst .gt_column_spanner_outer:last-child {
+#qtdvtmrmuh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#toybytjxst .gt_column_spanner {
+#qtdvtmrmuh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -350,7 +350,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   width: 100%;
 }
 
-#toybytjxst .gt_group_heading {
+#qtdvtmrmuh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -375,7 +375,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   vertical-align: middle;
 }
 
-#toybytjxst .gt_empty_group_heading {
+#qtdvtmrmuh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -390,15 +390,15 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   vertical-align: middle;
 }
 
-#toybytjxst .gt_from_md &gt; :first-child {
+#qtdvtmrmuh .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#toybytjxst .gt_from_md &gt; :last-child {
+#qtdvtmrmuh .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#toybytjxst .gt_row {
+#qtdvtmrmuh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -417,7 +417,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   overflow-x: hidden;
 }
 
-#toybytjxst .gt_stub {
+#qtdvtmrmuh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -430,7 +430,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#toybytjxst .gt_stub_row_group {
+#qtdvtmrmuh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -444,11 +444,11 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   vertical-align: top;
 }
 
-#toybytjxst .gt_row_group_first td {
+#qtdvtmrmuh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#toybytjxst .gt_summary_row {
+#qtdvtmrmuh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -458,16 +458,16 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#toybytjxst .gt_first_summary_row {
+#qtdvtmrmuh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#toybytjxst .gt_first_summary_row.thick {
+#qtdvtmrmuh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#toybytjxst .gt_last_summary_row {
+#qtdvtmrmuh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -477,7 +477,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_grand_summary_row {
+#qtdvtmrmuh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -487,7 +487,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#toybytjxst .gt_first_grand_summary_row {
+#qtdvtmrmuh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -497,11 +497,11 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-top-color: #D3D3D3;
 }
 
-#toybytjxst .gt_striped {
+#qtdvtmrmuh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#toybytjxst .gt_table_body {
+#qtdvtmrmuh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -510,7 +510,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_footnotes {
+#qtdvtmrmuh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -524,7 +524,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_footnote {
+#qtdvtmrmuh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -533,7 +533,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#toybytjxst .gt_sourcenotes {
+#qtdvtmrmuh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -547,7 +547,7 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_sourcenote {
+#qtdvtmrmuh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -555,36 +555,36 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#toybytjxst .gt_left {
+#qtdvtmrmuh .gt_left {
   text-align: left;
 }
 
-#toybytjxst .gt_center {
+#qtdvtmrmuh .gt_center {
   text-align: center;
 }
 
-#toybytjxst .gt_right {
+#qtdvtmrmuh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#toybytjxst .gt_font_normal {
+#qtdvtmrmuh .gt_font_normal {
   font-weight: normal;
 }
 
-#toybytjxst .gt_font_bold {
+#qtdvtmrmuh .gt_font_bold {
   font-weight: bold;
 }
 
-#toybytjxst .gt_font_italic {
+#qtdvtmrmuh .gt_font_italic {
   font-style: italic;
 }
 
-#toybytjxst .gt_super {
+#qtdvtmrmuh .gt_super {
   font-size: 65%;
 }
 
-#toybytjxst .gt_two_val_uncert {
+#qtdvtmrmuh .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -593,31 +593,31 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))&lt;/code&gt;&lt;/pre&gt;
   margin-left: 0.1em;
 }
 
-#toybytjxst .gt_footnote_marks {
+#qtdvtmrmuh .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#toybytjxst .gt_asterisk {
+#qtdvtmrmuh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#toybytjxst .gt_slash_mark {
+#qtdvtmrmuh .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#toybytjxst .gt_fraction_numerator {
+#qtdvtmrmuh .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#toybytjxst .gt_fraction_denominator {
+#qtdvtmrmuh .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -744,12 +744,12 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.7), locations = cells_body(columns = vars(V1), rows = V1 &amp;gt; 1 &amp;amp; V1 &amp;lt; 2)) %&amp;gt;% 
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.5), locations = cells_body(columns = vars(V1), rows = V1 &amp;gt; 0.5 &amp;amp; V1 &amp;lt; 1)) %&amp;gt;% 
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.3), locations = cells_body(columns = vars(V1), rows = V1 &amp;lt; 0.5))&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;huvbobxmlt&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;mmwnbcdczr&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#huvbobxmlt .gt_table {
+#mmwnbcdczr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -774,7 +774,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_heading {
+#mmwnbcdczr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -786,7 +786,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_title {
+#mmwnbcdczr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -798,7 +798,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#huvbobxmlt .gt_subtitle {
+#mmwnbcdczr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -810,13 +810,13 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-width: 0;
 }
 
-#huvbobxmlt .gt_bottom_border {
+#mmwnbcdczr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_col_headings {
+#mmwnbcdczr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -831,7 +831,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_col_heading {
+#mmwnbcdczr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -851,7 +851,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#huvbobxmlt .gt_column_spanner_outer {
+#mmwnbcdczr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -863,15 +863,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 4px;
 }
 
-#huvbobxmlt .gt_column_spanner_outer:first-child {
+#mmwnbcdczr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#huvbobxmlt .gt_column_spanner_outer:last-child {
+#mmwnbcdczr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#huvbobxmlt .gt_column_spanner {
+#mmwnbcdczr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -883,7 +883,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   width: 100%;
 }
 
-#huvbobxmlt .gt_group_heading {
+#mmwnbcdczr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -908,7 +908,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#huvbobxmlt .gt_empty_group_heading {
+#mmwnbcdczr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -923,15 +923,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#huvbobxmlt .gt_from_md &gt; :first-child {
+#mmwnbcdczr .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#huvbobxmlt .gt_from_md &gt; :last-child {
+#mmwnbcdczr .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#huvbobxmlt .gt_row {
+#mmwnbcdczr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -950,7 +950,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#huvbobxmlt .gt_stub {
+#mmwnbcdczr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -963,7 +963,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_stub_row_group {
+#mmwnbcdczr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -977,11 +977,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: top;
 }
 
-#huvbobxmlt .gt_row_group_first td {
+#mmwnbcdczr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#huvbobxmlt .gt_summary_row {
+#mmwnbcdczr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -991,16 +991,16 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_first_summary_row {
+#mmwnbcdczr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_first_summary_row.thick {
+#mmwnbcdczr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#huvbobxmlt .gt_last_summary_row {
+#mmwnbcdczr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1010,7 +1010,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_grand_summary_row {
+#mmwnbcdczr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1020,7 +1020,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_first_grand_summary_row {
+#mmwnbcdczr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1030,11 +1030,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_striped {
+#mmwnbcdczr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#huvbobxmlt .gt_table_body {
+#mmwnbcdczr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1043,7 +1043,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_footnotes {
+#mmwnbcdczr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1057,7 +1057,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_footnote {
+#mmwnbcdczr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1066,7 +1066,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_sourcenotes {
+#mmwnbcdczr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1080,7 +1080,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_sourcenote {
+#mmwnbcdczr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1088,36 +1088,36 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_left {
+#mmwnbcdczr .gt_left {
   text-align: left;
 }
 
-#huvbobxmlt .gt_center {
+#mmwnbcdczr .gt_center {
   text-align: center;
 }
 
-#huvbobxmlt .gt_right {
+#mmwnbcdczr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#huvbobxmlt .gt_font_normal {
+#mmwnbcdczr .gt_font_normal {
   font-weight: normal;
 }
 
-#huvbobxmlt .gt_font_bold {
+#mmwnbcdczr .gt_font_bold {
   font-weight: bold;
 }
 
-#huvbobxmlt .gt_font_italic {
+#mmwnbcdczr .gt_font_italic {
   font-style: italic;
 }
 
-#huvbobxmlt .gt_super {
+#mmwnbcdczr .gt_super {
   font-size: 65%;
 }
 
-#huvbobxmlt .gt_two_val_uncert {
+#mmwnbcdczr .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1126,31 +1126,31 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#huvbobxmlt .gt_footnote_marks {
+#mmwnbcdczr .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#huvbobxmlt .gt_asterisk {
+#mmwnbcdczr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#huvbobxmlt .gt_slash_mark {
+#mmwnbcdczr .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#huvbobxmlt .gt_fraction_numerator {
+#mmwnbcdczr .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#huvbobxmlt .gt_fraction_denominator {
+#mmwnbcdczr .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1208,12 +1208,12 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
 
 ## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
 ## * please use `columns = c(...)` instead&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;tfyuvvwwyq&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;wzxvjldzca&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#tfyuvvwwyq .gt_table {
+#wzxvjldzca .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1238,7 +1238,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_heading {
+#wzxvjldzca .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1250,7 +1250,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_title {
+#wzxvjldzca .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1262,7 +1262,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#tfyuvvwwyq .gt_subtitle {
+#wzxvjldzca .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1274,13 +1274,13 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-width: 0;
 }
 
-#tfyuvvwwyq .gt_bottom_border {
+#wzxvjldzca .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_col_headings {
+#wzxvjldzca .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1295,7 +1295,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_col_heading {
+#wzxvjldzca .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1315,7 +1315,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer {
+#wzxvjldzca .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1327,15 +1327,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 4px;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer:first-child {
+#wzxvjldzca .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer:last-child {
+#wzxvjldzca .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tfyuvvwwyq .gt_column_spanner {
+#wzxvjldzca .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1347,7 +1347,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   width: 100%;
 }
 
-#tfyuvvwwyq .gt_group_heading {
+#wzxvjldzca .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1372,7 +1372,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#tfyuvvwwyq .gt_empty_group_heading {
+#wzxvjldzca .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1387,15 +1387,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#tfyuvvwwyq .gt_from_md &gt; :first-child {
+#wzxvjldzca .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#tfyuvvwwyq .gt_from_md &gt; :last-child {
+#wzxvjldzca .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#tfyuvvwwyq .gt_row {
+#wzxvjldzca .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1414,7 +1414,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#tfyuvvwwyq .gt_stub {
+#wzxvjldzca .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1427,7 +1427,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_stub_row_group {
+#wzxvjldzca .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1441,11 +1441,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: top;
 }
 
-#tfyuvvwwyq .gt_row_group_first td {
+#wzxvjldzca .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tfyuvvwwyq .gt_summary_row {
+#wzxvjldzca .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1455,16 +1455,16 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_first_summary_row {
+#wzxvjldzca .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_first_summary_row.thick {
+#wzxvjldzca .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tfyuvvwwyq .gt_last_summary_row {
+#wzxvjldzca .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1474,7 +1474,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_grand_summary_row {
+#wzxvjldzca .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1484,7 +1484,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_first_grand_summary_row {
+#wzxvjldzca .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1494,11 +1494,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_striped {
+#wzxvjldzca .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tfyuvvwwyq .gt_table_body {
+#wzxvjldzca .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1507,7 +1507,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_footnotes {
+#wzxvjldzca .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1521,7 +1521,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_footnote {
+#wzxvjldzca .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1530,7 +1530,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_sourcenotes {
+#wzxvjldzca .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1544,7 +1544,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_sourcenote {
+#wzxvjldzca .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1552,36 +1552,36 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_left {
+#wzxvjldzca .gt_left {
   text-align: left;
 }
 
-#tfyuvvwwyq .gt_center {
+#wzxvjldzca .gt_center {
   text-align: center;
 }
 
-#tfyuvvwwyq .gt_right {
+#wzxvjldzca .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tfyuvvwwyq .gt_font_normal {
+#wzxvjldzca .gt_font_normal {
   font-weight: normal;
 }
 
-#tfyuvvwwyq .gt_font_bold {
+#wzxvjldzca .gt_font_bold {
   font-weight: bold;
 }
 
-#tfyuvvwwyq .gt_font_italic {
+#wzxvjldzca .gt_font_italic {
   font-style: italic;
 }
 
-#tfyuvvwwyq .gt_super {
+#wzxvjldzca .gt_super {
   font-size: 65%;
 }
 
-#tfyuvvwwyq .gt_two_val_uncert {
+#wzxvjldzca .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1590,31 +1590,31 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#tfyuvvwwyq .gt_footnote_marks {
+#wzxvjldzca .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#tfyuvvwwyq .gt_asterisk {
+#wzxvjldzca .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tfyuvvwwyq .gt_slash_mark {
+#wzxvjldzca .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#tfyuvvwwyq .gt_fraction_numerator {
+#wzxvjldzca .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#tfyuvvwwyq .gt_fraction_denominator {
+#wzxvjldzca .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1701,12 +1701,12 @@ df %&amp;gt;%
 &lt;h1&gt;Dealing with the negative skewness&lt;/h1&gt;
 &lt;p&gt;The important caveat in applying the above methods to reduce the skewness is the data should be skewed to the right side, otherwise those methods do not transform the distribution of the data to normal.&lt;/p&gt;
 &lt;p&gt;Let’s use the life expectancy data from the World Bank as an example. You can download the data from &lt;a href=&#34;https://data.worldbank.org/indicator/SP.DYN.LE00.IN&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;div id=&#34;qzghdmrtjl&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;sdawsnospu&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#qzghdmrtjl .gt_table {
+#sdawsnospu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1731,7 +1731,7 @@ df %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_heading {
+#sdawsnospu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1743,7 +1743,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_title {
+#sdawsnospu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1755,7 +1755,7 @@ df %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#qzghdmrtjl .gt_subtitle {
+#sdawsnospu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1767,13 +1767,13 @@ df %&amp;gt;%
   border-top-width: 0;
 }
 
-#qzghdmrtjl .gt_bottom_border {
+#sdawsnospu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_col_headings {
+#sdawsnospu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1788,7 +1788,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_col_heading {
+#sdawsnospu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1808,7 +1808,7 @@ df %&amp;gt;%
   overflow-x: hidden;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer {
+#sdawsnospu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1820,15 +1820,15 @@ df %&amp;gt;%
   padding-right: 4px;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer:first-child {
+#sdawsnospu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer:last-child {
+#sdawsnospu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qzghdmrtjl .gt_column_spanner {
+#sdawsnospu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1840,7 +1840,7 @@ df %&amp;gt;%
   width: 100%;
 }
 
-#qzghdmrtjl .gt_group_heading {
+#sdawsnospu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1865,7 +1865,7 @@ df %&amp;gt;%
   vertical-align: middle;
 }
 
-#qzghdmrtjl .gt_empty_group_heading {
+#sdawsnospu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1880,15 +1880,15 @@ df %&amp;gt;%
   vertical-align: middle;
 }
 
-#qzghdmrtjl .gt_from_md &gt; :first-child {
+#sdawsnospu .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#qzghdmrtjl .gt_from_md &gt; :last-child {
+#sdawsnospu .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#qzghdmrtjl .gt_row {
+#sdawsnospu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1907,7 +1907,7 @@ df %&amp;gt;%
   overflow-x: hidden;
 }
 
-#qzghdmrtjl .gt_stub {
+#sdawsnospu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1920,7 +1920,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_stub_row_group {
+#sdawsnospu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1934,11 +1934,11 @@ df %&amp;gt;%
   vertical-align: top;
 }
 
-#qzghdmrtjl .gt_row_group_first td {
+#sdawsnospu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qzghdmrtjl .gt_summary_row {
+#sdawsnospu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1948,16 +1948,16 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_first_summary_row {
+#sdawsnospu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_first_summary_row.thick {
+#sdawsnospu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qzghdmrtjl .gt_last_summary_row {
+#sdawsnospu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1967,7 +1967,7 @@ df %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_grand_summary_row {
+#sdawsnospu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1977,7 +1977,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_first_grand_summary_row {
+#sdawsnospu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1987,11 +1987,11 @@ df %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_striped {
+#sdawsnospu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qzghdmrtjl .gt_table_body {
+#sdawsnospu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2000,7 +2000,7 @@ df %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_footnotes {
+#sdawsnospu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2014,7 +2014,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_footnote {
+#sdawsnospu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2023,7 +2023,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_sourcenotes {
+#sdawsnospu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2037,7 +2037,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_sourcenote {
+#sdawsnospu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2045,36 +2045,36 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_left {
+#sdawsnospu .gt_left {
   text-align: left;
 }
 
-#qzghdmrtjl .gt_center {
+#sdawsnospu .gt_center {
   text-align: center;
 }
 
-#qzghdmrtjl .gt_right {
+#sdawsnospu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qzghdmrtjl .gt_font_normal {
+#sdawsnospu .gt_font_normal {
   font-weight: normal;
 }
 
-#qzghdmrtjl .gt_font_bold {
+#sdawsnospu .gt_font_bold {
   font-weight: bold;
 }
 
-#qzghdmrtjl .gt_font_italic {
+#sdawsnospu .gt_font_italic {
   font-style: italic;
 }
 
-#qzghdmrtjl .gt_super {
+#sdawsnospu .gt_super {
   font-size: 65%;
 }
 
-#qzghdmrtjl .gt_two_val_uncert {
+#sdawsnospu .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -2083,31 +2083,31 @@ df %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#qzghdmrtjl .gt_footnote_marks {
+#sdawsnospu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#qzghdmrtjl .gt_asterisk {
+#sdawsnospu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qzghdmrtjl .gt_slash_mark {
+#sdawsnospu .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#qzghdmrtjl .gt_fraction_numerator {
+#sdawsnospu .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#qzghdmrtjl .gt_fraction_denominator {
+#sdawsnospu .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -2366,12 +2366,12 @@ Where,&lt;/p&gt;
 &lt;p&gt;The correlation coefficient always lies between -1 and +1 and can’t go outside of this range. Where the sign of the correlation coefficient denotes the direction of the relationship between two variables and the absolute value of the correlation coefficient indicates the strength of association between two variables. A &lt;code&gt;+&lt;/code&gt; sign indicates the positive relationship and a &lt;code&gt;-&lt;/code&gt; sign indicates the negative relationship. Furthermore, the closer the correlation coefficient to -1 or +1, the stronger the relationship, and as it goes toward 0 the relationship will be weaker.&lt;/p&gt;
 &lt;p&gt;How close is close enough to -1 or +1? I get too excited to see correlations beyond ±0.7.
 You can refer to below table while interpreting the correlation coefficient:&lt;/p&gt;
-&lt;div id=&#34;afvpaeqnbm&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;fccjqadfcv&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#afvpaeqnbm .gt_table {
+#fccjqadfcv .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2396,7 +2396,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-left-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_heading {
+#fccjqadfcv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2408,7 +2408,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_title {
+#fccjqadfcv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2420,7 +2420,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-width: 0;
 }
 
-#afvpaeqnbm .gt_subtitle {
+#fccjqadfcv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2432,13 +2432,13 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-top-width: 0;
 }
 
-#afvpaeqnbm .gt_bottom_border {
+#fccjqadfcv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_col_headings {
+#fccjqadfcv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2453,7 +2453,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_col_heading {
+#fccjqadfcv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2473,7 +2473,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   overflow-x: hidden;
 }
 
-#afvpaeqnbm .gt_column_spanner_outer {
+#fccjqadfcv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2485,15 +2485,15 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 4px;
 }
 
-#afvpaeqnbm .gt_column_spanner_outer:first-child {
+#fccjqadfcv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#afvpaeqnbm .gt_column_spanner_outer:last-child {
+#fccjqadfcv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#afvpaeqnbm .gt_column_spanner {
+#fccjqadfcv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2505,7 +2505,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   width: 100%;
 }
 
-#afvpaeqnbm .gt_group_heading {
+#fccjqadfcv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2530,7 +2530,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: middle;
 }
 
-#afvpaeqnbm .gt_empty_group_heading {
+#fccjqadfcv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2545,15 +2545,15 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: middle;
 }
 
-#afvpaeqnbm .gt_from_md &gt; :first-child {
+#fccjqadfcv .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#afvpaeqnbm .gt_from_md &gt; :last-child {
+#fccjqadfcv .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#afvpaeqnbm .gt_row {
+#fccjqadfcv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2572,7 +2572,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   overflow-x: hidden;
 }
 
-#afvpaeqnbm .gt_stub {
+#fccjqadfcv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2585,7 +2585,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#afvpaeqnbm .gt_stub_row_group {
+#fccjqadfcv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2599,11 +2599,11 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: top;
 }
 
-#afvpaeqnbm .gt_row_group_first td {
+#fccjqadfcv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#afvpaeqnbm .gt_summary_row {
+#fccjqadfcv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2613,16 +2613,16 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#afvpaeqnbm .gt_first_summary_row {
+#fccjqadfcv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_first_summary_row.thick {
+#fccjqadfcv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#afvpaeqnbm .gt_last_summary_row {
+#fccjqadfcv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2632,7 +2632,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_grand_summary_row {
+#fccjqadfcv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2642,7 +2642,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#afvpaeqnbm .gt_first_grand_summary_row {
+#fccjqadfcv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2652,11 +2652,11 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-top-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_striped {
+#fccjqadfcv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#afvpaeqnbm .gt_table_body {
+#fccjqadfcv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2665,7 +2665,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_footnotes {
+#fccjqadfcv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2679,7 +2679,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_footnote {
+#fccjqadfcv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2688,7 +2688,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#afvpaeqnbm .gt_sourcenotes {
+#fccjqadfcv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2702,7 +2702,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#afvpaeqnbm .gt_sourcenote {
+#fccjqadfcv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2710,36 +2710,36 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#afvpaeqnbm .gt_left {
+#fccjqadfcv .gt_left {
   text-align: left;
 }
 
-#afvpaeqnbm .gt_center {
+#fccjqadfcv .gt_center {
   text-align: center;
 }
 
-#afvpaeqnbm .gt_right {
+#fccjqadfcv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#afvpaeqnbm .gt_font_normal {
+#fccjqadfcv .gt_font_normal {
   font-weight: normal;
 }
 
-#afvpaeqnbm .gt_font_bold {
+#fccjqadfcv .gt_font_bold {
   font-weight: bold;
 }
 
-#afvpaeqnbm .gt_font_italic {
+#fccjqadfcv .gt_font_italic {
   font-style: italic;
 }
 
-#afvpaeqnbm .gt_super {
+#fccjqadfcv .gt_super {
   font-size: 65%;
 }
 
-#afvpaeqnbm .gt_two_val_uncert {
+#fccjqadfcv .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -2748,31 +2748,31 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   margin-left: 0.1em;
 }
 
-#afvpaeqnbm .gt_footnote_marks {
+#fccjqadfcv .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#afvpaeqnbm .gt_asterisk {
+#fccjqadfcv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#afvpaeqnbm .gt_slash_mark {
+#fccjqadfcv .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#afvpaeqnbm .gt_fraction_numerator {
+#fccjqadfcv .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#afvpaeqnbm .gt_fraction_denominator {
+#fccjqadfcv .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -3246,6 +3246,7 @@ sample estimates:
 &lt;p&gt;Mathematically, the standard deviation can be expressed as below:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##    Projects Expenditures
 ## 1  project1        10000
 ## 2  project1        15400

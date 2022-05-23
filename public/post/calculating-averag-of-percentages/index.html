@@ -290,17 +290,16 @@ I am conducting data analysis trainings once every two months and at the end of 
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
   <meta property="og:url" content="/post/calculating-averag-of-percentages/" />
   <meta property="og:title" content="Calculating Average of Percentages | Fahim Ahmad" />
   <meta property="og:description" content="body { text-align: justify}  Calculating the average of percentages is NOT similar to calculating the average of numbers.
-I am conducting data analysis trainings once every two months and at the end of each class I ask students if they want to join the advanced data analysis class that I organize once each year." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+I am conducting data analysis trainings once every two months and at the end of each class I ask students if they want to join the advanced data analysis class that I organize once each year." /><meta property="og:image" content="/post/calculating-averag-of-percentages/featured.png" />
+    <meta property="twitter:image" content="/post/calculating-averag-of-percentages/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
@@ -335,6 +334,10 @@ I am conducting data analysis trainings once every two months and at the end of 
     "@id": "/post/calculating-averag-of-percentages/"
   },
   "headline": "Calculating Average of Percentages",
+  
+  "image": [
+    "/post/calculating-averag-of-percentages/featured.png"
+  ],
   
   "datePublished": "2019-07-05T00:00:00Z",
   "dateModified": "2019-07-05T00:00:00Z",
@@ -634,21 +637,28 @@ I am conducting data analysis trainings once every two months and at the end of 
 
 
 
-  
+
+
+
+
+
+
+
 
   
   
+    
   
+
+
 <div class="article-container pt-3">
   <h1>Calculating Average of Percentages</h1>
 
   
+  
+  
 
   
-    
-    
-    
-    
 
 
 <div class="article-metadata">
@@ -687,13 +697,20 @@ I am conducting data analysis trainings once every two months and at the end of 
 
 </div>
 
-    
-
-
-
-
-
   
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 514px;">
+  <div style="position: relative">
+    <img src="/post/calculating-averag-of-percentages/featured_hu711a1dafc332956be14aeba7807302ba_53130_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    
+  </div>
 </div>
 
 
@@ -753,9 +770,9 @@ I am conducting data analysis trainings once every two months and at the end of 
 ## 27 class 1        BA          FALSE
 ## 28 class 2        MA           TRUE</code></pre>
 <p>Let’s find the percentage of each group who are eager to participate in the advanced class.</p>
-<pre class="r"><code>library(dplyr)
-
-df %&gt;%
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>df %&gt;%
   {round(prop.table(table(.$class, .$advanced_class),1)*100,2)}</code></pre>
 <pre><code>##          
 ##           FALSE TRUE

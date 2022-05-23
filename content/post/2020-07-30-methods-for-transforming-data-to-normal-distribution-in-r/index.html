@@ -14,6 +14,11 @@ output:
   blogdown::html_page:
     toc: yes
 
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+
 Description: In this post, I try to cover the most common methods of transforming a skewed distribution into a normal distribution, and the foundational step that you must consider prior deciding which method to apply.
 ---
 
@@ -47,12 +52,12 @@ Description: In this post, I try to cover the most common methods of transformin
 <h1>Dealing with the positive skewness</h1>
 <p>The common methods for transforming positively skewed data to normal distribution are, but not limited to, square root transformation, cube root transformation, and log transformation.</p>
 <p>I use the GDP per capita as an example. You can download the data from <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD">here</a>.</p>
-<div id="toybytjxst" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="qtdvtmrmuh" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#toybytjxst .gt_table {
+#qtdvtmrmuh .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -77,7 +82,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-left-color: #D3D3D3;
 }
 
-#toybytjxst .gt_heading {
+#qtdvtmrmuh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -89,7 +94,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_title {
+#qtdvtmrmuh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -101,7 +106,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-bottom-width: 0;
 }
 
-#toybytjxst .gt_subtitle {
+#qtdvtmrmuh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -113,13 +118,13 @@ Description: In this post, I try to cover the most common methods of transformin
   border-top-width: 0;
 }
 
-#toybytjxst .gt_bottom_border {
+#qtdvtmrmuh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_col_headings {
+#qtdvtmrmuh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -134,7 +139,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_col_heading {
+#qtdvtmrmuh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -154,7 +159,7 @@ Description: In this post, I try to cover the most common methods of transformin
   overflow-x: hidden;
 }
 
-#toybytjxst .gt_column_spanner_outer {
+#qtdvtmrmuh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -166,15 +171,15 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 4px;
 }
 
-#toybytjxst .gt_column_spanner_outer:first-child {
+#qtdvtmrmuh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#toybytjxst .gt_column_spanner_outer:last-child {
+#qtdvtmrmuh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#toybytjxst .gt_column_spanner {
+#qtdvtmrmuh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -186,7 +191,7 @@ Description: In this post, I try to cover the most common methods of transformin
   width: 100%;
 }
 
-#toybytjxst .gt_group_heading {
+#qtdvtmrmuh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -211,7 +216,7 @@ Description: In this post, I try to cover the most common methods of transformin
   vertical-align: middle;
 }
 
-#toybytjxst .gt_empty_group_heading {
+#qtdvtmrmuh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -226,15 +231,15 @@ Description: In this post, I try to cover the most common methods of transformin
   vertical-align: middle;
 }
 
-#toybytjxst .gt_from_md > :first-child {
+#qtdvtmrmuh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#toybytjxst .gt_from_md > :last-child {
+#qtdvtmrmuh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#toybytjxst .gt_row {
+#qtdvtmrmuh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -253,7 +258,7 @@ Description: In this post, I try to cover the most common methods of transformin
   overflow-x: hidden;
 }
 
-#toybytjxst .gt_stub {
+#qtdvtmrmuh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -266,7 +271,7 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 5px;
 }
 
-#toybytjxst .gt_stub_row_group {
+#qtdvtmrmuh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -280,11 +285,11 @@ Description: In this post, I try to cover the most common methods of transformin
   vertical-align: top;
 }
 
-#toybytjxst .gt_row_group_first td {
+#qtdvtmrmuh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#toybytjxst .gt_summary_row {
+#qtdvtmrmuh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -294,16 +299,16 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 5px;
 }
 
-#toybytjxst .gt_first_summary_row {
+#qtdvtmrmuh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#toybytjxst .gt_first_summary_row.thick {
+#qtdvtmrmuh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#toybytjxst .gt_last_summary_row {
+#qtdvtmrmuh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -313,7 +318,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_grand_summary_row {
+#qtdvtmrmuh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -323,7 +328,7 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 5px;
 }
 
-#toybytjxst .gt_first_grand_summary_row {
+#qtdvtmrmuh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -333,11 +338,11 @@ Description: In this post, I try to cover the most common methods of transformin
   border-top-color: #D3D3D3;
 }
 
-#toybytjxst .gt_striped {
+#qtdvtmrmuh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#toybytjxst .gt_table_body {
+#qtdvtmrmuh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -346,7 +351,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-bottom-color: #D3D3D3;
 }
 
-#toybytjxst .gt_footnotes {
+#qtdvtmrmuh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -360,7 +365,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_footnote {
+#qtdvtmrmuh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -369,7 +374,7 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 5px;
 }
 
-#toybytjxst .gt_sourcenotes {
+#qtdvtmrmuh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -383,7 +388,7 @@ Description: In this post, I try to cover the most common methods of transformin
   border-right-color: #D3D3D3;
 }
 
-#toybytjxst .gt_sourcenote {
+#qtdvtmrmuh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -391,36 +396,36 @@ Description: In this post, I try to cover the most common methods of transformin
   padding-right: 5px;
 }
 
-#toybytjxst .gt_left {
+#qtdvtmrmuh .gt_left {
   text-align: left;
 }
 
-#toybytjxst .gt_center {
+#qtdvtmrmuh .gt_center {
   text-align: center;
 }
 
-#toybytjxst .gt_right {
+#qtdvtmrmuh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#toybytjxst .gt_font_normal {
+#qtdvtmrmuh .gt_font_normal {
   font-weight: normal;
 }
 
-#toybytjxst .gt_font_bold {
+#qtdvtmrmuh .gt_font_bold {
   font-weight: bold;
 }
 
-#toybytjxst .gt_font_italic {
+#qtdvtmrmuh .gt_font_italic {
   font-style: italic;
 }
 
-#toybytjxst .gt_super {
+#qtdvtmrmuh .gt_super {
   font-size: 65%;
 }
 
-#toybytjxst .gt_two_val_uncert {
+#qtdvtmrmuh .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -429,31 +434,31 @@ Description: In this post, I try to cover the most common methods of transformin
   margin-left: 0.1em;
 }
 
-#toybytjxst .gt_footnote_marks {
+#qtdvtmrmuh .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#toybytjxst .gt_asterisk {
+#qtdvtmrmuh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#toybytjxst .gt_slash_mark {
+#qtdvtmrmuh .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#toybytjxst .gt_fraction_numerator {
+#qtdvtmrmuh .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#toybytjxst .gt_fraction_denominator {
+#qtdvtmrmuh .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -580,12 +585,12 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.7), locations = cells_body(columns = vars(V1), rows = V1 &gt; 1 &amp; V1 &lt; 2)) %&gt;% 
   tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.5), locations = cells_body(columns = vars(V1), rows = V1 &gt; 0.5 &amp; V1 &lt; 1)) %&gt;% 
   tab_style(style = cell_fill(color = &quot;maroon&quot;, alpha = 0.3), locations = cells_body(columns = vars(V1), rows = V1 &lt; 0.5))</code></pre>
-<div id="huvbobxmlt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mmwnbcdczr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#huvbobxmlt .gt_table {
+#mmwnbcdczr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -610,7 +615,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-left-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_heading {
+#mmwnbcdczr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -622,7 +627,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_title {
+#mmwnbcdczr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -634,7 +639,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-width: 0;
 }
 
-#huvbobxmlt .gt_subtitle {
+#mmwnbcdczr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -646,13 +651,13 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-top-width: 0;
 }
 
-#huvbobxmlt .gt_bottom_border {
+#mmwnbcdczr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_col_headings {
+#mmwnbcdczr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -667,7 +672,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_col_heading {
+#mmwnbcdczr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -687,7 +692,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   overflow-x: hidden;
 }
 
-#huvbobxmlt .gt_column_spanner_outer {
+#mmwnbcdczr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -699,15 +704,15 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 4px;
 }
 
-#huvbobxmlt .gt_column_spanner_outer:first-child {
+#mmwnbcdczr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#huvbobxmlt .gt_column_spanner_outer:last-child {
+#mmwnbcdczr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#huvbobxmlt .gt_column_spanner {
+#mmwnbcdczr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -719,7 +724,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   width: 100%;
 }
 
-#huvbobxmlt .gt_group_heading {
+#mmwnbcdczr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -744,7 +749,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: middle;
 }
 
-#huvbobxmlt .gt_empty_group_heading {
+#mmwnbcdczr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -759,15 +764,15 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: middle;
 }
 
-#huvbobxmlt .gt_from_md > :first-child {
+#mmwnbcdczr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#huvbobxmlt .gt_from_md > :last-child {
+#mmwnbcdczr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#huvbobxmlt .gt_row {
+#mmwnbcdczr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -786,7 +791,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   overflow-x: hidden;
 }
 
-#huvbobxmlt .gt_stub {
+#mmwnbcdczr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -799,7 +804,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_stub_row_group {
+#mmwnbcdczr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -813,11 +818,11 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: top;
 }
 
-#huvbobxmlt .gt_row_group_first td {
+#mmwnbcdczr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#huvbobxmlt .gt_summary_row {
+#mmwnbcdczr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -827,16 +832,16 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_first_summary_row {
+#mmwnbcdczr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_first_summary_row.thick {
+#mmwnbcdczr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#huvbobxmlt .gt_last_summary_row {
+#mmwnbcdczr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -846,7 +851,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_grand_summary_row {
+#mmwnbcdczr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -856,7 +861,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_first_grand_summary_row {
+#mmwnbcdczr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -866,11 +871,11 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-top-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_striped {
+#mmwnbcdczr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#huvbobxmlt .gt_table_body {
+#mmwnbcdczr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -879,7 +884,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_footnotes {
+#mmwnbcdczr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -893,7 +898,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_footnote {
+#mmwnbcdczr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -902,7 +907,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_sourcenotes {
+#mmwnbcdczr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -916,7 +921,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#huvbobxmlt .gt_sourcenote {
+#mmwnbcdczr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -924,36 +929,36 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#huvbobxmlt .gt_left {
+#mmwnbcdczr .gt_left {
   text-align: left;
 }
 
-#huvbobxmlt .gt_center {
+#mmwnbcdczr .gt_center {
   text-align: center;
 }
 
-#huvbobxmlt .gt_right {
+#mmwnbcdczr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#huvbobxmlt .gt_font_normal {
+#mmwnbcdczr .gt_font_normal {
   font-weight: normal;
 }
 
-#huvbobxmlt .gt_font_bold {
+#mmwnbcdczr .gt_font_bold {
   font-weight: bold;
 }
 
-#huvbobxmlt .gt_font_italic {
+#mmwnbcdczr .gt_font_italic {
   font-style: italic;
 }
 
-#huvbobxmlt .gt_super {
+#mmwnbcdczr .gt_super {
   font-size: 65%;
 }
 
-#huvbobxmlt .gt_two_val_uncert {
+#mmwnbcdczr .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -962,31 +967,31 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   margin-left: 0.1em;
 }
 
-#huvbobxmlt .gt_footnote_marks {
+#mmwnbcdczr .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#huvbobxmlt .gt_asterisk {
+#mmwnbcdczr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#huvbobxmlt .gt_slash_mark {
+#mmwnbcdczr .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#huvbobxmlt .gt_fraction_numerator {
+#mmwnbcdczr .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#huvbobxmlt .gt_fraction_denominator {
+#mmwnbcdczr .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1044,12 +1049,12 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
 
 ## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
 ## * please use `columns = c(...)` instead</code></pre>
-<div id="tfyuvvwwyq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wzxvjldzca" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#tfyuvvwwyq .gt_table {
+#wzxvjldzca .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1074,7 +1079,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-left-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_heading {
+#wzxvjldzca .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1086,7 +1091,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_title {
+#wzxvjldzca .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1098,7 +1103,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-width: 0;
 }
 
-#tfyuvvwwyq .gt_subtitle {
+#wzxvjldzca .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1110,13 +1115,13 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-top-width: 0;
 }
 
-#tfyuvvwwyq .gt_bottom_border {
+#wzxvjldzca .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_col_headings {
+#wzxvjldzca .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1131,7 +1136,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_col_heading {
+#wzxvjldzca .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1151,7 +1156,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   overflow-x: hidden;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer {
+#wzxvjldzca .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1163,15 +1168,15 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 4px;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer:first-child {
+#wzxvjldzca .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tfyuvvwwyq .gt_column_spanner_outer:last-child {
+#wzxvjldzca .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tfyuvvwwyq .gt_column_spanner {
+#wzxvjldzca .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1183,7 +1188,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   width: 100%;
 }
 
-#tfyuvvwwyq .gt_group_heading {
+#wzxvjldzca .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1208,7 +1213,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: middle;
 }
 
-#tfyuvvwwyq .gt_empty_group_heading {
+#wzxvjldzca .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1223,15 +1228,15 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: middle;
 }
 
-#tfyuvvwwyq .gt_from_md > :first-child {
+#wzxvjldzca .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tfyuvvwwyq .gt_from_md > :last-child {
+#wzxvjldzca .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tfyuvvwwyq .gt_row {
+#wzxvjldzca .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1250,7 +1255,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   overflow-x: hidden;
 }
 
-#tfyuvvwwyq .gt_stub {
+#wzxvjldzca .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1263,7 +1268,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_stub_row_group {
+#wzxvjldzca .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1277,11 +1282,11 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   vertical-align: top;
 }
 
-#tfyuvvwwyq .gt_row_group_first td {
+#wzxvjldzca .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tfyuvvwwyq .gt_summary_row {
+#wzxvjldzca .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1291,16 +1296,16 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_first_summary_row {
+#wzxvjldzca .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_first_summary_row.thick {
+#wzxvjldzca .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tfyuvvwwyq .gt_last_summary_row {
+#wzxvjldzca .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1310,7 +1315,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_grand_summary_row {
+#wzxvjldzca .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1320,7 +1325,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_first_grand_summary_row {
+#wzxvjldzca .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1330,11 +1335,11 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-top-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_striped {
+#wzxvjldzca .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tfyuvvwwyq .gt_table_body {
+#wzxvjldzca .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1343,7 +1348,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_footnotes {
+#wzxvjldzca .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1357,7 +1362,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_footnote {
+#wzxvjldzca .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1366,7 +1371,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_sourcenotes {
+#wzxvjldzca .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1380,7 +1385,7 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#tfyuvvwwyq .gt_sourcenote {
+#wzxvjldzca .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1388,36 +1393,36 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   padding-right: 5px;
 }
 
-#tfyuvvwwyq .gt_left {
+#wzxvjldzca .gt_left {
   text-align: left;
 }
 
-#tfyuvvwwyq .gt_center {
+#wzxvjldzca .gt_center {
   text-align: center;
 }
 
-#tfyuvvwwyq .gt_right {
+#wzxvjldzca .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tfyuvvwwyq .gt_font_normal {
+#wzxvjldzca .gt_font_normal {
   font-weight: normal;
 }
 
-#tfyuvvwwyq .gt_font_bold {
+#wzxvjldzca .gt_font_bold {
   font-weight: bold;
 }
 
-#tfyuvvwwyq .gt_font_italic {
+#wzxvjldzca .gt_font_italic {
   font-style: italic;
 }
 
-#tfyuvvwwyq .gt_super {
+#wzxvjldzca .gt_super {
   font-size: 65%;
 }
 
-#tfyuvvwwyq .gt_two_val_uncert {
+#wzxvjldzca .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1426,31 +1431,31 @@ do.call(rbind, (lapply(df, skewness))) %&gt;%
   margin-left: 0.1em;
 }
 
-#tfyuvvwwyq .gt_footnote_marks {
+#wzxvjldzca .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#tfyuvvwwyq .gt_asterisk {
+#wzxvjldzca .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tfyuvvwwyq .gt_slash_mark {
+#wzxvjldzca .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#tfyuvvwwyq .gt_fraction_numerator {
+#wzxvjldzca .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#tfyuvvwwyq .gt_fraction_denominator {
+#wzxvjldzca .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1537,12 +1542,12 @@ df %&gt;%
 <h1>Dealing with the negative skewness</h1>
 <p>The important caveat in applying the above methods to reduce the skewness is the data should be skewed to the right side, otherwise those methods do not transform the distribution of the data to normal.</p>
 <p>Let’s use the life expectancy data from the World Bank as an example. You can download the data from <a href="https://data.worldbank.org/indicator/SP.DYN.LE00.IN">here</a>.</p>
-<div id="qzghdmrtjl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="sdawsnospu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qzghdmrtjl .gt_table {
+#sdawsnospu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1567,7 +1572,7 @@ df %&gt;%
   border-left-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_heading {
+#sdawsnospu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1579,7 +1584,7 @@ df %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_title {
+#sdawsnospu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1591,7 +1596,7 @@ df %&gt;%
   border-bottom-width: 0;
 }
 
-#qzghdmrtjl .gt_subtitle {
+#sdawsnospu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1603,13 +1608,13 @@ df %&gt;%
   border-top-width: 0;
 }
 
-#qzghdmrtjl .gt_bottom_border {
+#sdawsnospu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_col_headings {
+#sdawsnospu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1624,7 +1629,7 @@ df %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_col_heading {
+#sdawsnospu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1644,7 +1649,7 @@ df %&gt;%
   overflow-x: hidden;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer {
+#sdawsnospu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1656,15 +1661,15 @@ df %&gt;%
   padding-right: 4px;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer:first-child {
+#sdawsnospu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qzghdmrtjl .gt_column_spanner_outer:last-child {
+#sdawsnospu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qzghdmrtjl .gt_column_spanner {
+#sdawsnospu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1676,7 +1681,7 @@ df %&gt;%
   width: 100%;
 }
 
-#qzghdmrtjl .gt_group_heading {
+#sdawsnospu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1701,7 +1706,7 @@ df %&gt;%
   vertical-align: middle;
 }
 
-#qzghdmrtjl .gt_empty_group_heading {
+#sdawsnospu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1716,15 +1721,15 @@ df %&gt;%
   vertical-align: middle;
 }
 
-#qzghdmrtjl .gt_from_md > :first-child {
+#sdawsnospu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qzghdmrtjl .gt_from_md > :last-child {
+#sdawsnospu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qzghdmrtjl .gt_row {
+#sdawsnospu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1743,7 +1748,7 @@ df %&gt;%
   overflow-x: hidden;
 }
 
-#qzghdmrtjl .gt_stub {
+#sdawsnospu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1756,7 +1761,7 @@ df %&gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_stub_row_group {
+#sdawsnospu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1770,11 +1775,11 @@ df %&gt;%
   vertical-align: top;
 }
 
-#qzghdmrtjl .gt_row_group_first td {
+#sdawsnospu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qzghdmrtjl .gt_summary_row {
+#sdawsnospu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1784,16 +1789,16 @@ df %&gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_first_summary_row {
+#sdawsnospu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_first_summary_row.thick {
+#sdawsnospu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qzghdmrtjl .gt_last_summary_row {
+#sdawsnospu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1803,7 +1808,7 @@ df %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_grand_summary_row {
+#sdawsnospu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1813,7 +1818,7 @@ df %&gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_first_grand_summary_row {
+#sdawsnospu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1823,11 +1828,11 @@ df %&gt;%
   border-top-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_striped {
+#sdawsnospu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qzghdmrtjl .gt_table_body {
+#sdawsnospu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1836,7 +1841,7 @@ df %&gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_footnotes {
+#sdawsnospu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1850,7 +1855,7 @@ df %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_footnote {
+#sdawsnospu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1859,7 +1864,7 @@ df %&gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_sourcenotes {
+#sdawsnospu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1873,7 +1878,7 @@ df %&gt;%
   border-right-color: #D3D3D3;
 }
 
-#qzghdmrtjl .gt_sourcenote {
+#sdawsnospu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1881,36 +1886,36 @@ df %&gt;%
   padding-right: 5px;
 }
 
-#qzghdmrtjl .gt_left {
+#sdawsnospu .gt_left {
   text-align: left;
 }
 
-#qzghdmrtjl .gt_center {
+#sdawsnospu .gt_center {
   text-align: center;
 }
 
-#qzghdmrtjl .gt_right {
+#sdawsnospu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qzghdmrtjl .gt_font_normal {
+#sdawsnospu .gt_font_normal {
   font-weight: normal;
 }
 
-#qzghdmrtjl .gt_font_bold {
+#sdawsnospu .gt_font_bold {
   font-weight: bold;
 }
 
-#qzghdmrtjl .gt_font_italic {
+#sdawsnospu .gt_font_italic {
   font-style: italic;
 }
 
-#qzghdmrtjl .gt_super {
+#sdawsnospu .gt_super {
   font-size: 65%;
 }
 
-#qzghdmrtjl .gt_two_val_uncert {
+#sdawsnospu .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1919,31 +1924,31 @@ df %&gt;%
   margin-left: 0.1em;
 }
 
-#qzghdmrtjl .gt_footnote_marks {
+#sdawsnospu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#qzghdmrtjl .gt_asterisk {
+#sdawsnospu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qzghdmrtjl .gt_slash_mark {
+#sdawsnospu .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#qzghdmrtjl .gt_fraction_numerator {
+#sdawsnospu .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#qzghdmrtjl .gt_fraction_denominator {
+#sdawsnospu .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;

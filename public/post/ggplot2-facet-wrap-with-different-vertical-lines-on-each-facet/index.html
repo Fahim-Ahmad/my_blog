@@ -290,17 +290,16 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geo
   
   
     
-    
   
   
-  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
   <meta property="og:url" content="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/" />
   <meta property="og:title" content="ggplot2: geom_histogram &amp; facet_wrap with different vertical lines on each facet | Fahim Ahmad" />
   <meta property="og:description" content="The geom_histogram() function from ggplot2 package is used to create a histogram plot. For example, let’s plot the distribution of Sepal.Length from iris data.
-library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geom_histogram(fill = &quot;orange&quot;) To add a vertical line to show the mean value of Sepal." /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
-    <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
+library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geom_histogram(fill = &quot;orange&quot;) To add a vertical line to show the mean value of Sepal." /><meta property="og:image" content="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/featured.png" />
+    <meta property="twitter:image" content="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
@@ -335,6 +334,10 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geo
     "@id": "/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/"
   },
   "headline": "ggplot2: geom_histogram \u0026 facet_wrap with different vertical lines on each facet",
+  
+  "image": [
+    "/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/featured.png"
+  ],
   
   "datePublished": "2022-04-03T00:00:00Z",
   "dateModified": "2022-04-03T00:00:00Z",
@@ -634,21 +637,28 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geo
 
 
 
-  
+
+
+
+
+
+
+
 
   
   
+    
   
+
+
 <div class="article-container pt-3">
   <h1>ggplot2: geom_histogram &amp; facet_wrap with different vertical lines on each facet</h1>
 
   
+  
+  
 
   
-    
-    
-    
-    
 
 
 <div class="article-metadata">
@@ -691,13 +701,20 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) &#43; geo
 
 </div>
 
-    
-
-
-
-
-
   
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 514px;">
+  <div style="position: relative">
+    <img src="/post/ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/featured_huc42b81be4e86b4d67e3f702f1cc8d547_57633_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    
+  </div>
 </div>
 
 
@@ -728,8 +745,9 @@ ggplot(iris, aes(Sepal.Length)) + geom_histogram(fill = &quot;orange&quot;) +
 <p><img src="/post/2022-04-03-ggplot2-facet-wrap-with-different-vertical-lines-on-each-facet/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>While using <code>facet_wrap()</code> each plot shows a different subset of the data, however, the <code>geom_vline()</code> adds the vertical line on the same x-intercept in all plots. For instance, in the above histograms the vertical line shows the overall mean of <code>Sepal.Length</code> column instead of mean of each group.</p>
 <p>It’s more practical to add a vertical line on each facet showing the mean for each group of data. To do so, a separate data frame containing the mean of each group should be created to use with <code>geom_vline()</code>.</p>
-<pre class="r"><code>library(dplyr)
-vline &lt;- summarise(group_by(iris,Species), mean = mean(Sepal.Length))
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>vline &lt;- summarise(group_by(iris,Species), mean = mean(Sepal.Length))
 vline</code></pre>
 <pre><code>## # A tibble: 3 × 2
 ##   Species     mean
