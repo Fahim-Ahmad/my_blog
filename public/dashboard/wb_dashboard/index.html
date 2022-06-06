@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="" />
+  <meta name="description" content="This dashboard visualizes the economy &amp; growth related indicators from the World Bank (WB)" />
 
   
-  <link rel="alternate" hreflang="en-us" href="/category/shinyapp/" />
+  <link rel="alternate" hreflang="en-us" href="/dashboard/wb_dashboard/" />
 
   
 
@@ -270,8 +270,6 @@
   
 
   
-    <link rel="alternate" href="/category/shinyapp/index.xml" type="application/rss+xml" title="Fahim Ahmad" />
-  
 
   
     <link rel="manifest" href="/index.webmanifest" />
@@ -280,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/category/shinyapp/" />
+  <link rel="canonical" href="/dashboard/wb_dashboard/" />
 
   
   
@@ -297,14 +295,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/category/shinyapp/" />
-  <meta property="og:title" content="shinyapp | Fahim Ahmad" />
-  <meta property="og:description" content="" /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
+  <meta property="og:url" content="/dashboard/wb_dashboard/" />
+  <meta property="og:title" content="WB Dashboard | Fahim Ahmad" />
+  <meta property="og:description" content="This dashboard visualizes the economy &amp; growth related indicators from the World Bank (WB)" /><meta property="og:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" />
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2022-06-06T00:00:00&#43;00:00" />
+      <meta
+        property="article:published_time"
+        content="2022-06-06T00:00:00&#43;00:00"
+      />
     
+    <meta property="article:modified_time" content="2022-06-06T00:00:00&#43;00:00">
   
 
   
@@ -315,15 +317,17 @@
 
   
 
+  
 
 
 
 
-  <title>shinyapp | Fahim Ahmad</title>
+
+  <title>WB Dashboard | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   "  >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="a0abf13291795ae48bddab5ebcfe0f05" >
 
   
   
@@ -512,7 +516,7 @@
         
 
         <li class="nav-item">
-          <a class="nav-link " href="/dashboard/"><span>Dashboards</span></a>
+          <a class="nav-link  active" href="/dashboard/"><span>Dashboards</span></a>
         </li>
 
         
@@ -570,30 +574,80 @@
   </div>
 
   <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>WB Dashboard</h1>
+
+  
+  <p class="page-subtitle">A dashboard to visualize the World Bank Data</p>
+  
+
+  
+    
+    
+    
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jun 6, 2022
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a>, <a href="/category/shinyapp/">shinyapp</a></span>
+  
+
+</div>
+
     
 
 
 
 
-
-
-
-
-
-
-
-
-  
-
-  
-  
-  
-    
-  
-<div class="universal-wrapper pt-3">
-  <h1>shinyapp</h1>
-
-  
 
   
 </div>
@@ -603,39 +657,220 @@
 
  
 
-<div class="universal-wrapper">
-  
+  <div class="article-container">
 
-  
-  
-    
-    
-    
-    <div>
-      <h2><a href="/dashboard/wb_dashboard/" >WB Dashboard</a></h2>
-      <div class="article-style">
-        
-          This dashboard visualizes the economy & growth related indicators from the World Bank (WB)
-        
-      </div>
+    <div class="article-style">
+      
+
+
+<p>I developed this dashboard to visualize the economy &amp; growth related indicators from the <a href="https://data.worldbank.org/indicator">World Bank</a> (WB).</p>
+<p>It is very simple to use. You select an indicator and it depicts the most recent values of the selected indicator in a map (the first tab of the tabset-panel) and in a treemap (the second tab of the tabset-panel).</p>
+<p>It also shows the increase and decrease of the selected indicator over years for a country or a comparison between two or more than two countries.</p>
+<p>Additionally, you can download the data in a wide format as well as in a clean and analysis-ready long format.</p>
+<p>Source code: <a href="https://github.com/Fahim-Ahmad/wb_dashboard" class="uri">https://github.com/Fahim-Ahmad/wb_dashboard</a></p>
+<blockquote>
+<p>If you have a working knowledge of R, please use the source code from my GitHub account as I am using the free version of the shinyapps.io which has limited usage.</p>
+</blockquote>
+<p>Please click on the below image to use the dashboard:
+<a href="https://fahim-ahmad.shinyapps.io/wb_dashboard/"><img src="imgs/wb_dashboard.png" alt="drawing" style="width:70%;"/></a></p>
+
     </div>
-  
-    
-    
-    
-    <div>
-      <h2><a href="/dashboard/compare_data_shiny_app/" >A shinyapp to compare datasets</a></h2>
-      <div class="article-style">
-        
-          The purpose of developing this app is to compare two versions of the same dataset.
-        
-      </div>
-    </div>
-  
 
-  
+    
 
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/shinyapp/">shinyapp</a>
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
 </div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/dashboard/wb_dashboard/&amp;text=WB%20Dashboard" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/dashboard/wb_dashboard/&amp;t=WB%20Dashboard" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=WB%20Dashboard&amp;body=/dashboard/wb_dashboard/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/dashboard/wb_dashboard/&amp;title=WB%20Dashboard" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=WB%20Dashboard%20/dashboard/wb_dashboard/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/dashboard/wb_dashboard/&amp;title=WB%20Dashboard" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/"><img class="avatar mr-3 avatar-circle" src="/author/fahim-ahmad/avatar_hu943ba8eb54126f053ce52e97313e0c4b_160404_270x270_fill_q75_lanczos_center.jpg" alt="Fahim Ahmad"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Fahim Ahmad</a></h5>
+      
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Fahim-Ahmad" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/Fahim_AY" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</article>
   </div>
 
   <div class="page-footer">

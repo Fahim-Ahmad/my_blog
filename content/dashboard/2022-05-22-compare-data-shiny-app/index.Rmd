@@ -17,14 +17,14 @@ image:
 projects: []
 ---
 
-Recently I developed [`compare_df()`](https://github.com/Fahim-Ahmad/r_custom_functions/blob/main/compare_df_function.R) function in R to compare two datasets.
+Recently I developed [`compaRe`](https://github.com/Fahim-Ahmad/compaRe) package in R to compare two datasets.
 
-In response to a friend's request who is not familiar with R, I created an online R-shiny app that compares two versions of the same data set, row by row and column by column, and generates the differences in a nice and tidy datatable that can be downloaded as a csv file. I make it public so everyone can use and benefit from it.
+In response to a friend's request who is not familiar with R, I created an online R-shiny app that compares two versions of the same data set, row by row and column by column, and generates the differences in a nice and tidy datatable that can be downloaded as a CSV file. I make it public so everyone can use and benefit from it.
 
 Link to the app: https://fahim-ahmad.shinyapps.io/compare_df/
 
 Source code: https://github.com/Fahim-Ahmad/compare_df_shiny_app
 
-> If you have a working knowledge of R, please use the source code from my github account as I am using free version of the shinyapps.io which has limited usage.
+> If you have a working knowledge of R, please use the source code from my GitHub account as I am using the free version of the shinyapps.io which has limited usage.
 
 [<img src="imgs/compare_df_shiny.png" alt="drawing" style="width:70%;"/>](https://fahim-ahmad.shinyapps.io/compare_df/)
