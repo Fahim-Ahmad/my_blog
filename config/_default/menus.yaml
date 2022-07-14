@@ -12,7 +12,10 @@ main:
     weight: 2
   - name: Dashboards
     url: dashboard/
-    weight: 3    
+    weight: 3
+  - name: Resources to learn R
+    url: resources/
+    weight: 4
 #  - name: new section
 #    url: new_section/
 #    weight: 3
