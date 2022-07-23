@@ -1,0 +1,81 @@
+---
+title: Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames
+author: Fahim
+date: '2022-07-22'
+slug: convert_data_from_multiple_excel_sheets_to_individual_data_frames
+categories:
+  - R
+tags:
+  - R
+  - Data Management
+
+output:
+  blogdown::html_page:
+    toc: yes
+    number_sections: false
+
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+  
+summary: In this post I explore different ways of reading data from multiple Excel sheets and converting them into individual data frames in R using lapply() and purrr::map() funciton.
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#step-1-reading-data">Step 1: Reading data</a><ul>
+<li><a href="#using-lapply">using lapply( )</a></li>
+<li><a href="#using-map">using map ( )</a></li>
+</ul></li>
+<li><a href="#step-2-converting-the-list-of-data-frames-into-individual-data-frames">Step 2: Converting the list of data frames into individual data frames</a><ul>
+<li><a href="#using-lapply-1">using lapply( )</a></li>
+<li><a href="#using-map-1">using map( )</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>I work with a team of data enthusiasts where we deal with a large amount of data every single day. Sometimes it happens that we end up storing the data into multiple Excel files or multiple Excel sheets.</p>
+<p>While data analysis though, we have to read the data from different sheets and convert them to individual data frames; this means the same function to import the data must be used several times.</p>
+<p>I am sure I am not the only one who works with multiple data sets at once, therefore I decided to write this post to explore an efficient way of reading data from several Excel sheets and storing them into individual data frames all at once, which I hope it can be of some help for those who face the same challenge and to have a record of the script for my future work as well.</p>
+<div id="step-1-reading-data" class="section level2">
+<h2>Step 1: Reading data</h2>
+<p>Suppose you have an Excel file named as <code>data.xlsx</code> with data in several sheets and you aim to import the data from every single sheet all at once. There are at least two ways of doing this: 1) using the <code>lapply()</code> function, 2) using <code>map()</code> function from <strong>purrr</strong> package.</p>
+<div id="using-lapply" class="section level3">
+<h3>using lapply( )</h3>
+<pre class="r"><code>library(readxl)
+
+df_list &lt;- lapply(excel_sheets(&quot;data.xlsx&quot;), function(x)
+  read_excel(&quot;data.xlsx&quot;, sheet = x)
+  )</code></pre>
+</div>
+<div id="using-map" class="section level3">
+<h3>using map ( )</h3>
+<pre class="r"><code>library(purrr)
+
+df_list &lt;- map(set_names(excel_sheets(&quot;data.xlsx&quot;)),
+               read_excel, path = &quot;data.xlsx&quot;
+               )</code></pre>
+<p>Although both <code>lapply()</code> and <code>map()</code> store the final output as a list, the <code>map()</code> function creates a named list where the name of each element of the list corresponds to the name of each sheet which the data come from. Thus, later on you will be able to easily identify which Excel sheet is stored in which element of the list of data frames.</p>
+</div>
+</div>
+<div id="step-2-converting-the-list-of-data-frames-into-individual-data-frames" class="section level2">
+<h2>Step 2: Converting the list of data frames into individual data frames</h2>
+<p>Once you read the data from Excel sheets and store them in a list, the next step is to convert them to individual data frames - unless if you want to apply some list-wise operations such as removing a particular row/column from all data frames at once.</p>
+<p>There are several ways of doing this. The straightforward way which I found most appealing and simple to use is the <code>list2env()</code> function. You only need to feed it with the list in which the data frames are stored and it will convert each component of the list into a single object.</p>
+<pre class="r"><code>list2env(df_list, envir = .GlobalEnv)</code></pre>
+<p>Apart from that, the same task can be accomplished using the <code>assign()</code> function with <code>lapply()</code> and <code>map()</code> functions too as below.</p>
+<div id="using-lapply-1" class="section level3">
+<h3>using lapply( )</h3>
+<pre class="r"><code>lapply(names(df_list), function(x)
+  assign(x, df_list[[x]], envir = .GlobalEnv)
+  )</code></pre>
+</div>
+<div id="using-map-1" class="section level3">
+<h3>using map( )</h3>
+<pre class="r"><code>purrr::map(names(df_list),
+           ~assign(.x, df_list[[.x]], envir = .GlobalEnv)
+           )</code></pre>
+</div>
+</div>

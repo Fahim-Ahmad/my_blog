@@ -19,7 +19,7 @@ image:
   focal_point: ''
   preview_only: no 
 
-Description: As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value. There are mainly two types of measures of dispersion. 1) Absolute measures of dispersion 2) Relative measures of dispersion
+summary: As the name suggests, the measures of dispersion show the extent of variability and the scattering of the data points. The main idea of the measures of dispersion is to get to know how the data are spread and how much the data points vary from the average value. There are mainly two types of measures of dispersion. 1) Absolute measures of dispersion 2) Relative measures of dispersion
 
 katex: false
 ---

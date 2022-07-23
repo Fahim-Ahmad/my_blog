@@ -7,10 +7,11 @@ categories:
   - R
 tags:
   - R
-Description: In this post you will learn how to rename columns of a data frame in R.
 output:
   blogdown::html_page: 
     toc: yes
+    
+summary: In this post you will learn how to rename columns of a data frame in R.    
 ---
 
 
@@ -65,9 +66,9 @@ head(iris)</code></pre>
 <h1>Rename column names with dplyr</h1>
 <p>You can use <code>rename()</code> function to change column names as following. For instance, let’s change <strong>Petal.Length</strong> to <strong>P.L</strong> and <strong>Petal.Width</strong> to <strong>P.W</strong>.</p>
 <pre class="r"><code># install.packages(&quot;dplyr&quot;)
-library(dplyr)
-
-iris %&gt;%
+library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>iris %&gt;%
   rename(
     P.L = Petal.Length,
     P.W = Petal.Width

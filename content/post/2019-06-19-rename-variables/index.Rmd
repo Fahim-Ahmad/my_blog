@@ -7,10 +7,11 @@ categories:
   - R
 tags:
   - R
-Description: In this post you will learn how to rename columns of a data frame in R.
 output:
   blogdown::html_page: 
     toc: yes
+    
+summary: In this post you will learn how to rename columns of a data frame in R.    
 ---
 
 There are several ways of renaming variables in R. In this post you will learn how to change a column name using base R function, the dplyr way and using data.table package.

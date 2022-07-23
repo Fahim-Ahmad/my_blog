@@ -16,7 +16,7 @@ image:
   focal_point: ''
   preview_only: no
 
-description: In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates.
+summary: In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates.
 ---
 
 Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data. In this post, I provide an overview of `duplicated()` function from base R and the `distinct()` function from **dplyr** package to detect and remove duplicates.

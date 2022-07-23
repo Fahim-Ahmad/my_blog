@@ -14,7 +14,7 @@ image:
   focal_point: ''
   preview_only: no 
 
-Description: In this post you will learn when to calculate average of percentages and when not to do it.
+summary: In this post you will learn when to calculate average of percentages and when not to do it.
 ---
 
 <style> 

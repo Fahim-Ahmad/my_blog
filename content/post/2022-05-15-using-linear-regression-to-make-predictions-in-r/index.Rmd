@@ -20,7 +20,7 @@ image:
   focal_point: ''
   preview_only: no
   
-Description: In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
+Summary: In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
 ---
 
 # Introduction

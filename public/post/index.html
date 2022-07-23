@@ -303,7 +303,7 @@
     <meta property="twitter:image" content="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2022-05-15T00:00:00&#43;00:00" />
+      <meta property="og:updated_time" content="2022-07-22T00:00:00&#43;00:00" />
     
   
 
@@ -665,13 +665,108 @@
   <div class="media-body">
 
     <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/" >Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames</a>
+    </div>
+
+    
+    <a href="/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/"  class="summary-link">
+      <div class="article-style">
+        In this post I explore different ways of reading data from multiple Excel sheets and converting them into individual data frames in R using lapply() and purrr::map() funciton.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jul 22, 2022
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    3 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+  </div>
+</div>
+
+    
+  
+    
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
       <a href="/post/using-linear-regression-to-make-predictions-in-r/" >Making Predictions with Linear Regression</a>
     </div>
 
     
     <a href="/post/using-linear-regression-to-make-predictions-in-r/"  class="summary-link">
       <div class="article-style">
-        Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation.
+        In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
       </div>
     </a>
     
@@ -771,8 +866,7 @@
     
     <a href="/post/using-survey-weight-in-r/"  class="summary-link">
       <div class="article-style">
-        In R working with survey weight is made possible using survey package. Let’s use below data frame as an exmaple here:
-set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) gender &lt;- c(&quot;Male&quot;, &quot;Female&quot;) gender &lt;- sample(gender, 100, replace = TRUE) country &lt;- c(&quot;A&quot;, &quot;B&quot;) country &lt;- sample(country, 100, replace = TRUE) df &lt;- data.
+        In R working with survey weight is made possible using the <code>survey</code> package.
       </div>
     </a>
     
@@ -867,7 +961,7 @@ set.seed(1000) age &lt;- c(18:100) age &lt;- sample(age, 100, replace = TRUE) ge
     
     <a href="/post/combining-multiple-plots-using-patchwork/"  class="summary-link">
       <div class="article-style">
-        Introduction loading required packages creating example plots  Combining plots using the patchwork package Combining plots beside or on top of each other Controlling the legend Adding an empty area Combining plot and table Annotation Modifying the result of the patchwork   Introduction Data is just a collection of numbers until it is turned into a story.
+        In this post, I explore different ways to combine multiple ggplot plots using patchwork package to produce publication-ready plots
       </div>
     </a>
     
@@ -1068,7 +1162,7 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     
     <a href="/post/exploring-relationship-between-variables-scatter-plot/"  class="summary-link">
       <div class="article-style">
-        When to use scatterplot? Scatterplot using the base R functions Scatterplot using ggplot2 package   When to use scatterplot? When dealing with numerical data, the most common way to graphically explore the patterns and relationships between variables and draw a conclusion about how variables correlate to one another is by plotting the data points using a scatterplot.
+        When dealing with numerical data, the most common way to graphically explore the patterns and relationships between variables and draw conclusion about how varaibles relate to one another is by plotting the data points using a scatterplot. A scatterplot uses dots/markers to represent values for two numeric variables where the position of each dot indicates values for an individual data point in the (x,y) coordinates.
       </div>
     </a>
     
@@ -1168,7 +1262,7 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     
     <a href="/post/detecting-duplicates/"  class="summary-link">
       <div class="article-style">
-        Removing duplicates based on a single variable Removing duplicates based on the combination of multiple variables Conclusion   Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data.
+        In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates.
       </div>
     </a>
     
@@ -1268,7 +1362,7 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     
     <a href="/post/methods-for-transforming-data-to-normal-distribution-in-r/"  class="summary-link">
       <div class="article-style">
-        Introduction Dealing with the positive skewness Dealing with the negative skewness Conclusion   Introduction Before we get deep into transforming skewed data, let’s quickly talk around the normal distribution and skewness coefficient, or have a look at my previous post to have a detailed insight on different types of distribution of data here.
+        In this post, I try to cover the most common methods of transforming a skewed distribution into a normal distribution, and the foundational step that you must consider prior deciding which method to apply.
       </div>
     </a>
     
@@ -1368,7 +1462,7 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     
     <a href="/post/skewness-definition-and-its-importance-in-data-science/"  class="summary-link">
       <div class="article-style">
-        What is Skewness? Calculating Skewness using R and by Hand Importance of Skewness in Data Science   What is Skewness? Skewness is an important statistical concept in the field of data analytics that every statistician and data scientist needs to know.
+        In this post, you will learn the main concept of skewness, calculating the skewness in R and by hand, and its importance in the field of data analytics.
       </div>
     </a>
     
@@ -1463,7 +1557,7 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     
     <a href="/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/"  class="summary-link">
       <div class="article-style">
-        Introduction Pearson Correlation Spearman Rank Correlation Interpreting the Correlation Coefficient Computing Correlation Coefficient in R   Introduction In recent posts, we discussed measures of central tendency and measures of dispersion.
+        While studying, for example, the relationship between GDP and life expectancy, you might be interested to know whether there exists any relationship between the two indicators? is it a positive relationship or a negative relationship? and how strong the association is? These questions can be answered by computing the correlation coefficient between the two indicators. Depending on the type of data, different methods of correlation exist. In this post, you will learn the Pearson correlation coefficient and the Spearman correlation coefficient.
       </div>
     </a>
     
@@ -1529,101 +1623,6 @@ library(ggplot2) theme_set(theme_bw()) ggplot(iris, aes(Sepal.Length)) + geom_hi
     <a href="/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/" >
       <img src="/post/analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/featured_hu215f54a079aa6399f24ca1eb716db198_73800_150x0_resize_lanczos_2.png" alt="Analysis of the Relationship Between Two Quantitative Variables | Correlation" loading="lazy">
     </a>
-    
-  </div>
-</div>
-
-    
-  
-    
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-<div class="media stream-item">
-  <div class="media-body">
-
-    <div class="section-subheading article-title mb-0 mt-0">
-      <a href="/post/measures-of-dispersion-using-r/" >Measures of Dispersion</a>
-    </div>
-
-    
-    <a href="/post/measures-of-dispersion-using-r/"  class="summary-link">
-      <div class="article-style">
-        Introduction Absolute measures of dispersion Relative measures of dispersion   Introduction In the previous post I described the measures of central tendency. But the central tendency is not the only thing you can tell interesting facts about the data and is not the only way by which you can get to know about the concentration of the data.
-      </div>
-    </a>
-    
-
-    <div class="stream-meta article-metadata">
-
-      
-
-      
-        
-
-
-<div class="article-metadata">
-
-  
-  
-
-  
-  <span class="article-date">
-    
-    
-      
-    
-    May 21, 2020
-  </span>
-  
-
-  
-
-  
-  <span class="middot-divider"></span>
-  <span class="article-reading-time">
-    5 min read
-  </span>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-  
-  <span class="middot-divider"></span>
-  <span class="article-categories">
-    <i class="fas fa-folder mr-1"></i><a href="/category/r/">R</a>, <a href="/category/statistics/">Statistics</a></span>
-  
-
-</div>
-
-      
-    </div>
-
-    
-
-  </div>
-  <div class="ml-3">
-    
     
   </div>
 </div>

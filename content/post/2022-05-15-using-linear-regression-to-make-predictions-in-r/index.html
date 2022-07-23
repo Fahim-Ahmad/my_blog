@@ -20,7 +20,7 @@ image:
   focal_point: ''
   preview_only: no
   
-Description: In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
+Summary: In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions.
 ---
 
 
@@ -115,6 +115,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
 <li><strong>Linearity</strong>: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post <a href="http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">here</a> for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.</li>
 </ul>
 <pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.5</code></pre>
 <pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
 <pre class="r"><code>ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() + 

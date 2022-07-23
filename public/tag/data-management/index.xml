@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Management | Fahim Ahmad</title>
+    <link>/tag/data-management/</link>
+      <atom:link href="/tag/data-management/index.xml" rel="self" type="application/rss+xml" />
+    <description>Data Management</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Fri, 22 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Data Management</title>
+      <link>/tag/data-management/</link>
+    </image>
+    
+    <item>
+      <title>Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames</title>
+      <link>/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/</link>
+      <pubDate>Fri, 22 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#step-1-reading-data&#34;&gt;Step 1: Reading data&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#using-lapply&#34;&gt;using lapply( )&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#using-map&#34;&gt;using map ( )&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#step-2-converting-the-list-of-data-frames-into-individual-data-frames&#34;&gt;Step 2: Converting the list of data frames into individual data frames&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#using-lapply-1&#34;&gt;using lapply( )&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#using-map-1&#34;&gt;using map( )&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I work with a team of data enthusiasts where we deal with a large amount of data every single day. Sometimes it happens that we end up storing the data into multiple Excel files or multiple Excel sheets.&lt;/p&gt;
+&lt;p&gt;While data analysis though, we have to read the data from different sheets and convert them to individual data frames; this means the same function to import the data must be used several times.&lt;/p&gt;
+&lt;p&gt;I am sure I am not the only one who works with multiple data sets at once, therefore I decided to write this post to explore an efficient way of reading data from several Excel sheets and storing them into individual data frames all at once, which I hope it can be of some help for those who face the same challenge and to have a record of the script for my future work as well.&lt;/p&gt;
+&lt;div id=&#34;step-1-reading-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Step 1: Reading data&lt;/h2&gt;
+&lt;p&gt;Suppose you have an Excel file named as &lt;code&gt;data.xlsx&lt;/code&gt; with data in several sheets and you aim to import the data from every single sheet all at once. There are at least two ways of doing this: 1) using the &lt;code&gt;lapply()&lt;/code&gt; function, 2) using &lt;code&gt;map()&lt;/code&gt; function from &lt;strong&gt;purrr&lt;/strong&gt; package.&lt;/p&gt;
+&lt;div id=&#34;using-lapply&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using lapply( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(readxl)
+
+df_list &amp;lt;- lapply(excel_sheets(&amp;quot;data.xlsx&amp;quot;), function(x)
+  read_excel(&amp;quot;data.xlsx&amp;quot;, sheet = x)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-map&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using map ( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr)
+
+df_list &amp;lt;- map(set_names(excel_sheets(&amp;quot;data.xlsx&amp;quot;)),
+               read_excel, path = &amp;quot;data.xlsx&amp;quot;
+               )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Although both &lt;code&gt;lapply()&lt;/code&gt; and &lt;code&gt;map()&lt;/code&gt; store the final output as a list, the &lt;code&gt;map()&lt;/code&gt; function creates a named list where the name of each element of the list corresponds to the name of each sheet which the data come from. Thus, later on you will be able to easily identify which Excel sheet is stored in which element of the list of data frames.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;step-2-converting-the-list-of-data-frames-into-individual-data-frames&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Step 2: Converting the list of data frames into individual data frames&lt;/h2&gt;
+&lt;p&gt;Once you read the data from Excel sheets and store them in a list, the next step is to convert them to individual data frames - unless if you want to apply some list-wise operations such as removing a particular row/column from all data frames at once.&lt;/p&gt;
+&lt;p&gt;There are several ways of doing this. The straightforward way which I found most appealing and simple to use is the &lt;code&gt;list2env()&lt;/code&gt; function. You only need to feed it with the list in which the data frames are stored and it will convert each component of the list into a single object.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;list2env(df_list, envir = .GlobalEnv)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Apart from that, the same task can be accomplished using the &lt;code&gt;assign()&lt;/code&gt; function with &lt;code&gt;lapply()&lt;/code&gt; and &lt;code&gt;map()&lt;/code&gt; functions too as below.&lt;/p&gt;
+&lt;div id=&#34;using-lapply-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using lapply( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(names(df_list), function(x)
+  assign(x, df_list[[x]], envir = .GlobalEnv)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-map-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using map( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;purrr::map(names(df_list),
+           ~assign(.x, df_list[[.x]], envir = .GlobalEnv)
+           )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

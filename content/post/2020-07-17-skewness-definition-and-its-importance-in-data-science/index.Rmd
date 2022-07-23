@@ -19,7 +19,7 @@ image:
   focal_point: ''
   preview_only: no
 
-Description: In this post, you will learn the main concept of skewness, calculating the skewness in R and by hand, and its importance in the field of data analytics.
+summary: In this post, you will learn the main concept of skewness, calculating the skewness in R and by hand, and its importance in the field of data analytics.
 ---
 
 # What is Skewness?

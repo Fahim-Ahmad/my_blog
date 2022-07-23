@@ -19,7 +19,7 @@ image:
   focal_point: ''
   preview_only: no
   
-Description: When dealing with numerical data, the most common way to graphically explore the patterns and relationships between variables and draw conclusion about how varaibles relate to one another is by plotting the data points using a scatterplot. A scatterplot uses dots/markers to represent values for two numeric variables where the position of each dot indicates values for an individual data point in the (x,y) coordinates.
+summary: When dealing with numerical data, the most common way to graphically explore the patterns and relationships between variables and draw conclusion about how varaibles relate to one another is by plotting the data points using a scatterplot. A scatterplot uses dots/markers to represent values for two numeric variables where the position of each dot indicates values for an individual data point in the (x,y) coordinates.
 ---
 
 ### When to use scatterplot?

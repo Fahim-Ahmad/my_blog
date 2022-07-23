@@ -10,6 +10,8 @@ Description: In this post, you will learn how to use weights in R using the surv
 output:
   blogdown::html_page: 
     toc: yes
+
+Summary: In R working with survey weight is made possible using the `survey` package.
 ---
 
 In R working with survey weight is made possible using `survey` package. Let's use below data frame as an exmaple here:

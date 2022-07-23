@@ -30,7 +30,7 @@
   
     
   
-  <meta name="description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." />
+  <meta name="description" content="In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions." />
 
   
   <link rel="alternate" hreflang="en-us" href="/post/using-linear-regression-to-make-predictions-in-r/" />
@@ -296,7 +296,7 @@
   <meta property="og:site_name" content="Fahim Ahmad" />
   <meta property="og:url" content="/post/using-linear-regression-to-make-predictions-in-r/" />
   <meta property="og:title" content="Making Predictions with Linear Regression | Fahim Ahmad" />
-  <meta property="og:description" content="Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation." /><meta property="og:image" content="/post/using-linear-regression-to-make-predictions-in-r/featured.png" />
+  <meta property="og:description" content="In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions." /><meta property="og:image" content="/post/using-linear-regression-to-make-predictions-in-r/featured.png" />
     <meta property="twitter:image" content="/post/using-linear-regression-to-make-predictions-in-r/featured.png" /><meta property="og:locale" content="en-us" />
   
     
@@ -353,7 +353,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Introduction Building the Linear Regression Model Model Assessment Coefficients Model Accuracy  Assumptions Making Predictions   Introduction In previous posts, I discussed visualizing the relationship between two quantitative variables through a scatter plot and quantifying the strength of the relationship through different types of correlation."
+  "description": "In this post you will learn how to build a linear regression, interpret the result, test its assumptions, and use the regression equation for predictions."
 }
 </script>
 
@@ -846,6 +846,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
 <li><strong>Linearity</strong>: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post <a href="http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">here</a> for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.</li>
 </ul>
 <pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.5</code></pre>
 <pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
 <pre class="r"><code>ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() + 

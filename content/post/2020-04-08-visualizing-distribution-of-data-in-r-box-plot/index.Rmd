@@ -19,7 +19,7 @@ image:
   focal_point: ''
   preview_only: no 
 
-Description: Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks. And it is one of the best tools to identify the outliers to check if an association you find in your analysis can be explained by the presence of potential unusual observations. Through box plots we can find the minimum, lower quartile (25th percentile), median (50th percentile), upper quartile (75th percentile), and maximum of an continues variable.
+summary: Box-plot is one of the effective ways to visually represent the distribution of data and it gives you an overall idea about how the data looks. And it is one of the best tools to identify the outliers to check if an association you find in your analysis can be explained by the presence of potential unusual observations. Through box plots we can find the minimum, lower quartile (25th percentile), median (50th percentile), upper quartile (75th percentile), and maximum of an continues variable.
 ---
 
 ## Why box-plot?

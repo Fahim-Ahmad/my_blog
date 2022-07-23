@@ -13,7 +13,8 @@ tags:
 output:
   blogdown::html_page:
     toc: yes
-Description: The most common types of measure of central tendency are mean, median, and mode. Each of these measures shows the tendency of the data to clusture around a middle value using a different approach.
+
+summary: The most common types of measure of central tendency are mean, median, and mode. Each of these measures shows the tendency of the data to clusture around a middle value using a different approach.
 ---
 
 Before going directly to measures of central tendency, I want you to look at the data below. This is a table of weekly expenditures of two projects over the course of 10 weeks. Now tell me which one is cost-efficient than the other, or both are the same?

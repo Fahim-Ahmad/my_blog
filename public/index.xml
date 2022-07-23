@@ -5,12 +5,78 @@
     <link>/</link>
       <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <description>Fahim Ahmad</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Mon, 06 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Fri, 22 Jul 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
       <title>Fahim Ahmad</title>
       <link>/</link>
     </image>
+    
+    <item>
+      <title>Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames</title>
+      <link>/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/</link>
+      <pubDate>Fri, 22 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/</guid>
+      <description>
+
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#step-1-reading-data&#34;&gt;Step 1: Reading data&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#using-lapply&#34;&gt;using lapply( )&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#using-map&#34;&gt;using map ( )&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#step-2-converting-the-list-of-data-frames-into-individual-data-frames&#34;&gt;Step 2: Converting the list of data frames into individual data frames&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#using-lapply-1&#34;&gt;using lapply( )&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#using-map-1&#34;&gt;using map( )&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I work with a team of data enthusiasts where we deal with a large amount of data every single day. Sometimes it happens that we end up storing the data into multiple Excel files or multiple Excel sheets.&lt;/p&gt;
+&lt;p&gt;While data analysis though, we have to read the data from different sheets and convert them to individual data frames; this means the same function to import the data must be used several times.&lt;/p&gt;
+&lt;p&gt;I am sure I am not the only one who works with multiple data sets at once, therefore I decided to write this post to explore an efficient way of reading data from several Excel sheets and storing them into individual data frames all at once, which I hope it can be of some help for those who face the same challenge and to have a record of the script for my future work as well.&lt;/p&gt;
+&lt;div id=&#34;step-1-reading-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Step 1: Reading data&lt;/h2&gt;
+&lt;p&gt;Suppose you have an Excel file named as &lt;code&gt;data.xlsx&lt;/code&gt; with data in several sheets and you aim to import the data from every single sheet all at once. There are at least two ways of doing this: 1) using the &lt;code&gt;lapply()&lt;/code&gt; function, 2) using &lt;code&gt;map()&lt;/code&gt; function from &lt;strong&gt;purrr&lt;/strong&gt; package.&lt;/p&gt;
+&lt;div id=&#34;using-lapply&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using lapply( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(readxl)
+
+df_list &amp;lt;- lapply(excel_sheets(&amp;quot;data.xlsx&amp;quot;), function(x)
+  read_excel(&amp;quot;data.xlsx&amp;quot;, sheet = x)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-map&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using map ( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr)
+
+df_list &amp;lt;- map(set_names(excel_sheets(&amp;quot;data.xlsx&amp;quot;)),
+               read_excel, path = &amp;quot;data.xlsx&amp;quot;
+               )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Although both &lt;code&gt;lapply()&lt;/code&gt; and &lt;code&gt;map()&lt;/code&gt; store the final output as a list, the &lt;code&gt;map()&lt;/code&gt; function creates a named list where the name of each element of the list corresponds to the name of each sheet which the data come from. Thus, later on you will be able to easily identify which Excel sheet is stored in which element of the list of data frames.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;step-2-converting-the-list-of-data-frames-into-individual-data-frames&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Step 2: Converting the list of data frames into individual data frames&lt;/h2&gt;
+&lt;p&gt;Once you read the data from Excel sheets and store them in a list, the next step is to convert them to individual data frames - unless if you want to apply some list-wise operations such as removing a particular row/column from all data frames at once.&lt;/p&gt;
+&lt;p&gt;There are several ways of doing this. The straightforward way which I found most appealing and simple to use is the &lt;code&gt;list2env()&lt;/code&gt; function. You only need to feed it with the list in which the data frames are stored and it will convert each component of the list into a single object.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;list2env(df_list, envir = .GlobalEnv)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Apart from that, the same task can be accomplished using the &lt;code&gt;assign()&lt;/code&gt; function with &lt;code&gt;lapply()&lt;/code&gt; and &lt;code&gt;map()&lt;/code&gt; functions too as below.&lt;/p&gt;
+&lt;div id=&#34;using-lapply-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using lapply( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(names(df_list), function(x)
+  assign(x, df_list[[x]], envir = .GlobalEnv)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-map-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;using map( )&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;purrr::map(names(df_list),
+           ~assign(.x, df_list[[.x]], envir = .GlobalEnv)
+           )&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>WB Dashboard</title>
@@ -150,6 +216,7 @@ The &lt;code&gt;lm()&lt;/code&gt; function is used to estimate the coefficients 
 &lt;li&gt;&lt;strong&gt;Linearity&lt;/strong&gt;: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post &lt;a href=&#34;http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/&#34;&gt;here&lt;/a&gt; for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;tidyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() + 
@@ -627,7 +694,7 @@ ggplot(df, aes(x = age, y = salary)) +
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(plotly)
 plot_ly(df, x = ~age, y = ~salary, z = ~education, type = &amp;quot;scatter3d&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;plotly html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;visdat&#34;:{&#34;3c81192dbfb3&#34;:[&#34;function () &#34;,&#34;plotlyVisDat&#34;]},&#34;cur_data&#34;:&#34;3c81192dbfb3&#34;,&#34;attrs&#34;:{&#34;3c81192dbfb3&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;z&#34;:{},&#34;alpha_stroke&#34;:1,&#34;sizes&#34;:[10,100],&#34;spans&#34;:[1,20],&#34;type&#34;:&#34;scatter3d&#34;}},&#34;layout&#34;:{&#34;margin&#34;:{&#34;b&#34;:40,&#34;l&#34;:60,&#34;t&#34;:25,&#34;r&#34;:10},&#34;scene&#34;:{&#34;xaxis&#34;:{&#34;title&#34;:&#34;age&#34;},&#34;yaxis&#34;:{&#34;title&#34;:&#34;salary&#34;},&#34;zaxis&#34;:{&#34;title&#34;:&#34;education&#34;}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;showlegend&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;config&#34;:{&#34;showSendToCloud&#34;:false},&#34;data&#34;:[{&#34;x&#34;:[30,25,27,28,24,29,27,24,22,25,27,29,24,22,18,25,22,23,27,23,26,23,22],&#34;y&#34;:[25000,31000,35000,27000,32000,26000,31000,30000,35000,33000,30000,25000,29000,37000,28000,31000,37000,34000,31000,35000,29000,37000,36000],&#34;z&#34;:[9,12,16,10,14,10,11,14,16,14,12,9,13,15,10,12,17,16,13,16,12,18,17],&#34;type&#34;:&#34;scatter3d&#34;,&#34;mode&#34;:&#34;markers&#34;,&#34;marker&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;,&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;}},&#34;error_y&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;error_x&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;frame&#34;:null}],&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;shinyEvents&#34;:[&#34;plotly_hover&#34;,&#34;plotly_click&#34;,&#34;plotly_selected&#34;,&#34;plotly_relayout&#34;,&#34;plotly_brushed&#34;,&#34;plotly_brushing&#34;,&#34;plotly_clickannotation&#34;,&#34;plotly_doubleclick&#34;,&#34;plotly_deselect&#34;,&#34;plotly_afterplot&#34;,&#34;plotly_sunburstclick&#34;],&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;visdat&#34;:{&#34;1047977cd8e40&#34;:[&#34;function () &#34;,&#34;plotlyVisDat&#34;]},&#34;cur_data&#34;:&#34;1047977cd8e40&#34;,&#34;attrs&#34;:{&#34;1047977cd8e40&#34;:{&#34;x&#34;:{},&#34;y&#34;:{},&#34;z&#34;:{},&#34;alpha_stroke&#34;:1,&#34;sizes&#34;:[10,100],&#34;spans&#34;:[1,20],&#34;type&#34;:&#34;scatter3d&#34;}},&#34;layout&#34;:{&#34;margin&#34;:{&#34;b&#34;:40,&#34;l&#34;:60,&#34;t&#34;:25,&#34;r&#34;:10},&#34;scene&#34;:{&#34;xaxis&#34;:{&#34;title&#34;:&#34;age&#34;},&#34;yaxis&#34;:{&#34;title&#34;:&#34;salary&#34;},&#34;zaxis&#34;:{&#34;title&#34;:&#34;education&#34;}},&#34;hovermode&#34;:&#34;closest&#34;,&#34;showlegend&#34;:false},&#34;source&#34;:&#34;A&#34;,&#34;config&#34;:{&#34;showSendToCloud&#34;:false},&#34;data&#34;:[{&#34;x&#34;:[30,25,27,28,24,29,27,24,22,25,27,29,24,22,18,25,22,23,27,23,26,23,22],&#34;y&#34;:[25000,31000,35000,27000,32000,26000,31000,30000,35000,33000,30000,25000,29000,37000,28000,31000,37000,34000,31000,35000,29000,37000,36000],&#34;z&#34;:[9,12,16,10,14,10,11,14,16,14,12,9,13,15,10,12,17,16,13,16,12,18,17],&#34;type&#34;:&#34;scatter3d&#34;,&#34;mode&#34;:&#34;markers&#34;,&#34;marker&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;,&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;}},&#34;error_y&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;error_x&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;line&#34;:{&#34;color&#34;:&#34;rgba(31,119,180,1)&#34;},&#34;frame&#34;:null}],&#34;highlight&#34;:{&#34;on&#34;:&#34;plotly_click&#34;,&#34;persistent&#34;:false,&#34;dynamic&#34;:false,&#34;selectize&#34;:false,&#34;opacityDim&#34;:0.2,&#34;selected&#34;:{&#34;opacity&#34;:1},&#34;debounce&#34;:0},&#34;shinyEvents&#34;:[&#34;plotly_hover&#34;,&#34;plotly_click&#34;,&#34;plotly_selected&#34;,&#34;plotly_relayout&#34;,&#34;plotly_brushed&#34;,&#34;plotly_brushing&#34;,&#34;plotly_clickannotation&#34;,&#34;plotly_doubleclick&#34;,&#34;plotly_deselect&#34;,&#34;plotly_afterplot&#34;,&#34;plotly_sunburstclick&#34;],&#34;base_url&#34;:&#34;https://plot.ly&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
 &lt;/div&gt;
 </description>
     </item>
@@ -791,12 +858,12 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Dealing with the positive skewness&lt;/h1&gt;
 &lt;p&gt;The common methods for transforming positively skewed data to normal distribution are, but not limited to, square root transformation, cube root transformation, and log transformation.&lt;/p&gt;
 &lt;p&gt;I use the GDP per capita as an example. You can download the data from &lt;a href=&#34;https://data.worldbank.org/indicator/NY.GDP.PCAP.CD&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;div id=&#34;qtdvtmrmuh&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;hcgdthulod&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#qtdvtmrmuh .gt_table {
+#hcgdthulod .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -821,7 +888,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-left-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_heading {
+#hcgdthulod .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -833,7 +900,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_title {
+#hcgdthulod .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -845,7 +912,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-bottom-width: 0;
 }
 
-#qtdvtmrmuh .gt_subtitle {
+#hcgdthulod .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -857,13 +924,13 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-top-width: 0;
 }
 
-#qtdvtmrmuh .gt_bottom_border {
+#hcgdthulod .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_col_headings {
+#hcgdthulod .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -878,7 +945,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_col_heading {
+#hcgdthulod .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -898,7 +965,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   overflow-x: hidden;
 }
 
-#qtdvtmrmuh .gt_column_spanner_outer {
+#hcgdthulod .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -910,15 +977,15 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 4px;
 }
 
-#qtdvtmrmuh .gt_column_spanner_outer:first-child {
+#hcgdthulod .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qtdvtmrmuh .gt_column_spanner_outer:last-child {
+#hcgdthulod .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qtdvtmrmuh .gt_column_spanner {
+#hcgdthulod .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -930,7 +997,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   width: 100%;
 }
 
-#qtdvtmrmuh .gt_group_heading {
+#hcgdthulod .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -955,7 +1022,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   vertical-align: middle;
 }
 
-#qtdvtmrmuh .gt_empty_group_heading {
+#hcgdthulod .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -970,15 +1037,15 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   vertical-align: middle;
 }
 
-#qtdvtmrmuh .gt_from_md &gt; :first-child {
+#hcgdthulod .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#qtdvtmrmuh .gt_from_md &gt; :last-child {
+#hcgdthulod .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#qtdvtmrmuh .gt_row {
+#hcgdthulod .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -997,7 +1064,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   overflow-x: hidden;
 }
 
-#qtdvtmrmuh .gt_stub {
+#hcgdthulod .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1010,7 +1077,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#qtdvtmrmuh .gt_stub_row_group {
+#hcgdthulod .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1024,11 +1091,11 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   vertical-align: top;
 }
 
-#qtdvtmrmuh .gt_row_group_first td {
+#hcgdthulod .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qtdvtmrmuh .gt_summary_row {
+#hcgdthulod .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1038,16 +1105,16 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#qtdvtmrmuh .gt_first_summary_row {
+#hcgdthulod .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_first_summary_row.thick {
+#hcgdthulod .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qtdvtmrmuh .gt_last_summary_row {
+#hcgdthulod .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1057,7 +1124,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-bottom-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_grand_summary_row {
+#hcgdthulod .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1067,7 +1134,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#qtdvtmrmuh .gt_first_grand_summary_row {
+#hcgdthulod .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1077,11 +1144,11 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-top-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_striped {
+#hcgdthulod .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qtdvtmrmuh .gt_table_body {
+#hcgdthulod .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1090,7 +1157,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-bottom-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_footnotes {
+#hcgdthulod .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1104,7 +1171,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_footnote {
+#hcgdthulod .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1113,7 +1180,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#qtdvtmrmuh .gt_sourcenotes {
+#hcgdthulod .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1127,7 +1194,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   border-right-color: #D3D3D3;
 }
 
-#qtdvtmrmuh .gt_sourcenote {
+#hcgdthulod .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1135,36 +1202,36 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   padding-right: 5px;
 }
 
-#qtdvtmrmuh .gt_left {
+#hcgdthulod .gt_left {
   text-align: left;
 }
 
-#qtdvtmrmuh .gt_center {
+#hcgdthulod .gt_center {
   text-align: center;
 }
 
-#qtdvtmrmuh .gt_right {
+#hcgdthulod .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qtdvtmrmuh .gt_font_normal {
+#hcgdthulod .gt_font_normal {
   font-weight: normal;
 }
 
-#qtdvtmrmuh .gt_font_bold {
+#hcgdthulod .gt_font_bold {
   font-weight: bold;
 }
 
-#qtdvtmrmuh .gt_font_italic {
+#hcgdthulod .gt_font_italic {
   font-style: italic;
 }
 
-#qtdvtmrmuh .gt_super {
+#hcgdthulod .gt_super {
   font-size: 65%;
 }
 
-#qtdvtmrmuh .gt_two_val_uncert {
+#hcgdthulod .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1173,31 +1240,31 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)&lt;/code&gt;&lt;/pre&gt;
   margin-left: 0.1em;
 }
 
-#qtdvtmrmuh .gt_footnote_marks {
+#hcgdthulod .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#qtdvtmrmuh .gt_asterisk {
+#hcgdthulod .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qtdvtmrmuh .gt_slash_mark {
+#hcgdthulod .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#qtdvtmrmuh .gt_fraction_numerator {
+#hcgdthulod .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#qtdvtmrmuh .gt_fraction_denominator {
+#hcgdthulod .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1324,12 +1391,12 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.7), locations = cells_body(columns = vars(V1), rows = V1 &amp;gt; 1 &amp;amp; V1 &amp;lt; 2)) %&amp;gt;% 
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.5), locations = cells_body(columns = vars(V1), rows = V1 &amp;gt; 0.5 &amp;amp; V1 &amp;lt; 1)) %&amp;gt;% 
   tab_style(style = cell_fill(color = &amp;quot;maroon&amp;quot;, alpha = 0.3), locations = cells_body(columns = vars(V1), rows = V1 &amp;lt; 0.5))&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;mmwnbcdczr&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;krsculekmf&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#mmwnbcdczr .gt_table {
+#krsculekmf .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1354,7 +1421,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_heading {
+#krsculekmf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1366,7 +1433,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_title {
+#krsculekmf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1378,7 +1445,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#mmwnbcdczr .gt_subtitle {
+#krsculekmf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1390,13 +1457,13 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-width: 0;
 }
 
-#mmwnbcdczr .gt_bottom_border {
+#krsculekmf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_col_headings {
+#krsculekmf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1411,7 +1478,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_col_heading {
+#krsculekmf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1431,7 +1498,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#mmwnbcdczr .gt_column_spanner_outer {
+#krsculekmf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1443,15 +1510,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 4px;
 }
 
-#mmwnbcdczr .gt_column_spanner_outer:first-child {
+#krsculekmf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mmwnbcdczr .gt_column_spanner_outer:last-child {
+#krsculekmf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mmwnbcdczr .gt_column_spanner {
+#krsculekmf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1463,7 +1530,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   width: 100%;
 }
 
-#mmwnbcdczr .gt_group_heading {
+#krsculekmf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1488,7 +1555,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#mmwnbcdczr .gt_empty_group_heading {
+#krsculekmf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1503,15 +1570,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#mmwnbcdczr .gt_from_md &gt; :first-child {
+#krsculekmf .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#mmwnbcdczr .gt_from_md &gt; :last-child {
+#krsculekmf .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#mmwnbcdczr .gt_row {
+#krsculekmf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1530,7 +1597,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#mmwnbcdczr .gt_stub {
+#krsculekmf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1543,7 +1610,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#mmwnbcdczr .gt_stub_row_group {
+#krsculekmf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1557,11 +1624,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: top;
 }
 
-#mmwnbcdczr .gt_row_group_first td {
+#krsculekmf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mmwnbcdczr .gt_summary_row {
+#krsculekmf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1571,16 +1638,16 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#mmwnbcdczr .gt_first_summary_row {
+#krsculekmf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_first_summary_row.thick {
+#krsculekmf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mmwnbcdczr .gt_last_summary_row {
+#krsculekmf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1590,7 +1657,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_grand_summary_row {
+#krsculekmf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1600,7 +1667,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#mmwnbcdczr .gt_first_grand_summary_row {
+#krsculekmf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1610,11 +1677,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_striped {
+#krsculekmf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mmwnbcdczr .gt_table_body {
+#krsculekmf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1623,7 +1690,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_footnotes {
+#krsculekmf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1637,7 +1704,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_footnote {
+#krsculekmf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1646,7 +1713,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#mmwnbcdczr .gt_sourcenotes {
+#krsculekmf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1660,7 +1727,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#mmwnbcdczr .gt_sourcenote {
+#krsculekmf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1668,36 +1735,36 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#mmwnbcdczr .gt_left {
+#krsculekmf .gt_left {
   text-align: left;
 }
 
-#mmwnbcdczr .gt_center {
+#krsculekmf .gt_center {
   text-align: center;
 }
 
-#mmwnbcdczr .gt_right {
+#krsculekmf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mmwnbcdczr .gt_font_normal {
+#krsculekmf .gt_font_normal {
   font-weight: normal;
 }
 
-#mmwnbcdczr .gt_font_bold {
+#krsculekmf .gt_font_bold {
   font-weight: bold;
 }
 
-#mmwnbcdczr .gt_font_italic {
+#krsculekmf .gt_font_italic {
   font-style: italic;
 }
 
-#mmwnbcdczr .gt_super {
+#krsculekmf .gt_super {
   font-size: 65%;
 }
 
-#mmwnbcdczr .gt_two_val_uncert {
+#krsculekmf .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1706,31 +1773,31 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#mmwnbcdczr .gt_footnote_marks {
+#krsculekmf .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#mmwnbcdczr .gt_asterisk {
+#krsculekmf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mmwnbcdczr .gt_slash_mark {
+#krsculekmf .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#mmwnbcdczr .gt_fraction_numerator {
+#krsculekmf .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#mmwnbcdczr .gt_fraction_denominator {
+#krsculekmf .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1788,12 +1855,12 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
 
 ## Warning: `columns = vars(...)` has been deprecated in gt 0.3.0:
 ## * please use `columns = c(...)` instead&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;wzxvjldzca&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;uuzavqddij&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#wzxvjldzca .gt_table {
+#uuzavqddij .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1818,7 +1885,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_heading {
+#uuzavqddij .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1830,7 +1897,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_title {
+#uuzavqddij .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1842,7 +1909,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#wzxvjldzca .gt_subtitle {
+#uuzavqddij .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1854,13 +1921,13 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-width: 0;
 }
 
-#wzxvjldzca .gt_bottom_border {
+#uuzavqddij .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_col_headings {
+#uuzavqddij .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1875,7 +1942,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_col_heading {
+#uuzavqddij .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1895,7 +1962,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#wzxvjldzca .gt_column_spanner_outer {
+#uuzavqddij .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1907,15 +1974,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 4px;
 }
 
-#wzxvjldzca .gt_column_spanner_outer:first-child {
+#uuzavqddij .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wzxvjldzca .gt_column_spanner_outer:last-child {
+#uuzavqddij .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wzxvjldzca .gt_column_spanner {
+#uuzavqddij .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1927,7 +1994,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   width: 100%;
 }
 
-#wzxvjldzca .gt_group_heading {
+#uuzavqddij .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1952,7 +2019,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#wzxvjldzca .gt_empty_group_heading {
+#uuzavqddij .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1967,15 +2034,15 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: middle;
 }
 
-#wzxvjldzca .gt_from_md &gt; :first-child {
+#uuzavqddij .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#wzxvjldzca .gt_from_md &gt; :last-child {
+#uuzavqddij .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#wzxvjldzca .gt_row {
+#uuzavqddij .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1994,7 +2061,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   overflow-x: hidden;
 }
 
-#wzxvjldzca .gt_stub {
+#uuzavqddij .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2007,7 +2074,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#wzxvjldzca .gt_stub_row_group {
+#uuzavqddij .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2021,11 +2088,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   vertical-align: top;
 }
 
-#wzxvjldzca .gt_row_group_first td {
+#uuzavqddij .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wzxvjldzca .gt_summary_row {
+#uuzavqddij .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2035,16 +2102,16 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#wzxvjldzca .gt_first_summary_row {
+#uuzavqddij .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_first_summary_row.thick {
+#uuzavqddij .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wzxvjldzca .gt_last_summary_row {
+#uuzavqddij .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2054,7 +2121,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_grand_summary_row {
+#uuzavqddij .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2064,7 +2131,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#wzxvjldzca .gt_first_grand_summary_row {
+#uuzavqddij .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2074,11 +2141,11 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_striped {
+#uuzavqddij .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wzxvjldzca .gt_table_body {
+#uuzavqddij .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2087,7 +2154,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_footnotes {
+#uuzavqddij .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2101,7 +2168,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_footnote {
+#uuzavqddij .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2110,7 +2177,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#wzxvjldzca .gt_sourcenotes {
+#uuzavqddij .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2124,7 +2191,7 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#wzxvjldzca .gt_sourcenote {
+#uuzavqddij .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2132,36 +2199,36 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   padding-right: 5px;
 }
 
-#wzxvjldzca .gt_left {
+#uuzavqddij .gt_left {
   text-align: left;
 }
 
-#wzxvjldzca .gt_center {
+#uuzavqddij .gt_center {
   text-align: center;
 }
 
-#wzxvjldzca .gt_right {
+#uuzavqddij .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wzxvjldzca .gt_font_normal {
+#uuzavqddij .gt_font_normal {
   font-weight: normal;
 }
 
-#wzxvjldzca .gt_font_bold {
+#uuzavqddij .gt_font_bold {
   font-weight: bold;
 }
 
-#wzxvjldzca .gt_font_italic {
+#uuzavqddij .gt_font_italic {
   font-style: italic;
 }
 
-#wzxvjldzca .gt_super {
+#uuzavqddij .gt_super {
   font-size: 65%;
 }
 
-#wzxvjldzca .gt_two_val_uncert {
+#uuzavqddij .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -2170,31 +2237,31 @@ do.call(rbind, (lapply(df, skewness))) %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#wzxvjldzca .gt_footnote_marks {
+#uuzavqddij .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#wzxvjldzca .gt_asterisk {
+#uuzavqddij .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wzxvjldzca .gt_slash_mark {
+#uuzavqddij .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#wzxvjldzca .gt_fraction_numerator {
+#uuzavqddij .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#wzxvjldzca .gt_fraction_denominator {
+#uuzavqddij .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -2281,12 +2348,12 @@ df %&amp;gt;%
 &lt;h1&gt;Dealing with the negative skewness&lt;/h1&gt;
 &lt;p&gt;The important caveat in applying the above methods to reduce the skewness is the data should be skewed to the right side, otherwise those methods do not transform the distribution of the data to normal.&lt;/p&gt;
 &lt;p&gt;Let’s use the life expectancy data from the World Bank as an example. You can download the data from &lt;a href=&#34;https://data.worldbank.org/indicator/SP.DYN.LE00.IN&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;div id=&#34;sdawsnospu&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;yvenipqqpk&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#sdawsnospu .gt_table {
+#yvenipqqpk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2311,7 +2378,7 @@ df %&amp;gt;%
   border-left-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_heading {
+#yvenipqqpk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2323,7 +2390,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_title {
+#yvenipqqpk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2335,7 +2402,7 @@ df %&amp;gt;%
   border-bottom-width: 0;
 }
 
-#sdawsnospu .gt_subtitle {
+#yvenipqqpk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2347,13 +2414,13 @@ df %&amp;gt;%
   border-top-width: 0;
 }
 
-#sdawsnospu .gt_bottom_border {
+#yvenipqqpk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_col_headings {
+#yvenipqqpk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2368,7 +2435,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_col_heading {
+#yvenipqqpk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2388,7 +2455,7 @@ df %&amp;gt;%
   overflow-x: hidden;
 }
 
-#sdawsnospu .gt_column_spanner_outer {
+#yvenipqqpk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2400,15 +2467,15 @@ df %&amp;gt;%
   padding-right: 4px;
 }
 
-#sdawsnospu .gt_column_spanner_outer:first-child {
+#yvenipqqpk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sdawsnospu .gt_column_spanner_outer:last-child {
+#yvenipqqpk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sdawsnospu .gt_column_spanner {
+#yvenipqqpk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2420,7 +2487,7 @@ df %&amp;gt;%
   width: 100%;
 }
 
-#sdawsnospu .gt_group_heading {
+#yvenipqqpk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2445,7 +2512,7 @@ df %&amp;gt;%
   vertical-align: middle;
 }
 
-#sdawsnospu .gt_empty_group_heading {
+#yvenipqqpk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2460,15 +2527,15 @@ df %&amp;gt;%
   vertical-align: middle;
 }
 
-#sdawsnospu .gt_from_md &gt; :first-child {
+#yvenipqqpk .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#sdawsnospu .gt_from_md &gt; :last-child {
+#yvenipqqpk .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#sdawsnospu .gt_row {
+#yvenipqqpk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2487,7 +2554,7 @@ df %&amp;gt;%
   overflow-x: hidden;
 }
 
-#sdawsnospu .gt_stub {
+#yvenipqqpk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2500,7 +2567,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#sdawsnospu .gt_stub_row_group {
+#yvenipqqpk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2514,11 +2581,11 @@ df %&amp;gt;%
   vertical-align: top;
 }
 
-#sdawsnospu .gt_row_group_first td {
+#yvenipqqpk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#sdawsnospu .gt_summary_row {
+#yvenipqqpk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2528,16 +2595,16 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#sdawsnospu .gt_first_summary_row {
+#yvenipqqpk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_first_summary_row.thick {
+#yvenipqqpk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#sdawsnospu .gt_last_summary_row {
+#yvenipqqpk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2547,7 +2614,7 @@ df %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_grand_summary_row {
+#yvenipqqpk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2557,7 +2624,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#sdawsnospu .gt_first_grand_summary_row {
+#yvenipqqpk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2567,11 +2634,11 @@ df %&amp;gt;%
   border-top-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_striped {
+#yvenipqqpk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sdawsnospu .gt_table_body {
+#yvenipqqpk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2580,7 +2647,7 @@ df %&amp;gt;%
   border-bottom-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_footnotes {
+#yvenipqqpk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2594,7 +2661,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_footnote {
+#yvenipqqpk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2603,7 +2670,7 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#sdawsnospu .gt_sourcenotes {
+#yvenipqqpk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2617,7 +2684,7 @@ df %&amp;gt;%
   border-right-color: #D3D3D3;
 }
 
-#sdawsnospu .gt_sourcenote {
+#yvenipqqpk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2625,36 +2692,36 @@ df %&amp;gt;%
   padding-right: 5px;
 }
 
-#sdawsnospu .gt_left {
+#yvenipqqpk .gt_left {
   text-align: left;
 }
 
-#sdawsnospu .gt_center {
+#yvenipqqpk .gt_center {
   text-align: center;
 }
 
-#sdawsnospu .gt_right {
+#yvenipqqpk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sdawsnospu .gt_font_normal {
+#yvenipqqpk .gt_font_normal {
   font-weight: normal;
 }
 
-#sdawsnospu .gt_font_bold {
+#yvenipqqpk .gt_font_bold {
   font-weight: bold;
 }
 
-#sdawsnospu .gt_font_italic {
+#yvenipqqpk .gt_font_italic {
   font-style: italic;
 }
 
-#sdawsnospu .gt_super {
+#yvenipqqpk .gt_super {
   font-size: 65%;
 }
 
-#sdawsnospu .gt_two_val_uncert {
+#yvenipqqpk .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -2663,31 +2730,31 @@ df %&amp;gt;%
   margin-left: 0.1em;
 }
 
-#sdawsnospu .gt_footnote_marks {
+#yvenipqqpk .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#sdawsnospu .gt_asterisk {
+#yvenipqqpk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#sdawsnospu .gt_slash_mark {
+#yvenipqqpk .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#sdawsnospu .gt_fraction_numerator {
+#yvenipqqpk .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#sdawsnospu .gt_fraction_denominator {
+#yvenipqqpk .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -2946,12 +3013,12 @@ Where,&lt;/p&gt;
 &lt;p&gt;The correlation coefficient always lies between -1 and +1 and can’t go outside of this range. Where the sign of the correlation coefficient denotes the direction of the relationship between two variables and the absolute value of the correlation coefficient indicates the strength of association between two variables. A &lt;code&gt;+&lt;/code&gt; sign indicates the positive relationship and a &lt;code&gt;-&lt;/code&gt; sign indicates the negative relationship. Furthermore, the closer the correlation coefficient to -1 or +1, the stronger the relationship, and as it goes toward 0 the relationship will be weaker.&lt;/p&gt;
 &lt;p&gt;How close is close enough to -1 or +1? I get too excited to see correlations beyond ±0.7.
 You can refer to below table while interpreting the correlation coefficient:&lt;/p&gt;
-&lt;div id=&#34;fccjqadfcv&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
+&lt;div id=&#34;wpvhkubyhe&#34; style=&#34;overflow-x:auto;overflow-y:auto;width:auto;height:auto;&#34;&gt;
 &lt;style&gt;html {
   font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Oxygen, Ubuntu, Cantarell, &#39;Helvetica Neue&#39;, &#39;Fira Sans&#39;, &#39;Droid Sans&#39;, Arial, sans-serif;
 }
 
-#fccjqadfcv .gt_table {
+#wpvhkubyhe .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2976,7 +3043,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-left-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_heading {
+#wpvhkubyhe .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2988,7 +3055,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_title {
+#wpvhkubyhe .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3000,7 +3067,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-width: 0;
 }
 
-#fccjqadfcv .gt_subtitle {
+#wpvhkubyhe .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3012,13 +3079,13 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-top-width: 0;
 }
 
-#fccjqadfcv .gt_bottom_border {
+#wpvhkubyhe .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_col_headings {
+#wpvhkubyhe .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3033,7 +3100,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_col_heading {
+#wpvhkubyhe .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3053,7 +3120,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   overflow-x: hidden;
 }
 
-#fccjqadfcv .gt_column_spanner_outer {
+#wpvhkubyhe .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3065,15 +3132,15 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 4px;
 }
 
-#fccjqadfcv .gt_column_spanner_outer:first-child {
+#wpvhkubyhe .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fccjqadfcv .gt_column_spanner_outer:last-child {
+#wpvhkubyhe .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fccjqadfcv .gt_column_spanner {
+#wpvhkubyhe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3085,7 +3152,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   width: 100%;
 }
 
-#fccjqadfcv .gt_group_heading {
+#wpvhkubyhe .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3110,7 +3177,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: middle;
 }
 
-#fccjqadfcv .gt_empty_group_heading {
+#wpvhkubyhe .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3125,15 +3192,15 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: middle;
 }
 
-#fccjqadfcv .gt_from_md &gt; :first-child {
+#wpvhkubyhe .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#fccjqadfcv .gt_from_md &gt; :last-child {
+#wpvhkubyhe .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#fccjqadfcv .gt_row {
+#wpvhkubyhe .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3152,7 +3219,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   overflow-x: hidden;
 }
 
-#fccjqadfcv .gt_stub {
+#wpvhkubyhe .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3165,7 +3232,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#fccjqadfcv .gt_stub_row_group {
+#wpvhkubyhe .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3179,11 +3246,11 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   vertical-align: top;
 }
 
-#fccjqadfcv .gt_row_group_first td {
+#wpvhkubyhe .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fccjqadfcv .gt_summary_row {
+#wpvhkubyhe .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3193,16 +3260,16 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#fccjqadfcv .gt_first_summary_row {
+#wpvhkubyhe .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_first_summary_row.thick {
+#wpvhkubyhe .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fccjqadfcv .gt_last_summary_row {
+#wpvhkubyhe .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3212,7 +3279,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_grand_summary_row {
+#wpvhkubyhe .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3222,7 +3289,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#fccjqadfcv .gt_first_grand_summary_row {
+#wpvhkubyhe .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3232,11 +3299,11 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-top-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_striped {
+#wpvhkubyhe .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fccjqadfcv .gt_table_body {
+#wpvhkubyhe .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3245,7 +3312,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-bottom-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_footnotes {
+#wpvhkubyhe .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3259,7 +3326,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_footnote {
+#wpvhkubyhe .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -3268,7 +3335,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#fccjqadfcv .gt_sourcenotes {
+#wpvhkubyhe .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3282,7 +3349,7 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   border-right-color: #D3D3D3;
 }
 
-#fccjqadfcv .gt_sourcenote {
+#wpvhkubyhe .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3290,36 +3357,36 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   padding-right: 5px;
 }
 
-#fccjqadfcv .gt_left {
+#wpvhkubyhe .gt_left {
   text-align: left;
 }
 
-#fccjqadfcv .gt_center {
+#wpvhkubyhe .gt_center {
   text-align: center;
 }
 
-#fccjqadfcv .gt_right {
+#wpvhkubyhe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fccjqadfcv .gt_font_normal {
+#wpvhkubyhe .gt_font_normal {
   font-weight: normal;
 }
 
-#fccjqadfcv .gt_font_bold {
+#wpvhkubyhe .gt_font_bold {
   font-weight: bold;
 }
 
-#fccjqadfcv .gt_font_italic {
+#wpvhkubyhe .gt_font_italic {
   font-style: italic;
 }
 
-#fccjqadfcv .gt_super {
+#wpvhkubyhe .gt_super {
   font-size: 65%;
 }
 
-#fccjqadfcv .gt_two_val_uncert {
+#wpvhkubyhe .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -3328,31 +3395,31 @@ You can refer to below table while interpreting the correlation coefficient:&lt;
   margin-left: 0.1em;
 }
 
-#fccjqadfcv .gt_footnote_marks {
+#wpvhkubyhe .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#fccjqadfcv .gt_asterisk {
+#wpvhkubyhe .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fccjqadfcv .gt_slash_mark {
+#wpvhkubyhe .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#fccjqadfcv .gt_fraction_numerator {
+#wpvhkubyhe .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#fccjqadfcv .gt_fraction_denominator {
+#wpvhkubyhe .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -3826,6 +3893,7 @@ sample estimates:
 &lt;p&gt;Mathematically, the standard deviation can be expressed as below:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[{Standard \space deviation} = {\sqrt\frac{∑(x-\bar{x})^2}{\ {n-1}}}\]&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;No panic! In R, you can easily compute the range, quartile deviation, variance, and standard deviation. Suppose you have the weekly expenditures of two projects over 10 weeks.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;tidyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##    Projects Expenditures
 ## 1  project1        10000
@@ -4383,9 +4451,9 @@ head(iris)&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Rename column names with dplyr&lt;/h1&gt;
 &lt;p&gt;You can use &lt;code&gt;rename()&lt;/code&gt; function to change column names as following. For instance, let’s change &lt;strong&gt;Petal.Length&lt;/strong&gt; to &lt;strong&gt;P.L&lt;/strong&gt; and &lt;strong&gt;Petal.Width&lt;/strong&gt; to &lt;strong&gt;P.W&lt;/strong&gt;.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;dplyr&amp;quot;)
-library(dplyr)
-
-iris %&amp;gt;%
+library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 4.0.5&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;iris %&amp;gt;%
   rename(
     P.L = Petal.Length,
     P.W = Petal.Width
