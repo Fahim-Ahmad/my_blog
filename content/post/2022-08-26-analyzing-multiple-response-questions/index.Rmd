@@ -1,0 +1,135 @@
+---
+title: Analyzing Multiple Response Questions
+author: Fahim
+date: '2022-08-26'
+slug: analyzing-multiple-response-questions
+categories:
+  - R
+tags:
+  - R
+
+output:
+  blogdown::html_page:
+    toc: no
+
+summary: "In this post you will learn how to analyze multiple response questions in R."
+
+---
+
+There are at least two main approaches for storing multiple response questions in a data set. The indicator mode and the polytomous mode.
+
+## Polytomous mode
+
+The polytomous mode is suitable when the possible response categories are not fixed and the responses are recorded according to their order of appearance.
+
+For example, consider the following question.
+
+    What are your favorite statistical software package? (allow up to two answers)
+
+    Response 1: _____________
+
+    Response 2: _____________
+
+The collected data would then look like the following:
+
+```{r message=FALSE}
+polytomous <- data.frame(
+  response1 = c("R", "Python","R", "Stata", "SPSS","Python","Stata","SPSS","R"),
+  response2 = c("Python", "R", "Stata", "SPSS", "R", "R", "R", "Stata", "SPSS")
+)
+polytomous
+```
+
+
+## Indicator mode
+
+The indicator mode refers to the situation where the data are stored as a set of indicator variables/columns. Consider the above question as following:
+
+    Which of the followings are your favorite statistical packages?
+
+    a) R
+    b) Stata
+    c) Python
+    d) SPSS
+
+The most straightforward way to store the above data is to construct a set of indicator or dummy variables.
+
+> One variable/column for each response.
+
+In this case, the data would like the following:
+
+```{r}
+indicator <- data.frame(
+  R = c("Yes","Yes","Yes", "No", "Yes","Yes","Yes","No","Yes"),
+  Stata = c("No","No","Yes","Yes","No","No","Yes","Yes","No"),
+  Python = c("Yes","Yes","No","No","No","Yes","No","No","No"),
+  SPSS = c("No","No","No","Yes","Yes","No","No","Yes","Yes")
+)
+indicator
+```
+
+## Analyzing multiple response questions
+
+If the data are stored as indicator mode, the common way is to tabulate each variable separately.
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+# install.packages("dplyr")
+library(dplyr)
+
+# R
+# round(prop.table(table(indicator$R))*100,1)
+count(indicator, R, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Stata
+# round(prop.table(table(indicator$Stata))*100,1)
+count(indicator, Stata, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Python
+# round(prop.table(table(indicator$Python))*100,1)
+count(indicator, Python, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# SPSS
+# round(prop.table(table(indicator$SPSS))*100,1)
+count(indicator, SPSS, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+```
+
+```{r echo=FALSE}
+# R
+# round(prop.table(table(indicator$R))*100,1)
+count(indicator, R, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Stata
+# round(prop.table(table(indicator$Stata))*100,1)
+count(indicator, Stata, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Python
+# round(prop.table(table(indicator$Python))*100,1)
+count(indicator, Python, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# SPSS
+# round(prop.table(table(indicator$SPSS))*100,1)
+count(indicator, SPSS, name = "Freq") %>% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+```
+
+If the data are stored as polytomous mode even a simple descriptive analysis like tabulating frequency distributions could be quite tricky and complicated. In this case, we can use `calc_cro()` function from the **expss** package for tabulating multiple response questions.
+
+
+```{r expss, message=FALSE}
+# install.packages(expss)
+library(expss)
+```
+
+```{r message=FALSE}
+# Frequency
+
+calc_cro(polytomous, mrset(response1 %to% response2), total(label = "Freq"))
+# Percent of responses
+calc_cro_cpct_responses(polytomous, mrset(response1 %to% response2), total_row_position = "none", total(label = "Percent of responses"))
+
+# Percent of cases
+calc_cro_cpct(polytomous, mrset(response1 %to% response2), total_row_position = "none", total(label = "Percent of cases"))
+```
+
+
+
+

@@ -5,12 +5,269 @@
     <link>/category/r/</link>
       <atom:link href="/category/r/index.xml" rel="self" type="application/rss+xml" />
     <description>R</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Fri, 22 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© Fahim Ahmad (2020)</copyright><lastBuildDate>Fri, 26 Aug 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
       <title>R</title>
       <link>/category/r/</link>
     </image>
+    
+    <item>
+      <title>Analyzing Multiple Response Questions</title>
+      <link>/post/analyzing-multiple-response-questions/</link>
+      <pubDate>Fri, 26 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/post/analyzing-multiple-response-questions/</guid>
+      <description>
+
+
+&lt;p&gt;There are at least two main approaches for storing multiple response questions in a data set. The indicator mode and the polytomous mode.&lt;/p&gt;
+&lt;div id=&#34;polytomous-mode&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Polytomous mode&lt;/h2&gt;
+&lt;p&gt;The polytomous mode is suitable when the possible response categories are not fixed and the responses are recorded according to their order of appearance.&lt;/p&gt;
+&lt;p&gt;For example, consider the following question.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;What are your favorite statistical software package? (allow up to two answers)
+
+Response 1: _____________
+
+Response 2: _____________&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The collected data would then look like the following:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;polytomous &amp;lt;- data.frame(
+  response1 = c(&amp;quot;R&amp;quot;, &amp;quot;Python&amp;quot;,&amp;quot;R&amp;quot;, &amp;quot;Stata&amp;quot;, &amp;quot;SPSS&amp;quot;,&amp;quot;Python&amp;quot;,&amp;quot;Stata&amp;quot;,&amp;quot;SPSS&amp;quot;,&amp;quot;R&amp;quot;),
+  response2 = c(&amp;quot;Python&amp;quot;, &amp;quot;R&amp;quot;, &amp;quot;Stata&amp;quot;, &amp;quot;SPSS&amp;quot;, &amp;quot;R&amp;quot;, &amp;quot;R&amp;quot;, &amp;quot;R&amp;quot;, &amp;quot;Stata&amp;quot;, &amp;quot;SPSS&amp;quot;)
+)
+polytomous&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   response1 response2
+## 1         R    Python
+## 2    Python         R
+## 3         R     Stata
+## 4     Stata      SPSS
+## 5      SPSS         R
+## 6    Python         R
+## 7     Stata         R
+## 8      SPSS     Stata
+## 9         R      SPSS&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;indicator-mode&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Indicator mode&lt;/h2&gt;
+&lt;p&gt;The indicator mode refers to the situation where the data are stored as a set of indicator variables/columns. Consider the above question as following:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Which of the followings are your favorite statistical packages?
+
+a) R
+b) Stata
+c) Python
+d) SPSS&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The most straightforward way to store the above data is to construct a set of indicator or dummy variables.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;One variable/column for each response.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In this case, the data would like the following:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;indicator &amp;lt;- data.frame(
+  R = c(&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;, &amp;quot;No&amp;quot;, &amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;),
+  Stata = c(&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;),
+  Python = c(&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;),
+  SPSS = c(&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;No&amp;quot;,&amp;quot;Yes&amp;quot;,&amp;quot;Yes&amp;quot;)
+)
+indicator&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##     R Stata Python SPSS
+## 1 Yes    No    Yes   No
+## 2 Yes    No    Yes   No
+## 3 Yes   Yes     No   No
+## 4  No   Yes     No  Yes
+## 5 Yes    No     No  Yes
+## 6 Yes    No    Yes   No
+## 7 Yes   Yes     No   No
+## 8  No   Yes     No  Yes
+## 9 Yes    No     No  Yes&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;analyzing-multiple-response-questions&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Analyzing multiple response questions&lt;/h2&gt;
+&lt;p&gt;If the data are stored as indicator mode, the common way is to tabulate each variable separately.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(&amp;quot;dplyr&amp;quot;)
+library(dplyr)
+
+# R
+# round(prop.table(table(indicator$R))*100,1)
+count(indicator, R, name = &amp;quot;Freq&amp;quot;) %&amp;gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Stata
+# round(prop.table(table(indicator$Stata))*100,1)
+count(indicator, Stata, name = &amp;quot;Freq&amp;quot;) %&amp;gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Python
+# round(prop.table(table(indicator$Python))*100,1)
+count(indicator, Python, name = &amp;quot;Freq&amp;quot;) %&amp;gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# SPSS
+# round(prop.table(table(indicator$SPSS))*100,1)
+count(indicator, SPSS, name = &amp;quot;Freq&amp;quot;) %&amp;gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##     R Freq Percent
+## 1  No    2    22.2
+## 2 Yes    7    77.8&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   Stata Freq Percent
+## 1    No    5    55.6
+## 2   Yes    4    44.4&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   Python Freq Percent
+## 1     No    6    66.7
+## 2    Yes    3    33.3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   SPSS Freq Percent
+## 1   No    5    55.6
+## 2  Yes    4    44.4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If the data are stored as polytomous mode even a simple descriptive analysis like tabulating frequency distributions could be quite tricky and complicated. In this case, we can use &lt;code&gt;calc_cro()&lt;/code&gt; function from the &lt;strong&gt;expss&lt;/strong&gt; package for tabulating multiple response questions.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install.packages(expss)
+library(expss)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Frequency
+
+calc_cro(polytomous, mrset(response1 %to% response2), total(label = &amp;quot;Freq&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;gmisc_table&#34; style=&#34;border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;&#34;&gt;
+&lt;/th&gt;
+&lt;th style=&#34;font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;&#34;&gt;
+ Freq 
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ Python 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+3
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ R 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+7
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ SPSS 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+4
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ Stata 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+4
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: left;&#34;&gt;
+ #Total cases 
+&lt;/td&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: right;&#34;&gt;
+9
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Percent of responses
+calc_cro_cpct_responses(polytomous, mrset(response1 %to% response2), total_row_position = &amp;quot;none&amp;quot;, total(label = &amp;quot;Percent of responses&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;gmisc_table&#34; style=&#34;border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;&#34;&gt;
+&lt;/th&gt;
+&lt;th style=&#34;font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;&#34;&gt;
+ Percent of responses 
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ Python 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+16.7
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ R 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+38.9
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ SPSS 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+22.2
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: left;&#34;&gt;
+ Stata 
+&lt;/td&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: right;&#34;&gt;
+22.2
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Percent of cases
+calc_cro_cpct(polytomous, mrset(response1 %to% response2), total_row_position = &amp;quot;none&amp;quot;, total(label = &amp;quot;Percent of cases&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;gmisc_table&#34; style=&#34;border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;&#34;&gt;
+&lt;/th&gt;
+&lt;th style=&#34;font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;&#34;&gt;
+ Percent of cases 
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ Python 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+33.3
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ R 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+77.8
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align: left;&#34;&gt;
+ SPSS 
+&lt;/td&gt;
+&lt;td style=&#34;text-align: right;&#34;&gt;
+44.4
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: left;&#34;&gt;
+ Stata 
+&lt;/td&gt;
+&lt;td style=&#34;border-bottom: 2px solid grey; text-align: right;&#34;&gt;
+44.4
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames</title>

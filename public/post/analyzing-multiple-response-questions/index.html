@@ -30,10 +30,10 @@
   
     
   
-  <meta name="description" content="In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates." />
+  <meta name="description" content="In this post you will learn how to analyze multiple response questions in R." />
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/detecting-duplicates/" />
+  <link rel="alternate" hreflang="en-us" href="/post/analyzing-multiple-response-questions/" />
 
   
 
@@ -278,7 +278,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="/post/detecting-duplicates/" />
+  <link rel="canonical" href="/post/analyzing-multiple-response-questions/" />
 
   
   
@@ -294,18 +294,18 @@
   <meta property="twitter:card" content="summary_large_image" />
   
   <meta property="og:site_name" content="Fahim Ahmad" />
-  <meta property="og:url" content="/post/detecting-duplicates/" />
-  <meta property="og:title" content="Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad" />
-  <meta property="og:description" content="In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates." /><meta property="og:image" content="/post/detecting-duplicates/featured.png" />
-    <meta property="twitter:image" content="/post/detecting-duplicates/featured.png" /><meta property="og:locale" content="en-us" />
+  <meta property="og:url" content="/post/analyzing-multiple-response-questions/" />
+  <meta property="og:title" content="Analyzing Multiple Response Questions | Fahim Ahmad" />
+  <meta property="og:description" content="In this post you will learn how to analyze multiple response questions in R." /><meta property="og:image" content="/post/analyzing-multiple-response-questions/featured.png" />
+    <meta property="twitter:image" content="/post/analyzing-multiple-response-questions/featured.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2021-07-23T00:00:00&#43;00:00"
+        content="2022-08-26T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-07-23T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2022-08-26T00:00:00&#43;00:00">
   
 
   
@@ -329,16 +329,16 @@
   "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "/post/detecting-duplicates/"
+    "@id": "/post/analyzing-multiple-response-questions/"
   },
-  "headline": "Detecting Duplicates (base R vs. dplyr)",
+  "headline": "Analyzing Multiple Response Questions",
   
   "image": [
-    "/post/detecting-duplicates/featured.png"
+    "/post/analyzing-multiple-response-questions/featured.png"
   ],
   
-  "datePublished": "2021-07-23T00:00:00Z",
-  "dateModified": "2021-07-23T00:00:00Z",
+  "datePublished": "2022-08-26T00:00:00Z",
+  "dateModified": "2022-08-26T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -353,7 +353,7 @@
       "url": "/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "In this post, I provide an overview of duplicated( ) function from base R and the distinct( ) function from dplyr package to detect and remove duplicates."
+  "description": "In this post you will learn how to analyze multiple response questions in R."
 }
 </script>
 
@@ -369,11 +369,11 @@
 
 
 
-  <title>Detecting Duplicates (base R vs. dplyr) | Fahim Ahmad</title>
+  <title>Analyzing Multiple Response Questions | Fahim Ahmad</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="d8d545a7db874b37d518a47c29924c06" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="6091a2510e6c88ab0e98e573b69eccb3" >
 
   
   
@@ -678,7 +678,7 @@
 
 
 <div class="article-container pt-3">
-  <h1>Detecting Duplicates (base R vs. dplyr)</h1>
+  <h1>Analyzing Multiple Response Questions</h1>
 
   
   
@@ -698,7 +698,7 @@
     
       
     
-    Jul 23, 2021
+    Aug 26, 2022
   </span>
   
 
@@ -707,7 +707,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    4 min read
+    3 min read
   </span>
   
 
@@ -736,9 +736,9 @@
 </div>
 
 
-<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 486px; max-height: 293px;">
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 254px; max-height: 198px;">
   <div style="position: relative">
-    <img src="/post/detecting-duplicates/featured.png" alt="" class="featured-image">
+    <img src="/post/analyzing-multiple-response-questions/featured.png" alt="" class="featured-image">
     
   </div>
 </div>
@@ -753,118 +753,252 @@
     <div class="article-style">
       
 
-<div id="TOC">
-<ul>
-<li><a href="#removing-duplicates-based-on-a-single-variable">Removing duplicates based on a single variable</a></li>
-<li><a href="#removing-duplicates-based-on-the-combination-of-multiple-variables">Removing duplicates based on the combination of multiple variables</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul>
-</div>
 
-<p>Sometimes you may encounter duplicated values in the data which might cause problems depending on how you plan to use the data. In this post, I provide an overview of <code>duplicated()</code> function from base R and the <code>distinct()</code> function from <strong>dplyr</strong> package to detect and remove duplicates.</p>
-<p>I will be using the following data frame as an example in this post.</p>
-<pre class="r"><code>set.seed(1000)
-df &lt;- data.frame(
-  ID = sample(paste0(&quot;ID-00&quot;, 1:7), 10, replace = T),
-  value_1 = sample(1:7, 10, replace = T),
-  value_2 = sample(2:5, 10, replace = T)
+<p>There are at least two main approaches for storing multiple response questions in a data set. The indicator mode and the polytomous mode.</p>
+<div id="polytomous-mode" class="section level2">
+<h2>Polytomous mode</h2>
+<p>The polytomous mode is suitable when the possible response categories are not fixed and the responses are recorded according to their order of appearance.</p>
+<p>For example, consider the following question.</p>
+<pre><code>What are your favorite statistical software package? (allow up to two answers)
+
+Response 1: _____________
+
+Response 2: _____________</code></pre>
+<p>The collected data would then look like the following:</p>
+<pre class="r"><code>polytomous &lt;- data.frame(
+  response1 = c(&quot;R&quot;, &quot;Python&quot;,&quot;R&quot;, &quot;Stata&quot;, &quot;SPSS&quot;,&quot;Python&quot;,&quot;Stata&quot;,&quot;SPSS&quot;,&quot;R&quot;),
+  response2 = c(&quot;Python&quot;, &quot;R&quot;, &quot;Stata&quot;, &quot;SPSS&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;Stata&quot;, &quot;SPSS&quot;)
 )
-
-df</code></pre>
-<pre><code>##        ID value_1 value_2
-## 1  ID-004       5       2
-## 2  ID-003       6       5
-## 3  ID-006       1       3
-## 4  ID-003       1       4
-## 5  ID-005       5       5
-## 6  ID-003       2       3
-## 7  ID-005       2       2
-## 8  ID-002       4       3
-## 9  ID-006       7       2
-## 10 ID-006       2       3</code></pre>
-<div id="removing-duplicates-based-on-a-single-variable" class="section level1">
-<h1>Removing duplicates based on a single variable</h1>
-<p>The <code>duplicated()</code> function returns a logical vector where <code>TRUE</code> specifies which rows of the data frame are duplicates.</p>
-<p>For instance, <code>duplicated(df[&quot;ID&quot;])</code> returns the following vector.</p>
-<pre><code>##  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE</code></pre>
-<blockquote>
-<p><strong>Note</strong>: the <code>duplicated()</code> function preserves the first occurrence in the process of identifying the duplicate values, if you want to consider the duplication from the reverse side, then set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
-</blockquote>
-<p>Let’s use the above vector to exclude the duplicated values.</p>
-<pre class="r"><code>df[!duplicate_rows, ]</code></pre>
-<pre><code>##       ID value_1 value_2
-## 1 ID-004       5       2
-## 2 ID-003       6       5
-## 3 ID-006       1       3
-## 5 ID-005       5       5
-## 8 ID-002       4       3</code></pre>
-<p>An alternative way to select unique values is <code>dplyr::distinct()</code> function that yields a similar result as above.</p>
-<pre class="r"><code>dplyr::distinct(df, ID, .keep_all = TRUE)</code></pre>
-<pre><code>##       ID value_1 value_2
-## 1 ID-004       5       2
-## 2 ID-003       6       5
-## 3 ID-006       1       3
-## 4 ID-005       5       5
-## 5 ID-002       4       3</code></pre>
-<blockquote>
-<p><strong>Note</strong>: The .<code>keep_all</code> argument is used to retain all other columns in the output data frame.</p>
-</blockquote>
+polytomous</code></pre>
+<pre><code>##   response1 response2
+## 1         R    Python
+## 2    Python         R
+## 3         R     Stata
+## 4     Stata      SPSS
+## 5      SPSS         R
+## 6    Python         R
+## 7     Stata         R
+## 8      SPSS     Stata
+## 9         R      SPSS</code></pre>
 </div>
-<div id="removing-duplicates-based-on-the-combination-of-multiple-variables" class="section level1">
-<h1>Removing duplicates based on the combination of multiple variables</h1>
-<p>The above chunks of codes remove the duplicated rows based on a single column. What if we want to remove duplicates based on more than a single column?</p>
-<p>One way is to concatenate the columns in which you want to check the presence of duplicates. For example, let’s remove the rows where <strong>value_1</strong> and <strong>value_2</strong> are duplicated.</p>
-<pre class="r"><code>df &lt;- dplyr::mutate(df, value_1_2 = paste(value_1, value_2))
-df[!duplicated(df[c(&quot;value_1_2&quot;)]), ]</code></pre>
-<pre><code>##       ID value_1 value_2 value_1_2
-## 1 ID-004       5       2       5 2
-## 2 ID-003       6       5       6 5
-## 3 ID-006       1       3       1 3
-## 4 ID-003       1       4       1 4
-## 5 ID-005       5       5       5 5
-## 6 ID-003       2       3       2 3
-## 7 ID-005       2       2       2 2
-## 8 ID-002       4       3       4 3
-## 9 ID-006       7       2       7 2</code></pre>
-<p>Below is an efficient way of detecting duplicates based on the combination of multiple columns without concatenating the values of the columns in which we want to identify the duplicated values:</p>
-<pre class="r"><code># using duplicated() function
-df[!duplicated(df[c(&quot;value_1&quot;, &quot;value_2&quot;)]), ]
+<div id="indicator-mode" class="section level2">
+<h2>Indicator mode</h2>
+<p>The indicator mode refers to the situation where the data are stored as a set of indicator variables/columns. Consider the above question as following:</p>
+<pre><code>Which of the followings are your favorite statistical packages?
 
-# using distinct() function
-dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
-<pre><code>##       ID value_1 value_2 value_1_2
-## 1 ID-004       5       2       5 2
-## 2 ID-003       6       5       6 5
-## 3 ID-006       1       3       1 3
-## 4 ID-003       1       4       1 4
-## 5 ID-005       5       5       5 5
-## 6 ID-003       2       3       2 3
-## 7 ID-005       2       2       2 2
-## 8 ID-002       4       3       4 3
-## 9 ID-006       7       2       7 2</code></pre>
+a) R
+b) Stata
+c) Python
+d) SPSS</code></pre>
+<p>The most straightforward way to store the above data is to construct a set of indicator or dummy variables.</p>
+<blockquote>
+<p>One variable/column for each response.</p>
+</blockquote>
+<p>In this case, the data would like the following:</p>
+<pre class="r"><code>indicator &lt;- data.frame(
+  R = c(&quot;Yes&quot;,&quot;Yes&quot;,&quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;,&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;,&quot;Yes&quot;),
+  Stata = c(&quot;No&quot;,&quot;No&quot;,&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;,&quot;No&quot;,&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;),
+  Python = c(&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;,&quot;No&quot;,&quot;No&quot;,&quot;Yes&quot;,&quot;No&quot;,&quot;No&quot;,&quot;No&quot;),
+  SPSS = c(&quot;No&quot;,&quot;No&quot;,&quot;No&quot;,&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;,&quot;No&quot;,&quot;Yes&quot;,&quot;Yes&quot;)
+)
+indicator</code></pre>
+<pre><code>##     R Stata Python SPSS
+## 1 Yes    No    Yes   No
+## 2 Yes    No    Yes   No
+## 3 Yes   Yes     No   No
+## 4  No   Yes     No  Yes
+## 5 Yes    No     No  Yes
+## 6 Yes    No    Yes   No
+## 7 Yes   Yes     No   No
+## 8  No   Yes     No  Yes
+## 9 Yes    No     No  Yes</code></pre>
 </div>
-<div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
-<p>It seems that both approaches work very well; however, the advantage of using <code>duplicated()</code> function from base R is it returns a logical vector identifying the duplicated rows that can be used to either drop the duplicated rows or keep only these rows for further investigation while the <code>distinct()</code> function directly removes the duplicated rows without specifying which row has duplicate values.</p>
-<p>For instance, let’s keep the duplicated ID numbers only.</p>
-<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F), ]</code></pre>
-<pre><code>##        ID value_1 value_2 value_1_2
-## 4  ID-003       1       4       1 4
-## 6  ID-003       2       3       2 3
-## 7  ID-005       2       2       2 2
-## 9  ID-006       7       2       7 2
-## 10 ID-006       2       3       2 3</code></pre>
-<p>As mentioned above, the <code>duplicated()</code> function does not assign the first occurrence in the process of identifying the duplicated values as duplicates. Thus, we need to count backward as well to consider the duplication from the reverse side. To do so, we need to set the <code>fromLast</code> argument to <code>TRUE</code>.</p>
-<pre class="r"><code>df[duplicated(df[&quot;ID&quot;], fromLast = F) | duplicated(df[&quot;ID&quot;], fromLast = T), ]</code></pre>
-<pre><code>##        ID value_1 value_2 value_1_2
-## 2  ID-003       6       5       6 5
-## 3  ID-006       1       3       1 3
-## 4  ID-003       1       4       1 4
-## 5  ID-005       5       5       5 5
-## 6  ID-003       2       3       2 3
-## 7  ID-005       2       2       2 2
-## 9  ID-006       7       2       7 2
-## 10 ID-006       2       3       2 3</code></pre>
+<div id="analyzing-multiple-response-questions" class="section level2">
+<h2>Analyzing multiple response questions</h2>
+<p>If the data are stored as indicator mode, the common way is to tabulate each variable separately.</p>
+<pre class="r"><code># install.packages(&quot;dplyr&quot;)
+library(dplyr)
+
+# R
+# round(prop.table(table(indicator$R))*100,1)
+count(indicator, R, name = &quot;Freq&quot;) %&gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Stata
+# round(prop.table(table(indicator$Stata))*100,1)
+count(indicator, Stata, name = &quot;Freq&quot;) %&gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# Python
+# round(prop.table(table(indicator$Python))*100,1)
+count(indicator, Python, name = &quot;Freq&quot;) %&gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))
+
+# SPSS
+# round(prop.table(table(indicator$SPSS))*100,1)
+count(indicator, SPSS, name = &quot;Freq&quot;) %&gt;% mutate(Percent = round(Freq/sum(Freq)*100, 1))</code></pre>
+<pre><code>##     R Freq Percent
+## 1  No    2    22.2
+## 2 Yes    7    77.8</code></pre>
+<pre><code>##   Stata Freq Percent
+## 1    No    5    55.6
+## 2   Yes    4    44.4</code></pre>
+<pre><code>##   Python Freq Percent
+## 1     No    6    66.7
+## 2    Yes    3    33.3</code></pre>
+<pre><code>##   SPSS Freq Percent
+## 1   No    5    55.6
+## 2  Yes    4    44.4</code></pre>
+<p>If the data are stored as polytomous mode even a simple descriptive analysis like tabulating frequency distributions could be quite tricky and complicated. In this case, we can use <code>calc_cro()</code> function from the <strong>expss</strong> package for tabulating multiple response questions.</p>
+<pre class="r"><code># install.packages(expss)
+library(expss)</code></pre>
+<pre class="r"><code># Frequency
+
+calc_cro(polytomous, mrset(response1 %to% response2), total(label = &quot;Freq&quot;))</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Freq 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ Python 
+</td>
+<td style="text-align: right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ R 
+</td>
+<td style="text-align: right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ SPSS 
+</td>
+<td style="text-align: right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ Stata 
+</td>
+<td style="text-align: right;">
+4
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ #Total cases 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+9
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Percent of responses
+calc_cro_cpct_responses(polytomous, mrset(response1 %to% response2), total_row_position = &quot;none&quot;, total(label = &quot;Percent of responses&quot;))</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Percent of responses 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ Python 
+</td>
+<td style="text-align: right;">
+16.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ R 
+</td>
+<td style="text-align: right;">
+38.9
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ SPSS 
+</td>
+<td style="text-align: right;">
+22.2
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ Stata 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+22.2
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Percent of cases
+calc_cro_cpct(polytomous, mrset(response1 %to% response2), total_row_position = &quot;none&quot;, total(label = &quot;Percent of cases&quot;))</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Percent of cases 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ Python 
+</td>
+<td style="text-align: right;">
+33.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ R 
+</td>
+<td style="text-align: right;">
+77.8
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ SPSS 
+</td>
+<td style="text-align: right;">
+44.4
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ Stata 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+44.4
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 
     </div>
@@ -895,7 +1029,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/detecting-duplicates/&amp;text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=/post/analyzing-multiple-response-questions/&amp;text=Analyzing%20Multiple%20Response%20Questions" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -908,7 +1042,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/detecting-duplicates/&amp;t=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=/post/analyzing-multiple-response-questions/&amp;t=Analyzing%20Multiple%20Response%20Questions" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -921,7 +1055,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="mailto:?subject=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29&amp;body=/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Analyzing%20Multiple%20Response%20Questions&amp;body=/post/analyzing-multiple-response-questions/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -934,7 +1068,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=/post/analyzing-multiple-response-questions/&amp;title=Analyzing%20Multiple%20Response%20Questions" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -947,7 +1081,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="whatsapp://send?text=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29%20/post/detecting-duplicates/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Analyzing%20Multiple%20Response%20Questions%20/post/analyzing-multiple-response-questions/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -960,7 +1094,7 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/detecting-duplicates/&amp;title=Detecting%20Duplicates%20%28base%20R%20vs.%20dplyr%29" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=/post/analyzing-multiple-response-questions/&amp;title=Analyzing%20Multiple%20Response%20Questions" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1062,8 +1196,6 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
     <h3>Related</h3>
     <ul>
       
-      <li><a href="/post/analyzing-multiple-response-questions/">Analyzing Multiple Response Questions</a></li>
-      
       <li><a href="/post/convert_data_from_multiple_excel_sheets_to_individual_data_frames/">Read Data from Multiple Excel Sheets and Convert them to Individual Data Frames</a></li>
       
       <li><a href="/dashboard/wb_dashboard/">WB Dashboard</a></li>
@@ -1071,6 +1203,8 @@ dplyr::distinct(df, value_1, value_2, .keep_all = TRUE)</code></pre>
       <li><a href="/post/using-linear-regression-to-make-predictions-in-r/">Making Predictions with Linear Regression</a></li>
       
       <li><a href="/post/using-survey-weight-in-r/">Using Survey Weight</a></li>
+      
+      <li><a href="/post/exploring-relationship-between-variables-scatter-plot/">Exploring Relationship Between Variables | scatter-plot</a></li>
       
     </ul>
   </div>
