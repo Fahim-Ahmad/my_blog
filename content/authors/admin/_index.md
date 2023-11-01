@@ -8,10 +8,10 @@ education:
   courses:
   - course: MA in Economics
     institution: Kabul University
-    year: 2016
+    year: 2015-2016
   - course: BA in Economics
     institution: Kabul University
-    year: 2013
+    year: 2010-2013
 
     
 email: ""
@@ -19,16 +19,16 @@ highlight_name: false
 
 interests:
 - Applied Statistics
+- Data Visualization
 - Data Driven Decision Making
-- Extract Knowledge from Data
     
 organizations:
   - name: Data Analyst
 
 social:
-# - icon: envelope
-#   icon_pack: fas
-#   link: /#contact
+- icon: envelope
+  icon_pack: fas
+  link: mailto:fyousufzai93@gmail.com
 
 # - icon: google-scholar
 #   icon_pack: ai
@@ -50,6 +50,8 @@ superuser: true
 title: Fahim Ahmad
 ---
 
-I am an aspiring data analyst and experienced researcher with a Master of Arts in Economics. Apart from my formal education, I have been self-learning and teaching topics in statistics and research methods. I have several publications in the form of textbooks on <span style="text-decoration:underline">Research Method</span>; <span style="text-decoration:underline">Applied Statistics for Policy Analysis</span>; and <span style="text-decoration:underline">Data Management, Analysis, and Visualization</span> that are freely available to anyone who is interested in this field.
+I am an aspiring data analyst and experienced researcher with a Master of Arts in Economics. Apart from my formal education, I have been self-learning and teaching topics in statistics and research methods.
 
-I love data and transforming data into useful information. My core values are strong work ethic with a sense of responsibility and integrity, being comfortable with working in a diverse team, and enjoyment in solving technical problems as well as sharing my knowladge with others. I started this blog to share data analysis tips and tricks using R and Python and data related topics which i find useful.
+I love data and transforming data into useful information. I started this blog to share data analysis tips and tricks using R and Python and data related topics which I find useful.
+
+
