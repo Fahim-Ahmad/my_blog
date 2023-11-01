@@ -20,15 +20,15 @@ twitter: ''
 
 # Contact (edit or remove options as required)
 
-email: fyousufzai93@gmail.com
-# phone: 0093-780-81-9993
-address:
-#   street: Lange Str.
-   City: 31675 Bückeburg, Lower Saxony (Niedersachsen)
+# email: fyousufzai93@gmail.com
+# phone:
+# address:
+#   street:
+#   City:
 #   region: EU
-#   postcode: '31675'
-#   country: Germany
-#   country_code: US
+#   postcode:
+#   country:
+#   country_code:
 # coordinates:
 #   latitude: '37.4275'
 #   longitude: '-122.1697'
@@ -59,7 +59,7 @@ address:
 
 main_menu:
   enable: true
-  align: l
+  align: r
   show_logo: true
   show_language: false
   show_day_night: true
