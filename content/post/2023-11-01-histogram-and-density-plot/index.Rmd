@@ -14,6 +14,11 @@ output:
   blogdown::html_page:
     toc: no
 
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: yes
+  
 summary: "In this post, I explore visualizing continuous variables by combining a histogram (showing the frequency of values within specific intervals) and a density plot (illustrating probability distribution)"
 
 ---
