@@ -26,14 +26,15 @@ Summary: In this post you will learn how to build a linear regression, interpret
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#building-the-linear-regression-model">Building the Linear Regression Model</a></li>
-<li><a href="#model-assessment">Model Assessment</a><ul>
-<li><a href="#coefficients">Coefficients</a></li>
-<li><a href="#model-accuracy">Model Accuracy</a></li>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#building-the-linear-regression-model" id="toc-building-the-linear-regression-model">Building the Linear Regression Model</a></li>
+<li><a href="#model-assessment" id="toc-model-assessment">Model Assessment</a>
+<ul>
+<li><a href="#coefficients" id="toc-coefficients">Coefficients</a></li>
+<li><a href="#model-accuracy" id="toc-model-accuracy">Model Accuracy</a></li>
 </ul></li>
-<li><a href="#assumptions">Assumptions</a></li>
-<li><a href="#making-predictions">Making Predictions</a></li>
+<li><a href="#assumptions" id="toc-assumptions">Assumptions</a></li>
+<li><a href="#making-predictions" id="toc-making-predictions">Making Predictions</a></li>
 </ul>
 </div>
 
@@ -86,7 +87,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 3.046 on 30 degrees of freedom
-## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
 ## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 <p>It displays the model equation <code>lm(formula = mpg ~ wt, data = mtcars)</code> followed by a glimpse of the distribution of the residuals.</p>
 <div id="coefficients" class="section level2">
@@ -114,14 +115,13 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
 <ul>
 <li><strong>Linearity</strong>: The linear regression, as the name suggests, assumes a linear relationship between the dependent and independent variables. I use the scatter plot to check the linearity assumption with a smooth curve to highlight the pattern of the data. Have a look at my post <a href="http://fahimahmad.netlify.app/post/exploring-relationship-between-variables-scatter-plot/">here</a> for a detailed explanation of using a scatter plot for evaluating the relationship between two variables.</li>
 </ul>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>ggplot(mtcars, aes(x = wt, y = mpg)) +
+<pre class="r"><code>library(tidyverse)
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;, se = F) +
   theme_bw()</code></pre>
-<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>The above graph depicts a linearly decreasing relationship between <code>mpg</code> and <code>wt</code>.</p>
 <ul>
 <li><strong>Normality</strong>: This indicates that the distribution of the data is close to the normal distribution. I use the QQ-plot to visually evaluate whether or not the data fit a normal distribution.</li>
@@ -137,7 +137,7 @@ The <code>lm()</code> function is used to estimate the coefficients of linear re
   geom_qq_line() +
   facet_wrap(~vars, scales = &quot;free&quot;) +
   theme_bw()</code></pre>
-<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>The above graphs illustrate that <code>mpg</code> and <code>wt</code> are moderately skewed to the right side.</p>
 <ul>
 <li><p><strong>Multicollinearity</strong>: Multicollinearity indicates the presence of a strong correlation among independent variables. You should check this assumption while using multiple linear regression. Since there is only one explanatory variable in our model, we can skip this assumption<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p></li>
@@ -156,7 +156,7 @@ data.frame(
   geom_point(color = &quot;steelblue&quot;) +
   geom_hline(yintercept = 0, linetype = &quot;dotted&quot;) +
   theme_bw()</code></pre>
-<p><img src="/post/2022-05-15-using-linear-regression-to-make-predictions-in-r/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>After determining that the data do not violate any of the above assumptions, you can proceed to make predictions based on new values of the explanatory variable(s).</p>
 </div>
 <div id="making-predictions" class="section level1">
@@ -171,10 +171,10 @@ predict.lm(lm(mpg~wt, mtcars),  data.frame(wt = 5))</code></pre>
 <pre><code>##        1 
 ## 10.56277</code></pre>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>The R-squared in a linear regression with one independent variable is the square of the Pearson correlation coefficient.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>We can test multicollinearity through correlation matrix or computing Variance Influential Factor which I will discuss it in the next post.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>The R-squared in a linear regression with one independent variable is the square of the Pearson correlation coefficient.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>We can test multicollinearity through correlation matrix or computing Variance Influential Factor which I will discuss it in the next post.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
