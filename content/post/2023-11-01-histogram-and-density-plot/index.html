@@ -5,6 +5,7 @@ date: '2023-11-01'
 slug: combining-histogram-and-density-plot
 categories:
   - R
+  - visualization
 tags:
   - R
   - visualization
@@ -20,7 +21,7 @@ summary: "In this post, I explore visualizing continuous variables by combining 
 
 
 <p>Visualization is fundamental in gaining insights and understanding the data, yet selecting an appropriate visualization method can often pose a challenge.</p>
-<p>In this blog post, I explore combining a histogram (showing the frequency of values of the continuous data within specific intervals) and a density plot (illustrating probability distribution).</p>
+<p>Today I explore combining a histogram (showing the frequency of values of the continuous data within specific intervals) and a density plot (illustrating probability distribution).</p>
 <div id="required-packages-and-sample-data" class="section level3">
 <h3>Required Packages and Sample Data</h3>
 <pre class="r"><code>if(!require(dplyr)){install.packages(&quot;dplyr&quot;)}
@@ -85,5 +86,5 @@ df %&gt;%
   scale_y_continuous(sec.axis = sec_axis(~ . * max_density_y / max_hist_bin, name = &quot;density&quot;)) +
   labs(x = NULL, title = &quot;Histogram &amp; Density - 3&quot;)</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/combined-plot-3-1.png" width="672" /></p>
-<p>This combination helps us to understand both the frequency of values within a specific intervals and a fuller picture of how the data is distributed, making analysis more insightful.</p>
+<p>This combination helps us to understand the frequency of values within specific intervals and to have a fuller picture of how the data is distributed, making analysis more insightful.</p>
 </div>
