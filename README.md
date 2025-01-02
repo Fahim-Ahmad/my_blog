@@ -1,0 +1,1 @@
+This repository hosts my [personal blog](https://fahimahmad.netlify.app). If you notice any typos, coding errors, or have other feedback, please feel free to report them in the [issues section](https://github.com/Fahim-Ahmad/my_blog/issues). Your contributions are greatly appreciated!
