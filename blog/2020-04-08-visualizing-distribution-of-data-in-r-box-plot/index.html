@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing Distribution of Data | box-plot</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2020-04-09" />
+    <meta name="categories" content="R" />
+    <meta name="tags" content="ggplotRvisualization" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Visualizing Distribution of Data |
+box-plot</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2020-04-09</span>
+        </header>
+
+        <div id="why-box-plot" class="section level2">
+        <h2>Why box-plot?</h2>
+        <p>Box-plot is one of the effective ways to visually represent
+        the distribution of data and it gives you an overall idea about
+        how the data looks. Also, it is one of the best tools to
+        identify the outliers to check if an association you find in
+        your analysis can be explained by the presence of potential
+        unusual observations.</p>
+        <p>The graph shown below is an example of box-plot where the box
+        shows the interquartile range (IQR), the horizontal line inside
+        the box presents the median (50th percentile), and the whiskers
+        (lines extending from the box) represent maximum value that is
+        not an outlier (1.5 IQR above the third quartile) and minimum
+        value that is not an outlier (1.5 IQR below the first quartile).
+        All individual points outside the whiskers are considered as
+        outliers.</p>
+        <p><img
+        src="imgs/ComparingDistributionofDatainRbox-plot.jpg" /></p>
+        <ul>
+        <li>First quartile (Q1 / 25<sup>th</sup> Percentile) also knows
+        as lower quartile is the center of the lower half of the
+        data.</li>
+        <li>Median (Q2 / 50<sup>th</sup> Percentile) is the middle value
+        of the data.</li>
+        <li>Third quartile (Q3 / 75<sup>th</sup> Percentile) also known
+        as upper quartile is center of the upper half of the data.</li>
+        <li>Interquartile range (IQR) shows the middle half of the data.
+        (distance between first and third quartile)</li>
+        </ul>
+        <p>Box-plots are usually a useful way to compare the
+        distribution of data among two or more groups, or to compare the
+        distribution of data among one or more than one group across
+        time.</p>
+        </div>
+        <div id="box-plot-using-the-base-r-function"
+        class="section level2">
+        <h2>Box-plot using the base R function</h2>
+        <p>Let’s use the below data as an example. The first column
+        shows the gender of each observation, the values in the second
+        column are pre-test scores and the values in the third column
+        are post-test scores.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">gender    =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">pre_test =</span>    <span class="fu">c</span>(<span class="dv">30</span>,   <span class="dv">26</span>, <span class="dv">24</span>, <span class="dv">19</span>, <span class="dv">27</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">16</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">36</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">24</span>, <span class="dv">32</span>, <span class="dv">30</span>, <span class="dv">33</span>, <span class="dv">26</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">post_test =</span>   <span class="fu">c</span>(<span class="dv">35</span>,   <span class="dv">31</span>, <span class="dv">29</span>, <span class="dv">24</span>, <span class="dv">32</span>, <span class="dv">26</span>, <span class="dv">36</span>, <span class="dv">21</span>, <span class="dv">21</span>, <span class="dv">31</span>, <span class="dv">33</span>, <span class="dv">34</span>, <span class="dv">41</span>, <span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">29</span>, <span class="dv">37</span>, <span class="dv">35</span>, <span class="dv">38</span>, <span class="dv">31</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>df</span></code></pre></div>
+        <pre><code>##    gender pre_test post_test
+## 1    Male       30        35
+## 2    Male       26        31
+## 3    Male       24        29
+## 4    Male       19        24
+## 5    Male       27        32
+## 6    Male       21        26
+## 7    Male       31        36
+## 8    Male       16        21
+## 9    Male       16        21
+## 10 Female       26        31
+## 11 Female       28        33
+## 12 Female       29        34
+## 13 Female       36        41
+## 14 Female       25        30
+## 15 Female       27        32
+## 16 Female       24        29
+## 17 Female       32        37
+## 18 Female       30        35
+## 19 Female       33        38
+## 20 Female       26        31</code></pre>
+        <p>The base R function to build a boxplot is
+        <code>boxplot()</code>.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">boxplot</span>(df<span class="sc">$</span>pre_test, <span class="at">main=</span><span class="st">&quot;Pre-test&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+        <p>Let’s combine both plots for better comparison.</p>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">boxplot</span>(df[,<span class="fu">c</span>(<span class="st">&quot;pre_test&quot;</span>, <span class="st">&quot;post_test&quot;</span>)], <span class="at">main =</span> <span class="st">&quot;Pre-test vs Post test&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+        </div>
+        <div id="box-plot-using-the-ggplot2-package"
+        class="section level2">
+        <h2>Box-plot using the ggplot2 package</h2>
+        <p>I prefer the ggplot2 plots because the output is nicer and
+        importantly it can be easily modified compared to base R graphs,
+        moreover, it is more popular among R users.</p>
+        <p>The <code>geom_box()</code> function from the
+        <strong>ggplot2</strong> package can be used to create a
+        box-plot.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># install.packages(&quot;ggplot2&quot;)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> pre_test, <span class="at">x =</span> <span class="st">&quot;1: Pre-test&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> post_test, <span class="at">x =</span> <span class="st">&quot;2: Post-test&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Pre-test vs. Post-test scores&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+        <p>The plot on the left side shows the distribution of pre-test
+        scores and the one on the right side shows the distribution of
+        post-test scores. The above plot shows that average post-test
+        score (31.5) is higher compare to the pre-test (26.5).</p>
+        <p>It is also possible to use box-plot to visualize the
+        distribution of data by categories of another variable as well,
+        see below example for instance.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> pre_test, <span class="at">x =</span> <span class="st">&quot;1: Pre-test&quot;</span>, <span class="at">fill =</span> gender), <span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> post_test, <span class="at">x =</span> <span class="st">&quot;2: Post-test&quot;</span>, <span class="at">fill =</span> gender), <span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Pre-test vs. Post-test scores, by gender&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+        <p>The above plot shows that on average females have higher
+        score (boxes in red color) compare to those of males (boxes in
+        blue color) in both pre-test and post-test.</p>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

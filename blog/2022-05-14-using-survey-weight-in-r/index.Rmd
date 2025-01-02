@@ -1,0 +1,101 @@
+---
+title: Using Survey Weight in R
+author: Fahim Ahmad
+date: '2022-05-14'
+slug: using-survey-weight-in-r
+categories: [R]
+tags:
+  - R
+
+output:
+  html_document:
+    keep_md: false
+    toc: true
+    self_contained: false
+    theme: null
+    template: "../src/blog-template.html"
+---
+
+In R working with survey weight is made possible using `survey` package. Let's use below data frame as an exmaple here:
+
+```{r}
+set.seed(1000)
+age <- c(18:100)
+age <- sample(age, 100, replace = TRUE)
+gender <- c("Male", "Female")
+gender <- sample(gender, 100, replace = TRUE)
+country <- c("A", "B")
+country <- sample(country, 100, replace = TRUE)
+
+df <- data.frame(age, gender, country)
+
+df$weight[df$gender=="Female"] <-50/sum(df$gender=="Female")
+df$weight[df$gender=="Male"] <-50/sum(df$gender=="Male")
+
+# summary of data
+summary(df)
+```
+
+The most important variable here is the _weight_ variable which is constructed to balance the sex ratio. 
+
+Inside the `survey` package, there is `svydesign()` function that can be used to link a data frame with a weight.
+
+```{r message=FALSE}
+# install.packages("survey")
+library(survey)
+df.w <- svydesign(ids = ~1, data = df, weights = ~weight)
+```
+
+The resulting object is not a data frame anymore, but is a list of different objects that can be seen using `attributes()` function.
+
+```{r}
+attributes(df.w)
+```
+
+Therefore, we need to use `survey`'s own analytical functions. For example, here is a comparison of unweighted and weighted sex ratio.
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(dplyr)
+```
+
+```{r}
+# unweighted
+df %>%
+{table(.$gender)} %>%
+  prop.table()
+
+# weighted
+df.w %>%
+  svytable(~gender, .) %>%
+  prop.table()
+```
+
+`svytable()` can be used to create more than one-way frequency/percentage tables as well. For example, let's create contingency table of `gender` and `country`
+
+```{r}
+df.w %>%
+svytable(~gender+country, .) %>%
+  prop.table(2)
+```
+
+
+Below are other useful functions of `survey` package:
+
+```{r eval=FALSE, include=TRUE}
+# to compute weighted mean
+svymean(~age, df.w)
+# to compute weighted quantiles
+svyquantile(~age, df.w, c(.25, .50, .75))
+# to compute weigted variance
+svyvar(~age, df.w)
+# to perform t-test
+svyttest(age~gender, df.w)
+
+```
+
+
+
+
+
+

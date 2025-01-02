@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculating Average of Percentages</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2019-07-05" />
+    <meta name="categories" content="" />
+    <meta name="tags" content="" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Calculating Average of Percentages</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2019-07-05</span>
+        </header>
+
+        <p>I recently learned that calculating the average of
+        percentages is <strong>NOT</strong> similar to calculating the
+        average of numbers.</p>
+        <p>I am conducting data analysis training sessions once every
+        two months and at the end of each class I ask students if they
+        want to join the advanced data analysis class that I organize
+        once each year. Below data frame contains part of the actual
+        data which I collected from those who have participated in my
+        classes in the past few months which basically has three
+        variables as following:</p>
+        <ul>
+        <li><strong>class</strong>: either a trainee is from class 1 or
+        class 2.</li>
+        <li><strong>education</strong>: highest education level of
+        trainees</li>
+        <li><strong>advanced_class</strong>: a dummy variable where
+        <code>TRUE</code> indicates a trainee is eager to participate in
+        the advanced class and <code>FALAE</code> indicates a trainee
+        doesn’t want to attend in the advanced class.</li>
+        </ul>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">class =</span> <span class="fu">c</span>(<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 1&quot;</span>, <span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>,<span class="st">&quot;class 1&quot;</span>, <span class="st">&quot;class 1&quot;</span>, <span class="st">&quot;class 1&quot;</span>,<span class="st">&quot;class 2&quot;</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">education =</span> <span class="fu">c</span>(<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>,<span class="st">&quot;BA&quot;</span>,<span class="st">&quot;MA&quot;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">advanced_class =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>)</span></code></pre></div>
+        <pre><code>##      class education advanced_class
+## 1  class 1        BA           TRUE
+## 2  class 2        MA           TRUE
+## 3  class 1        BA          FALSE
+## 4  class 1        BA           TRUE
+## 5  class 2        MA          FALSE
+## 6  class 2        MA           TRUE
+## 7  class 1        BA           TRUE
+## 8  class 1        BA          FALSE
+## 9  class 1        BA           TRUE
+## 10 class 2        MA           TRUE
+## 11 class 1        MA          FALSE
+## 12 class 1        MA           TRUE
+## 13 class 2        BA          FALSE
+## 14 class 2        MA           TRUE
+## 15 class 2        BA          FALSE
+## 16 class 1        MA          FALSE
+## 17 class 1        BA          FALSE
+## 18 class 1        BA           TRUE
+## 19 class 1        MA           TRUE
+## 20 class 2        MA           TRUE
+## 21 class 1        BA          FALSE
+## 22 class 1        BA          FALSE
+## 23 class 1        MA          FALSE
+## 24 class 2        MA          FALSE
+## 25 class 1        BA           TRUE
+## 26 class 1        MA           TRUE
+## 27 class 1        BA          FALSE
+## 28 class 2        MA           TRUE</code></pre>
+        <p>Let’s find the percentage of each group who are eager to
+        participate in the advanced class.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  {<span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(.<span class="sc">$</span>class, .<span class="sc">$</span>advanced_class),<span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span>,<span class="dv">2</span>)}</span></code></pre></div>
+        <pre><code>##          
+##           FALSE TRUE
+##   class 1    50   50
+##   class 2    40   60</code></pre>
+        <p>Above table shows that 60% of trainees from class 2 and 50%
+        of trainees from class 1 want to join the advanced class. Does
+        this mean that <code>(60%+50%)/2=</code><strong>55%</strong> of
+        all trainees are intended to join the advanced class?</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(df<span class="sc">$</span>class, df<span class="sc">$</span>advanced_class),<span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">class =</span> Var1,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>         <span class="at">advanced_class=</span>Var2,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>          <span class="at">percentage =</span> Freq) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">filter</span>(advanced_class<span class="sc">!=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="co"># mutate(average = sum(percentage)/2) %&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>class, <span class="at">y=</span>percentage, <span class="at">fill =</span> class)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> percentage), <span class="at">nudge_x=</span><span class="dv">0</span>, <span class="at">nudge_y =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> (<span class="dv">50</span><span class="sc">+</span><span class="dv">60</span>)<span class="sc">/</span><span class="dv">2</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+        <p>The answer is <strong>No</strong>. Because each group does
+        not represent equal numbers of trainees.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  {<span class="fu">table</span>(.<span class="sc">$</span>class)}</span></code></pre></div>
+        <pre><code>## 
+## class 1 class 2 
+##      18      10</code></pre>
+        <p>As shown above, there are 18 trainees from class 1 and 10
+        trainees from class 2. It means that 60% of those form the
+        second class represents only 6 trainees and 50% of those from
+        the first class represents 9 trainees.</p>
+        <ul>
+        <li>class 1: <code>(50 / 100) x 18 = 9</code></li>
+        <li>class 2: <code>(60 / 100) x 10 = 6</code></li>
+        </ul>
+        <p>From the above result we can say that <code>9+6=</code>15 out
+        of all <code>18+10=</code>28 trainees in both classes said they
+        would like to join the advanced class. Therefore we can say that
+        <code>(15/28)*100=</code>53.57% of all trainees want to join the
+        advanced class.</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  {<span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(.<span class="sc">$</span>advanced_class))<span class="sc">*</span><span class="dv">100</span>,<span class="dv">2</span>)}</span></code></pre></div>
+        <pre><code>## 
+## FALSE  TRUE 
+## 46.43 53.57</code></pre>
+        <p>It can be observed that there is an inconsistency between
+        <code>(6+9/28)*100 =</code><strong>53.57%</strong> and
+        <code>(60%+50%)/2=</code><strong>55%</strong>. Hence, the
+        temptation of averaging percentages can lead to an inaccurate
+        result.</p>
+        <p>When sample size in both groups is equal, however, the
+        average of percentages agrees with the accurate percentage
+        calculation.</p>
+        <p>For example, the above data shows that 64.29% of trainees
+        with a master degree would like to join the advanced data
+        analysis class and this proportion is 42.86% among those with a
+        bachelor degree.</p>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  {<span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(.<span class="sc">$</span>education, .<span class="sc">$</span>advanced_class),<span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span>,<span class="dv">2</span>)}</span></code></pre></div>
+        <pre><code>##     
+##      FALSE  TRUE
+##   BA 57.14 42.86
+##   MA 35.71 64.29</code></pre>
+        <p>Here the average of both percentages is
+        <code>(64.29%+42.86)/2=</code><strong>53.57%</strong> which is
+        equal to accurate calculation of the percentage of trainees who
+        are intended to join the advanced data analysis training.</p>
+        <div class="sourceCode" id="cb12"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(df<span class="sc">$</span>education, df<span class="sc">$</span>advanced_class),<span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">education =</span> Var1,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>         <span class="at">advanced_class=</span>Var2,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>         <span class="at">percentage =</span> Freq) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">filter</span>(advanced_class<span class="sc">!=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>education, <span class="at">y=</span>percentage, <span class="at">fill =</span> education)) <span class="sc">+</span> <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span>percentage), <span class="at">nudge_y =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> (<span class="fl">42.9+64.3</span>)<span class="sc">/</span><span class="dv">2</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">2</span> )</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+        <p>The reason is that there is an equal number of trainees with
+        master and bachelor degrees.</p>
+        <div class="sourceCode" id="cb13"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  {<span class="fu">table</span>(.<span class="sc">$</span>education)}</span></code></pre></div>
+        <pre><code>## 
+## BA MA 
+## 14 14</code></pre>
+        <div id="summary" class="section level2">
+        <h2>Summary</h2>
+        <p>Average of percentages would lead you to an inaccurate result
+        unless all groups represent the equal sample size. The reason is
+        simple, when two groups are different in size then the same
+        percentage in both groups will give you two different numbers.
+        For example, 10% of a group of 100 individuals is 10 while 10%
+        of a group of 150 individuals is 15.</p>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

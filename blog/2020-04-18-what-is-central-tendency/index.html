@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Central Tendency?</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2020-04-18" />
+    <meta name="categories" content="RStatistics" />
+    <meta name="tags" content="RStatistics" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">What is Central Tendency?</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2020-04-18</span>
+        </header>
+
+        <p>Before going directly to measures of central tendency, I want
+        you to look at the data below. This is a table of weekly
+        expenditures of two projects over the course of 10 weeks. Now
+        tell me which one is cost-efficient than the other, or both are
+        the same?</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th align="right">project1</th>
+        <th align="right">project2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td align="right">10000</td>
+        <td align="right">10500</td>
+        </tr>
+        <tr class="even">
+        <td align="right">15400</td>
+        <td align="right">15000</td>
+        </tr>
+        <tr class="odd">
+        <td align="right">14250</td>
+        <td align="right">14300</td>
+        </tr>
+        <tr class="even">
+        <td align="right">13000</td>
+        <td align="right">12500</td>
+        </tr>
+        <tr class="odd">
+        <td align="right">11250</td>
+        <td align="right">11300</td>
+        </tr>
+        <tr class="even">
+        <td align="right">10450</td>
+        <td align="right">10500</td>
+        </tr>
+        <tr class="odd">
+        <td align="right">9035</td>
+        <td align="right">9030</td>
+        </tr>
+        <tr class="even">
+        <td align="right">12500</td>
+        <td align="right">12500</td>
+        </tr>
+        <tr class="odd">
+        <td align="right">14125</td>
+        <td align="right">14120</td>
+        </tr>
+        <tr class="even">
+        <td align="right">11240</td>
+        <td align="right">11320</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>What if I show you this?</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th align="left">projects</th>
+        <th align="right">average</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td align="left">project1</td>
+        <td align="right">12125</td>
+        </tr>
+        <tr class="even">
+        <td align="left">project2</td>
+        <td align="right">12107</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>Using the average, it is easy to compare the expenditures of
+        both projects. This is one of the primary purposes of the
+        measures of central tendency to summarize the data into a single
+        number that represents the center point of the data.</p>
+        <p>Measures of central tendency show the point where most values
+        of a the data fall and represent the tendency of the data to
+        cluster around a middle value using different approaches.
+        Selecting the appropriate method, however, depends on the type
+        of data you are dealing with. In this post, you will learn when
+        to use a particular measure of central tendency and how to
+        calculate it using R.</p>
+        <ul>
+        <li><strong>Mean:</strong> Mean is the measure of central
+        tendency that you are most familiar with. Its use is most often
+        with continuous data. You just add up all of the values and
+        divide by the number of observations in the data. The mean
+        locates the center accurately when the data is normally
+        distributed. In fact, in any symmetrical distribution the mean,
+        median and mode are equal. You can, therefore, use any of the
+        measures of the central tendency to locate the center of the
+        data. However, the presence of extreme values pulls the mean
+        away from the center while the median is less affected by
+        outliers.</li>
+        </ul>
+        <p>As mean is susceptible to the presence of outliers<a
+        href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>,
+        it loses its ability to provide the best central location when
+        the data is skewed. As the above figures show that mean is
+        dragged in the direction of the skew. Thus, using only the mean
+        to approximate the center of the data can often be
+        misleading.</p>
+        <p>In R, the <code>mean()</code> function can be used to
+        calculate the arithmetic mean. It takes a vector of values as
+        input and returns the average.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># use (na.rm = TRUE) if there is any missing value in the list of values</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">15400</span>, <span class="dv">14250</span>, <span class="dv">13000</span>, <span class="dv">11250</span>, <span class="dv">10450</span>, <span class="dv">9035</span>, <span class="dv">12500</span>, <span class="dv">14125</span>, <span class="dv">11240</span>), <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+        <pre><code>## [1] 12125</code></pre>
+        <ul>
+        <li><strong>Median:</strong> Median is the middle point of the
+        data that is arranged in ascending or descending order. If a
+        dataset contains an even number of values, the median is the
+        mean of the two middle values. In other words, the median is the
+        middle of an ordered list of values. Median is less likely to be
+        influenced by the presence of outliers. Therefore, it is the
+        most preferred measure of central tendency when the distribution
+        of the data is skewed. Moreover, the median is used when there
+        is an open-ended distribution. For example, if you have data
+        that measures numbers of employees and the options are 1, 2, 3,
+        4, “5 or more”. The “5 or more” option is open-ended and the
+        exact value is unknown. Thus, it makes calculating the mean
+        impossible.</li>
+        </ul>
+        <p>The <code>median()</code> function can be used to compute the
+        median. It takes a vector of values as input and returns the
+        value that is occurred most frequently.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># use (na.rm = TRUE) if there is any missing value in the list of values</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">median</span>(<span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">15400</span>, <span class="dv">14250</span>, <span class="dv">13000</span>, <span class="dv">11250</span>, <span class="dv">10450</span>, <span class="dv">9035</span>, <span class="dv">12500</span>, <span class="dv">14125</span>, <span class="dv">11240</span>), <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+        <pre><code>## [1] 11875</code></pre>
+        <ul>
+        <li><strong>Mode:</strong> Mode is preferred when you have a
+        categorical data. It is not often used with the continuous data
+        because there are an infinite number of values between two
+        values and it is very unlikely that two or more values will be
+        exactly equal. Mode represents the most common value -the value
+        that occurs most frequently- in the data. In some cases, a
+        dataset may contain multiple modes while some datasets may not
+        have any mode at all</li>
+        </ul>
+        <p>To the best of my knowledge, there is not any built-in
+        function in R to find out mode in a vector of values. Therefore,
+        below two steps must be followed:</p>
+        <ol style="list-style-type: lower-alpha">
+        <li>count the frequency of each value using <code>table()</code>
+        function.</li>
+        <li>use the result of the first step as an input into the
+        <code>which.max()</code> function to find the mode.</li>
+        </ol>
+        <p>Also, you can use below code to program a new function called
+        <strong>Mode</strong> to find the mode in a given vector of
+        values.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>Mode <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">as.character</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="fu">pull</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>      <span class="fu">filter</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>        <span class="fu">data.frame</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>          <span class="fu">table</span>(x)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>        ),</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>        Freq <span class="sc">==</span> <span class="fu">max</span>(Freq)),</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>      x)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  )</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>}</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">Mode</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>))</span></code></pre></div>
+        <pre><code>## [1] &quot;2&quot;</code></pre>
+        <p>The following table shows what the best measure of central
+        tendency is with respect to different types of variables.</p>
+        <table>
+        <thead>
+        <tr class="header">
+        <th align="center">Types of the variable</th>
+        <th align="center">The best measure of central tendency</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td align="center">Nominal</td>
+        <td align="center">Mode</td>
+        </tr>
+        <tr class="even">
+        <td align="center">Ordinal</td>
+        <td align="center">Median / Mode</td>
+        </tr>
+        <tr class="odd">
+        <td align="center">Continuous (not skewed)</td>
+        <td align="center">Mean</td>
+        </tr>
+        <tr class="even">
+        <td align="center">Continuous (skewed)</td>
+        <td align="center">Median</td>
+        </tr>
+        </tbody>
+        </table>
+        <p><br><br></p>
+        <div class="footnotes footnotes-end-of-document">
+        <hr />
+        <ol>
+        <li id="fn1"><p>Outliers are values that are notably different
+        from the rest of the data. Usually, any value larger than 1.5IQR
+        above the third quartile or lower than 1.5IQR below the first
+        quartile is considered as outlier.<a href="#fnref1"
+        class="footnote-back">↩︎</a></p></li>
+        </ol>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

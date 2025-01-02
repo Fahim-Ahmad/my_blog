@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making Predictions with Linear Regression</title>
+    <meta name="author" content="Fahim" />
+    <meta name="date" content="2022-05-15" />
+    <meta name="categories" content="RStatistics" />
+    <meta name="tags" content="RStatistics" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Making Predictions with Linear
+Regression</h1>
+            <span class="author">Fahim |</span>
+            <span class="date">2022-05-15</span>
+        </header>
+
+        <p>In previous posts, I discussed <a
+        href="../2021-08-10-exploring-relationship-between-variables-scatter-plot/">visualizing</a>
+        the relationship between two quantitative variables through a
+        scatter plot and <a
+        href="../2020-06-26-analysis-of-the-relationship-between-two-quantitative-variables-in-r-correlation/">quantifying</a>
+        the strength of the relationship through different types of
+        correlation.</p>
+        <blockquote>
+        <p>A scatter plot uses dots to represent the values of two
+        numeric variables. If the dots move from the lower-left to the
+        upper-right corner of the plot, it depicts a positive
+        correlation; if the dots move from upper-left to lower-right
+        corner, it illustrates a negative correlation; if the dots do
+        not form any pattern, it shows no relationship between the two
+        variables.</p>
+        </blockquote>
+        <blockquote>
+        <p>The correlation coefficient quantifies the extent of
+        interrelation between two numeric variables. The higher the
+        correlation coefficient in absolute value, the stronger the
+        degree of association.</p>
+        </blockquote>
+        <p>Correlation shows whether or not a change in one variable is
+        followed by changes in another variable, or vice versa, without
+        making any distinction between dependent or independent
+        variables. The linear regression predicts the numeric response
+        in the dependent variable that is triggered based on the changes
+        in the independent variable(s). In other words, the correlation
+        between <code>x</code> and <code>y</code> is identical to the
+        correlation between <code>y</code> and <code>x</code>. While
+        regressions of <code>y</code> on <code>x</code> and
+        <code>x</code> on <code>y</code> yield completely different
+        results.</p>
+        <div id="building-the-linear-regression-model"
+        class="section level1">
+        <h1>Building the Linear Regression Model</h1>
+        <p>There are two main types of linear regression: 1) Simple
+        linear regression that predicts the value of the dependent
+        variable on the basis of one explanatory variable and 2)
+        Multiple linear regression that predicts the value of the
+        dependent variable on the basis of two or more than two
+        explanatory variables.</p>
+        <p>For this analysis, I use the <strong>mtcars</strong> dataset
+        to build a simple linear model for <code>mpg</code> (miles a car
+        travels per gallon of gasoline) as a function of <code>wt</code>
+        (weight of a car), so you can use it to predict how many miles a
+        car travels when the weight is known.</p>
+        <p>Mathematically, the regression equation is expressed as
+        below:</p>
+        <p><span class="math display">\[y = \beta0+\beta1 \space x +
+        e\]</span></p>
+        <p>Where <span class="math inline">\(\beta0\)</span> and <span
+        class="math inline">\(\beta1\)</span> are regression
+        coefficients and <span class="math inline">\(e\)</span> is the
+        error term. The <code>lm()</code> function is used to estimate
+        the coefficients of linear regression:</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">lm</span>(mpg<span class="sc">~</span>wt, mtcars)</span></code></pre></div>
+        <pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)           wt  
+##      37.285       -5.344</code></pre>
+        <p>Since the coefficient for <code>wt</code> is negative, it
+        denotes a negative relationship between <code>mpg</code> and
+        <code>wt</code>. That is, a unit increase in <code>wt</code> is
+        followed by 5.344 units decrease in <code>mpg</code>.</p>
+        </div>
+        <div id="model-assessment" class="section level1">
+        <h1>Model Assessment</h1>
+        <p>Before using the model for predictions, we should make sure
+        the model is statistically significant. The
+        <code>summary()</code> function displays the significance level
+        of each coefficient alongside other useful information such as
+        residuals and R-squared to test the model accuracy.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(mpg<span class="sc">~</span>wt, mtcars))</span></code></pre></div>
+        <pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+        <p>It displays the model equation
+        <code>lm(formula = mpg ~ wt, data = mtcars)</code> followed by a
+        glimpse of the distribution of the residuals.</p>
+        <div id="coefficients" class="section level2">
+        <h2>Coefficients</h2>
+        <p>The <strong>Coefficients</strong> part shows the estimates
+        and their attributes such as standard error, t value, and
+        p-value for each beta coefficient to assess the extent and the
+        significance level of numeric response in the dependent variable
+        based on the changes of the independent variable(s).</p>
+        <ul>
+        <li><p><strong>Estimates:</strong> The y-intercept and the
+        estimated effect of the explanatory variable(s) on the dependent
+        variable are displayed in this part. (<em>The closer to zero,
+        the weaker its effect on the outcome</em>)</p></li>
+        <li><p><strong>Std. Error:</strong> It indicates how precisely
+        the estimates are measured by quantifying the uncertainty of the
+        estimates. It can be used to calculate the confidence interval
+        and t-value as well. (<em>The lower the standard error, the
+        better the estimates</em>)</p></li>
+        <li><p><strong>t-value:</strong> It is the ratio of the beta
+        coefficient and standard error <span class="math inline">\(t =
+        \frac {\beta}{Std. \space Error}\)</span>. A higher standard
+        error, therefore, yields a lower t-value. (<em>The higher
+        t-value is better</em>)</p></li>
+        <li><p><strong>Pr(&gt;|t|):</strong> It shows the significance
+        level of the coefficient, and tests whether or not it is
+        significantly different from zero. (<em>The closer to zero is
+        better</em>)</p></li>
+        </ul>
+        </div>
+        <div id="model-accuracy" class="section level2">
+        <h2>Model Accuracy</h2>
+        <p>The <code>summary()</code> function also provides additional
+        information such as RSE, R-squared, and the p-value to test how
+        well the model fits the data.</p>
+        <ul>
+        <li><p><strong>Residual standard error (RSE)</strong>: It shows
+        the average variation of the observed values from the predicted
+        values. For example, the RSE is 3.046 in the above model that
+        indicates the observed values of the dependent variable deviate
+        from the regression line, on average, by 3.046 units. The ratio
+        of RSE and mean of the dependent variable results in a
+        percentage error. In the above model the percentage error is
+        <code>3.046*100/mean(mtcars$mpg)</code> = 15.2%. (<em>The lower
+        RSE is better</em>)</p></li>
+        <li><p><strong>R-squared</strong>: It indicates the proportion
+        of variance of the dependent variable that can be explained by
+        the explanatory variable(s) which ranges from 0 to 1<a
+        href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
+        (<em>The closer to one is better</em>)</p></li>
+        <li><p><strong>p-value</strong>: It shows the overall
+        significance level of the model. (<em>The closer to zero is
+        better</em>)</p></li>
+        </ul>
+        </div>
+        </div>
+        <div id="assumptions" class="section level1">
+        <h1>Assumptions</h1>
+        <ul>
+        <li><strong>Linearity</strong>: The linear regression, as the
+        name suggests, assumes a linear relationship between the
+        dependent and independent variables. I use the scatter plot to
+        check the linearity assumption with a smooth curve to highlight
+        the pattern of the data. Have a look at my post <a
+        href="../2021-08-10-exploring-relationship-between-variables-scatter-plot/">here</a>
+        for a detailed explanation of using a scatter plot for
+        evaluating the relationship between two variables.</li>
+        </ul>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+        <p>The above graph depicts a linearly decreasing relationship
+        between <code>mpg</code> and <code>wt</code>.</p>
+        <ul>
+        <li><strong>Normality</strong>: This indicates that the
+        distribution of the data is close to the normal distribution. I
+        use the QQ-plot to visually evaluate whether or not the data fit
+        a normal distribution.</li>
+        </ul>
+        <blockquote>
+        <p>If the vast majority of points are very near the line, it
+        depicts a normal distribution. If the data do not follow a
+        normal distribution, you can use the methods described <a
+        href="../2020-07-30-methods-for-transforming-data-to-normal-distribution-in-r/">here</a>
+        to transform the data into a normal distribution.</p>
+        </blockquote>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">select</span>(mpg, wt) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">names_to =</span> <span class="st">&quot;vars&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;values&quot;</span>, <span class="at">cols =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> values)) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>() <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>vars, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+        <p>The above graphs illustrate that <code>mpg</code> and
+        <code>wt</code> are moderately skewed to the right side.</p>
+        <ul>
+        <li><p><strong>Multicollinearity</strong>: Multicollinearity
+        indicates the presence of a strong correlation among independent
+        variables. You should check this assumption while using multiple
+        linear regression. Since there is only one explanatory variable
+        in our model, we can skip this assumption.</p></li>
+        <li><p><strong>Homoscedasticity</strong>: It stands for
+        homogeneity of variance of residuals. We can test this
+        assumption by plotting the fitted values against the
+        residuals.</p></li>
+        </ul>
+        <blockquote>
+        <p>If the points form any systematic pattern, it depicts the
+        violation of homoscedasticity.</p>
+        </blockquote>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># The residuals and fitted values can also be obtained if you feed the linear regression model into `augment()` function from the **broom** package.</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">fitted =</span> <span class="fu">fitted</span>(<span class="fu">lm</span>(mpg<span class="sc">~</span>wt, mtcars)),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">residuals =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(mpg<span class="sc">~</span>wt, mtcars))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+        <p>After determining that the data do not violate any of the
+        above assumptions, you can proceed to make predictions based on
+        new values of the explanatory variable(s).</p>
+        </div>
+        <div id="making-predictions" class="section level1">
+        <h1>Making Predictions</h1>
+        <p>As mentioned earlier, if the dependent and independent
+        variables are denoted by <span class="math inline">\(y\)</span>
+        and <span class="math inline">\(x\)</span>, the regression line
+        of <span class="math inline">\(y\)</span> on <span
+        class="math inline">\(x\)</span> is expressed as follow: <span
+        class="math display">\[y = \beta 0 + \beta 1\space
+        x\]</span></p>
+        <p>where <span class="math inline">\(\beta 0\)</span> and <span
+        class="math inline">\(\beta 1\)</span> are unknown parameters
+        that can be estimated using the sample data. <span
+        class="math inline">\(\beta 0\)</span> indicates the y-intercept
+        and <span class="math inline">\(\beta 1\)</span> shows the slope
+        of the regression line, respectively. That is, <span
+        class="math inline">\(\beta 0\)</span> represents the value of
+        <span class="math inline">\(y\)</span> when <span
+        class="math inline">\(x\)</span> is 0 and <span
+        class="math inline">\(\beta 1\)</span> indicates the estimated
+        effect of <span class="math inline">\(x\)</span> on <span
+        class="math inline">\(y\)</span>.</p>
+        <p>Making predictions with linear regression is as simple as
+        solving the above equation. For instance, consider the model we
+        built earlier: <span class="math display">\[mpg = 37.285 - 5.344
+        × wt\]</span></p>
+        <p>You can enter different values for the explanatory variable
+        in the above equation to predict the dependent variable. For
+        example, let’s predict the value of <code>mpg</code> if
+        <code>wt</code> is 5: <span class="math display">\[mpg = 37.285
+        - 5.344 × 5 = 10.565\]</span></p>
+        <p>Nevertheless, if you have multiple explanatory variables,
+        solving the the above equation by hand would be time-consuming.
+        Instead, you can use the <code>predict.lm()</code> function for
+        the predictions based on the linear model.</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># predicting &#39;mpg&#39; if &#39;wt&#39; is equal to 10</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">predict.lm</span>(<span class="fu">lm</span>(mpg<span class="sc">~</span>wt, mtcars),  <span class="fu">data.frame</span>(<span class="at">wt =</span> <span class="dv">5</span>))</span></code></pre></div>
+        <pre><code>##        1 
+## 10.56277</code></pre>
+        </div>
+        <div class="footnotes footnotes-end-of-document">
+        <hr />
+        <ol>
+        <li id="fn1"><p>The R-squared in a linear regression with one
+        independent variable is the square of the Pearson correlation
+        coefficient.<a href="#fnref1"
+        class="footnote-back">↩︎</a></p></li>
+        </ol>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

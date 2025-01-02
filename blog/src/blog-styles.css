@@ -1,0 +1,51 @@
+/* :root {
+    --col-primary: #3c3c3c;
+    --col-secondary: #5A5A5A;
+    --col-url: #0077B6;
+    --col-url-hover: #005F99;
+    --col-shadow: rgba(0, 0, 0, 0.2);
+    --col-note: #fffae5;
+    --col-bg: #f8f9fa;
+    --col-transparent: #ffffff;
+}
+
+.dark-theme {
+    --col-primary: #f8f8f2;
+    --col-secondary: #ccc;
+    --col-url: #bbdefb;
+    --col-url-hover: #bbdefb;
+    --col-shadow: rgba(208, 201, 201, 0.2);
+    --col-note: #555;
+    --col-bg: #1d1f27;
+    --col-transparent: #23252f;
+} */
+
+.author {
+    display: none;
+    color: var(--col-secondary);
+}
+
+.date {
+    color: var(--col-secondary);
+}
+
+img {
+    max-width: 90%;
+}
+
+pre {
+    background-color: var(--col-bg);
+    color: var(--col-primary);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+pre.dark-theme {
+    background-color: #44475a;
+}
+
+.share-area i {
+    font-size: 1.5em;
+}
+

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                <!-- <li class="nav-item"><a class="nav-link active" href="/dashboard">Dashboards</a></li>
+                <li class="nav-item"><a class="nav-link" href="/publication">Publications</a></li>
+                <li class="nav-item"><a class="nav-link" href="/blog">Today I Learned</a></li> -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4">
+
+        <div class="p-4">
+            <p>Creating dashboards and visualizations is the most rewarding aspects of my work as a data analyst.</p>
+        </div>
+
+        <div class="row justify-content-center dashboard-cards">
+            
+            <div class="card m-3 p-0" style="width: 18rem;">
+                <a href="https://github.com/Fahim-Ahmad/wb_dashboard" target="_blank">
+                    <img class="card-img-top" src="dash-1.jpg" alt="dash-1">
+                </a>
+                <div class="card-body">
+                  <p class="card-text text-muted">This dashboard visualizes the economy & growth related indicators from the World Bank (WB)</p>                  
+                </div>
+                <div class="card-footer">
+                    <i class="fab fa-github text-muted"></i>
+                    <a href="https://github.com/Fahim-Ahmad/wb_dashboard" target="_blank">Source Code</a>
+                </div>
+            </div>
+
+            <div class="card m-3 p-0" style="width: 18rem;">
+                <a href="https://github.com/Fahim-Ahmad/wb_indicators/tree/r-shiny" target="_blank">
+                    <img class="card-img-top" src="dash-2.jpg" alt="dash-2">
+                </a>
+                <div class="card-body">
+                  <p class="card-text text-muted">This dashboard allows users to explore and compare key social, economic, environmental, and institutional indicators for different countries</p>
+                </div>
+                <div class="card-footer">
+                    <i class="fab fa-github text-muted"></i>
+                    <a href="https://github.com/Fahim-Ahmad/wb_indicators/tree/r-shiny" target="_blank">Source Code</a>
+                </div>
+            </div>
+
+            <div class="card m-3 p-0" style="width: 18rem;">
+                <a href="https://github.com/Fahim-Ahmad/attacks_on_healthcare_facilities" target="_blank">
+                    <img class="card-img-top" src="dash-3.jpg" alt="dash-3">
+                </a>
+                <div class="card-body">
+                  <p class="card-text text-muted">I developed this dashboard as as part of my studies at Massachusetts Institute of Technology (MIT) - Emerging Talent.</p>
+                </div>
+                <div class="card-footer">
+                    <i class="fab fa-github text-muted"></i>
+                    <a href="https://github.com/Fahim-Ahmad/attacks_on_healthcare_facilities" target="_blank">Source Code</a>
+                </div>
+            </div>
+        <!-- </div> -->
+
+        <!-- <div class="row justify-content-center"> -->
+            <div class="card m-3 p-0" style="width: 18rem;">
+                <a href="https://github.com/Fahim-Ahmad/compare_df_shiny_app" target="_blank">
+                    <img class="card-img-top" src="dash-4.jpg" alt="dash-4">
+                </a>
+                <div class="card-body">
+                  <p class="card-text text-muted">The purpose of developing this app is to compare two versions of the same dataset.</p>
+                </div>
+                <div class="card-footer">
+                    <i class="fab fa-github text-muted"></i>
+                    <a href="https://github.com/Fahim-Ahmad/compare_df_shiny_app" target="_blank">Source Code</a>
+                </div>
+            </div>
+
+            <div class="card m-3 p-0" style="width: 18rem;">
+                <a href="https://github.com/Fahim-Ahmad/calculating-food-consumption-score" target="_blank">
+                    <img class="card-img-top" src="dash-5.jpg" alt="dash-5">
+                </a>
+                <div class="card-body">
+                  <p class="card-text text-muted">I developed this app to calculate the Food Consumption Score (FCS) for a single household</p>
+                </div>
+                <div class="card-footer">
+                    <i class="fab fa-github text-muted"></i>
+                    <a href="https://github.com/Fahim-Ahmad/calculating-food-consumption-score" target="_blank">Source Code</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+</body>
+</html>

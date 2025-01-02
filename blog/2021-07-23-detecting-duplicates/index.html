@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting Duplicates (base R vs. dplyr)</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2021-07-23" />
+    <meta name="categories" content="R" />
+    <meta name="tags" content="R" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Detecting Duplicates (base R
+vs. dplyr)</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2021-07-23</span>
+        </header>
+
+        <p>Sometimes you may encounter duplicated values in the data
+        which might cause problems depending on how you plan to use the
+        data. In this post, I provide an overview of
+        <code>duplicated()</code> function from base R and the
+        <code>distinct()</code> function from <strong>dplyr</strong>
+        package to detect and remove duplicates.</p>
+        <p>I will be using the following data frame as an example in
+        this post.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">ID =</span> <span class="fu">sample</span>(<span class="fu">paste0</span>(<span class="st">&quot;ID-00&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>), <span class="dv">10</span>, <span class="at">replace =</span> T),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">value_1 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">10</span>, <span class="at">replace =</span> T),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">value_2 =</span> <span class="fu">sample</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">10</span>, <span class="at">replace =</span> T)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>df</span></code></pre></div>
+        <pre><code>##        ID value_1 value_2
+## 1  ID-004       5       2
+## 2  ID-003       6       5
+## 3  ID-006       1       3
+## 4  ID-003       1       4
+## 5  ID-005       5       5
+## 6  ID-003       2       3
+## 7  ID-005       2       2
+## 8  ID-002       4       3
+## 9  ID-006       7       2
+## 10 ID-006       2       3</code></pre>
+        <div id="removing-duplicates-based-on-a-single-variable"
+        class="section level1">
+        <h1>Removing duplicates based on a single variable</h1>
+        <p>The <code>duplicated()</code> function returns a logical
+        vector where <code>TRUE</code> specifies which rows of the data
+        frame are duplicates.</p>
+        <p>For instance, <code>duplicated(df["ID"])</code> returns the
+        following vector.</p>
+        <pre><code>##  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE</code></pre>
+        <blockquote>
+        <p><strong>Note</strong>: the <code>duplicated()</code> function
+        preserves the first occurrence in the process of identifying the
+        duplicate values, if you want to consider the duplication from
+        the reverse side, then set the <code>fromLast</code> argument to
+        <code>TRUE</code>.</p>
+        </blockquote>
+        <p>Let’s use the above vector to exclude the duplicated
+        values.</p>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df[<span class="sc">!</span>duplicate_rows, ]</span></code></pre></div>
+        <pre><code>##       ID value_1 value_2
+## 1 ID-004       5       2
+## 2 ID-003       6       5
+## 3 ID-006       1       3
+## 5 ID-005       5       5
+## 8 ID-002       4       3</code></pre>
+        <p>An alternative way to select unique values is
+        <code>dplyr::distinct()</code> function that yields a similar
+        result as above.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">distinct</span>(df, ID, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+        <pre><code>##       ID value_1 value_2
+## 1 ID-004       5       2
+## 2 ID-003       6       5
+## 3 ID-006       1       3
+## 4 ID-005       5       5
+## 5 ID-002       4       3</code></pre>
+        <blockquote>
+        <p><strong>Note</strong>: The .<code>keep_all</code> argument is
+        used to retain all other columns in the output data frame.</p>
+        </blockquote>
+        </div>
+        <div
+        id="removing-duplicates-based-on-the-combination-of-multiple-variables"
+        class="section level1">
+        <h1>Removing duplicates based on the combination of multiple
+        variables</h1>
+        <p>The above chunks of codes remove the duplicated rows based on
+        a single column. What if we want to remove duplicates based on
+        more than a single column?</p>
+        <p>One way is to concatenate the columns in which you want to
+        check the presence of duplicates. For example, let’s remove the
+        rows where <strong>value_1</strong> and <strong>value_2</strong>
+        are duplicated.</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(df, <span class="at">value_1_2 =</span> <span class="fu">paste</span>(value_1, value_2))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>df[<span class="sc">!</span><span class="fu">duplicated</span>(df[<span class="fu">c</span>(<span class="st">&quot;value_1_2&quot;</span>)]), ]</span></code></pre></div>
+        <pre><code>##       ID value_1 value_2 value_1_2
+## 1 ID-004       5       2       5 2
+## 2 ID-003       6       5       6 5
+## 3 ID-006       1       3       1 3
+## 4 ID-003       1       4       1 4
+## 5 ID-005       5       5       5 5
+## 6 ID-003       2       3       2 3
+## 7 ID-005       2       2       2 2
+## 8 ID-002       4       3       4 3
+## 9 ID-006       7       2       7 2</code></pre>
+        <p>Below is an efficient way of detecting duplicates based on
+        the combination of multiple columns without concatenating the
+        values of the columns in which we want to identify the
+        duplicated values:</p>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># using duplicated() function</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>df[<span class="sc">!</span><span class="fu">duplicated</span>(df[<span class="fu">c</span>(<span class="st">&quot;value_1&quot;</span>, <span class="st">&quot;value_2&quot;</span>)]), ]</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># using distinct() function</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">distinct</span>(df, value_1, value_2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+        <pre><code>##       ID value_1 value_2 value_1_2
+## 1 ID-004       5       2       5 2
+## 2 ID-003       6       5       6 5
+## 3 ID-006       1       3       1 3
+## 4 ID-003       1       4       1 4
+## 5 ID-005       5       5       5 5
+## 6 ID-003       2       3       2 3
+## 7 ID-005       2       2       2 2
+## 8 ID-002       4       3       4 3
+## 9 ID-006       7       2       7 2</code></pre>
+        </div>
+        <div id="conclusion" class="section level1">
+        <h1>Conclusion</h1>
+        <p>It seems that both approaches work very well; however, the
+        advantage of using <code>duplicated()</code> function from base
+        R is it returns a logical vector identifying the duplicated rows
+        that can be used to either drop the duplicated rows or keep only
+        these rows for further investigation while the
+        <code>distinct()</code> function directly removes the duplicated
+        rows without specifying which row has duplicate values.</p>
+        <p>For instance, let’s keep the duplicated ID numbers only.</p>
+        <div class="sourceCode" id="cb12"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>df[<span class="fu">duplicated</span>(df[<span class="st">&quot;ID&quot;</span>], <span class="at">fromLast =</span> F), ]</span></code></pre></div>
+        <pre><code>##        ID value_1 value_2 value_1_2
+## 4  ID-003       1       4       1 4
+## 6  ID-003       2       3       2 3
+## 7  ID-005       2       2       2 2
+## 9  ID-006       7       2       7 2
+## 10 ID-006       2       3       2 3</code></pre>
+        <p>As mentioned above, the <code>duplicated()</code> function
+        does not assign the first occurrence in the process of
+        identifying the duplicated values as duplicates. Thus, we need
+        to count backward as well to consider the duplication from the
+        reverse side. To do so, we need to set the <code>fromLast</code>
+        argument to <code>TRUE</code>.</p>
+        <div class="sourceCode" id="cb14"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>df[<span class="fu">duplicated</span>(df[<span class="st">&quot;ID&quot;</span>], <span class="at">fromLast =</span> F) <span class="sc">|</span> <span class="fu">duplicated</span>(df[<span class="st">&quot;ID&quot;</span>], <span class="at">fromLast =</span> T), ]</span></code></pre></div>
+        <pre><code>##        ID value_1 value_2 value_1_2
+## 2  ID-003       6       5       6 5
+## 3  ID-006       1       3       1 3
+## 4  ID-003       1       4       1 4
+## 5  ID-005       5       5       5 5
+## 6  ID-003       2       3       2 3
+## 7  ID-005       2       2       2 2
+## 9  ID-006       7       2       7 2
+## 10 ID-006       2       3       2 3</code></pre>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

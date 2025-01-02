@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combining Histogram and Density Plot</title>
+    <meta name="author" content="Fahim" />
+    <meta name="date" content="2023-11-01" />
+    <meta name="categories" content="Rvisualization" />
+    <meta name="tags" content="Rvisualization" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Combining Histogram and Density Plot</h1>
+            <span class="author">Fahim |</span>
+            <span class="date">2023-11-01</span>
+        </header>
+
+        <p>Visualization is fundamental in gaining insights and
+        understanding the data, yet selecting an appropriate
+        visualization method can often pose a challenge.</p>
+        <p>Today I explore combining a histogram (showing the frequency
+        of values of the continuous data within specific intervals) and
+        a density plot (illustrating probability distribution).</p>
+        <div id="required-packages-and-sample-data"
+        class="section level3">
+        <h3>Required Packages and Sample Data</h3>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(dplyr)){<span class="fu">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)}</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){<span class="fu">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)}</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">continuous_var =</span> <span class="fu">rnorm</span>(<span class="dv">500</span>, <span class="at">mean =</span> <span class="dv">30</span>, <span class="at">sd =</span> <span class="dv">20</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>)</span></code></pre></div>
+        </div>
+        <div id="creating-a-histogram" class="section level3">
+        <h3>Creating a Histogram</h3>
+        <p>Let’s start by visualizing the distribution of data using a
+        histogram.</p>
+        <div class="sourceCode" id="cb2"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>n_bin <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> continuous_var, <span class="at">y =</span> <span class="fu">after_stat</span>(count))) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> n_bin, <span class="at">fill =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Histogram&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/histogram-1.png" width="672" /></p>
+        </div>
+        <div id="creating-a-density-plot" class="section level3">
+        <h3>Creating a Density Plot</h3>
+        <p>Next, generate a density plot to illustrate the probability
+        distribution of the data.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> continuous_var)) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Density&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/density-plot-1.png" width="672" /></p>
+        </div>
+        <div id="combining-histogram-and-density-plot"
+        class="section level1">
+        <h1>Combining Histogram and Density Plot</h1>
+        <p>Now, let’s combine both graphs. Initially, there’s an issue
+        as the histogram uses ‘count’ on the y-axis, while the density
+        plot employs density distribution on the y-axis. Thus, resulting
+        to below graph.</p>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>n_bin <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> continuous_var, <span class="at">y =</span> <span class="fu">after_stat</span>(count))) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> n_bin, <span class="at">fill =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Histogram &amp; Density - 1&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/combined-plot-1-1.png" width="672" /></p>
+        <p>To address this, I’ll rescale the density values so that the
+        curve matches the y-axis scale of the histogram.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>n_bin <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>max_hist_bin <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">table</span>(<span class="fu">cut</span>(df<span class="sc">$</span>continuous_var, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df<span class="sc">$</span>continuous_var), <span class="fu">max</span>(df<span class="sc">$</span>continuous_var), <span class="at">by =</span> n_bin))))</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>max_density_y <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">density</span>(df<span class="sc">$</span>continuous_var)<span class="sc">$</span>y)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> continuous_var, <span class="at">y =</span> <span class="fu">after_stat</span>(count))) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> n_bin, <span class="at">fill =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density) <span class="sc">*</span> max_hist_bin <span class="sc">/</span> max_density_y), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Histogram &amp; Density - 2&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/combined-plot-2-1.png" width="672" /></p>
+        <p>Lastly I want to incorporate both count and density values.
+        Thus, I add a secondary y-axis with the actual density values
+        rather than the scaled values.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>n_bin <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>max_hist_bin <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">table</span>(<span class="fu">cut</span>(df<span class="sc">$</span>continuous_var, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df<span class="sc">$</span>continuous_var), <span class="fu">max</span>(df<span class="sc">$</span>continuous_var), <span class="at">by =</span> n_bin))))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>max_density_y <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">density</span>(df<span class="sc">$</span>continuous_var)<span class="sc">$</span>y)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> continuous_var, <span class="at">y =</span> <span class="fu">after_stat</span>(count))) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> n_bin, <span class="at">fill =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density) <span class="sc">*</span> max_hist_bin <span class="sc">/</span> max_density_y), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">*</span> max_density_y <span class="sc">/</span> max_hist_bin, <span class="at">name =</span> <span class="st">&quot;density&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Histogram &amp; Density - 3&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/combined-plot-3-1.png" width="672" /></p>
+        <p>This combination helps us to understand the frequency of
+        values within specific intervals and to have a fuller picture of
+        how the data is distributed, making analysis more
+        insightful.</p>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>

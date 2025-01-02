@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combining Multiple Plots using Patchwork</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2022-04-11" />
+    <meta name="categories" content="R" />
+    <meta name="tags" content="ggplotpatchwork" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Combining Multiple Plots using
+Patchwork</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2022-04-11</span>
+        </header>
+
+        <p>Data is just a collection of numbers until it is turned into
+        a story. Sometimes, the combination of several plots is required
+        for telling a great data-driven story.</p>
+        <p>It is a while that I am using <strong>R</strong> for data
+        analysis and visualization and I have been using several
+        packages for combining multiple plots. During this period, I
+        found the <strong>patchwork</strong> package the most
+        straightforward way of combining multiple ggplot plots which I
+        will explore it in this post.</p>
+        <div id="loading-required-packages" class="section level3">
+        <h3>loading required packages</h3>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;patchwork&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># install.packages(&quot;gapminder&quot;)</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># install.packages(&quot;dplyr&quot;)</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># install.packages()</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+        </div>
+        <div id="creating-example-plots" class="section level3">
+        <h3>creating example plots</h3>
+        <div class="sourceCode" id="cb2"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>gdpPercap_lifeExpt <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>gdpPercap, <span class="at">y=</span>lifeExp, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>lifeExpt_densityPlot <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>lifeExp, <span class="at">fill=</span>continent)) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>lifeExpt_boxPlot <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>continent, <span class="at">y=</span>lifeExp, <span class="at">col=</span>continent)) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>gdpPercap_densityPlot <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>gdpPercap_boxPlot <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>continent, <span class="at">y=</span>gdpPercap, <span class="at">col=</span>continent)) <span class="sc">+</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+        </div>
+        <div id="combining-plots-using-the-patchwork-package"
+        class="section level1">
+        <h1>Combining plots using the patchwork package</h1>
+        <p>Them most simple and straightforward way to combine plots is
+        to use the <code>+</code> operator.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>lifeExpt_densityPlot <span class="sc">+</span> lifeExpt_boxPlot <span class="sc">+</span> gdpPercap_densityPlot <span class="sc">+</span> gdpPercap_boxPlot</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+        </div>
+        <div id="combining-plots-beside-or-on-top-of-each-other"
+        class="section level1">
+        <h1>Combining plots beside or on top of each other</h1>
+        <p>The <code>+</code> operator combines plots without indicating
+        anything about the desired layout. By default, the
+        <strong>patchwork</strong> package keeps the grid square and
+        fill the grid in row order. This can be controlled by
+        <code>plot_layout()</code>.</p>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>lifeExpt_densityPlot <span class="sc">+</span> lifeExpt_boxPlot <span class="sc">+</span> gdpPercap_densityPlot <span class="sc">+</span> gdpPercap_boxPlot <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> F)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+        <blockquote>
+        <p>By having a one-row layout <code>plot_layout(nrow = 1)</code>
+        or one-column layout <code>plotlayout(ncol = 1)</code>, plots
+        can be placed on top of each other or beside each other.</p>
+        </blockquote>
+        <p>Likewise, <strong>patchwork</strong> provides two more
+        operators. <code>|</code> and <code>/</code></p>
+        <p><code>|</code> will place the plots beside each other, while
+        <code>/</code> will stack them.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> gdpPercap_lifeExpt</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+        </div>
+        <div id="controlling-the-legend" class="section level1">
+        <h1>Controlling the legend</h1>
+        <p>The <code>plotlayout()</code> function can also be used to
+        place the legends in a common place instead of next to each
+        plot.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>lifeExpt_densityPlot <span class="sc">+</span> lifeExpt_boxPlot <span class="sc">+</span> gdpPercap_densityPlot <span class="sc">+</span> gdpPercap_boxPlot <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> F, <span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>gdpPercap_lifeExpt <span class="sc">/</span> ((lifeExpt_densityPlot <span class="sc">/</span> lifeExpt_boxPlot) <span class="sc">|</span> (gdpPercap_densityPlot <span class="sc">/</span> gdpPercap_boxPlot)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+        </div>
+        <div id="adding-an-empty-area" class="section level1">
+        <h1>Adding an empty area</h1>
+        <p>It is also possible to add an empty area between the plots by
+        creating an empty <em>ggplot</em> object using the
+        <code>plot_spacer()</code> and adding it to the patchwork.</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> <span class="fu">plot_spacer</span>() <span class="sc">/</span> gdpPercap_lifeExpt</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+        </div>
+        <div id="combining-plot-and-table" class="section level1">
+        <h1>Combining plot and table</h1>
+        <p>Sometimes you may want to combine a non-ggplot content with a
+        <em>ggplot</em> plot. For instance, let’s combine the
+        correlation table between life expectancy, GDP per capita, and
+        population with the GDP per capita and life expectancy scatter
+        plot.</p>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># install.packages(&quot;gridExtra&quot;)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(gapminder[,<span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>)], <span class="at">method =</span> <span class="st">&#39;pearson&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>gdpPercap_lifeExpt <span class="sc">/</span> <span class="fu">tableGrob</span>(correlation)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+        </div>
+        <div id="annotation" class="section level1">
+        <h1>Annotation</h1>
+        <p>The <code>plot_annotation()</code> function can be used to
+        control different aspects of the annotation of the final plot
+        such as title, subtitle, and caption.</p>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> gdpPercap_lifeExpt <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&#39;THIS IS TITLE&#39;</span>, <span class="at">subtitle =</span> <span class="st">&#39;this is subtitle&#39;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+        <p>The <code>plot_annotation()</code> function also provide the
+        <code>tag_levels</code>, <code>tag_prefix</code>, and
+        <code>tag_suffix</code> arguments for auto-tagging to identify
+        the subplots in text.</p>
+        <ul>
+        <li><p><strong>tag_levels</strong> = A character vector defining
+        the enumeration format to use at each level. Possible values are
+        ‘a’ for lowercase letters, ‘A’ for uppercase letters, ‘1’ for
+        numbers, ‘i’ for lowercase Roman numerals, and ‘I’ for uppercase
+        Roman numerals.</p></li>
+        <li><p><strong>tag_prefix</strong> = String that should appear
+        before the tag.</p></li>
+        <li><p><strong>tag_suffix</strong> = String that should appear
+        after the tag.</p></li>
+        </ul>
+        <div class="sourceCode" id="cb11"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> gdpPercap_lifeExpt <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;I&quot;</span>, <span class="at">tag_prefix =</span> <span class="st">&quot;Plot &quot;</span>, <span class="at">tag_suffix =</span> <span class="st">&quot; :&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+        </div>
+        <div id="modifying-the-result-of-the-patchwork"
+        class="section level1">
+        <h1>Modifying the result of the patchwork</h1>
+        <p>The resulting object of the patchwork is a ggplot object.
+        Which means if you continue adding objects such as geoms,
+        scales, etc. it will be referenced to the last added plot. For
+        example, let’s italicize the x-axis text and set the angle to
+        45.</p>
+        <div class="sourceCode" id="cb12"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> gdpPercap_lifeExpt <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;I&quot;</span>, <span class="at">tag_prefix =</span> <span class="st">&quot;Plot &quot;</span>, <span class="at">tag_suffix =</span> <span class="st">&quot; :&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="sc">-</span><span class="dv">45</span>, <span class="at">face =</span> <span class="st">&#39;italic&#39;</span>))</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+        <p>Often when it comes to modifying the plot it is more
+        reasonable to modify everything at once. To do so, instead of
+        the <code>+</code> operator, the <code>&amp;</code> operator can
+        be used.</p>
+        <div class="sourceCode" id="cb13"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>(lifeExpt_densityPlot <span class="sc">|</span> lifeExpt_boxPlot) <span class="sc">/</span> gdpPercap_lifeExpt <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;I&quot;</span>, <span class="at">tag_prefix =</span> <span class="st">&quot;Plot &quot;</span>, <span class="at">tag_suffix =</span> <span class="st">&quot; :&quot;</span>) <span class="sc">&amp;</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="sc">-</span><span class="dv">45</span>, <span class="at">face =</span> <span class="st">&#39;italic&#39;</span>))</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>
