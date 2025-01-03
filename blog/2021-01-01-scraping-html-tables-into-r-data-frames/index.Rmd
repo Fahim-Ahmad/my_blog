@@ -1,0 +1,130 @@
+---
+title: Hello 2021!
+author: Fahim Ahmad
+date: '2021-01-01'
+slug: Scraping-html-tables-into-R-data-frames
+categories:
+  - R
+tags: [web scraping]
+
+output:
+  html_document:
+    keep_md: false
+    toc: true
+    self_contained: false
+    theme: null
+    template: "../src/blog-template.html"
+---
+Today is the first day of 2021. I started this year by learning how to scrape information from web pages, a skill to extract data quickly and efficiently.
+
+I believe extracting a large amount of data in a short time is as unique skill as transforming raw data into useful information. Web scraping is a general and broad topic that I plan to learn in the coming weeks. As a starting point, and to celebrate the new year, I learned scraping HTML tables, a common structure of data storage on the web, into R data frames.
+
+For instance, this page (https://www.dab.gov.af/exchange-rates) contains the AFN exchange rate which is updating on daily basis.
+
+The `read_html()` function from the **rvest** package can be used to read the above web page.
+
+```{r message=FALSE}
+# install.packages("rvest")
+library(rvest)
+
+data <- read_html("https://www.dab.gov.af/exchange-rates")
+```
+
+Once you read the HTML document, a part of it can be selected with the `html_nodes()` function. For example, the below function will return all tables from the above-mentioned page and parse them into data frames.
+
+```{r}
+html_nodes(data, "table") %>% 
+  html_table()
+```
+
+As the result indicates, the above page has two tables. We can extract a specific table by its index. For example, the function below returns the first table only.
+
+```{r}
+html_nodes(data, "table") %>% 
+  html_table() %>% 
+  .[[1]]
+```
+
+The *XPath* selector can also be used with `html_nodes()` function to extract a specific table. To do so, open the web-page in Google Chrome > right-click on the desired table > click **inspect**. It will open the developer tool that will allow you to view the HTML codes that generated the web page.
+
+![](img\rvest-scraping-tables-1.png)
+
+Next, hover over different HTML elements in the developer console until your desired table is highlighted. Then right-click and copy the XPath. 
+
+```{r eval=F}
+Hint: It will be a line with <table> tag.
+```
+
+
+![](img\rvest-scraping-tables-2.png)
+
+Then use the *xpath* argument with `html_nodes()` to read your desired table.
+
+```{r}
+html_nodes(data, xpath = "/html/body/div[1]/main/section/div/div/div/div[2]/table") %>% 
+  html_table()
+```
+
+Now the data is ready for further analysis.
+Using the same method, I extracted the AFN exchange rate data from `r as.Date("01-01-2020",format="%m-%d-%y")` to `r as.Date("12-31-2020",format="%m-%d-%y")` from the following website: https://www.dab.gov.af/exchange-rates
+
+> Feel free to edit the codes in my [GitHub](https://github.com/Fahim-Ahmad/Scraping-html-tables-into-R-dataframes) account.
+
+```{r eval=F}
+#  Loading required packages
+library(rvest)  
+library(tidyverse)
+
+#Set the start and end dates
+start <- as.Date("01-01-2020",format="%m-%d-%y")  
+end   <- as.Date("12-31-2020",format="%m-%d-%y")  
+final_data <- rbind()  
+
+#Scraping the data from "https://www.dab.gov.af/exchange-rates"
+while (start <= end){  
+  
+  print(paste0("Extracting table from https://www.dab.gov.af/exchange-rates?field_date_value=",format(start,"%m/%d/%y")))  
+  df <- read_html(paste0("https://www.dab.gov.af/exchange-rates?field_date_value=",format(start,"%m/%d/%y")))  
+  logic <- html_nodes(df, xpath = "/html/body/div[1]/main/section/div/div/div/div[2]/table") %>% html_table() %>% unlist()  
+    
+  if (!is.null(logic)) {  
+    df_final <- html_nodes(df, xpath = "/html/body/div[1]/main/section/div/div/div/div[2]/table") %>% html_table() %>% data.frame() %>%  mutate(date = start)  
+  }  
+    
+  final_data <- rbind(final_data, df_final)  
+  start <- start + 1                      
+}  
+
+#Plotting the data
+final_data %>%   
+  filter(Currency %in% c("CNY¥", "EURO€", "INDIAN Rs.", "IRAN Toman", "PAKISTAN Rs.", "POUND£", "SAUDI RIYAL", "SWISS₣", "UAE DIRHAM", "USD$")) %>%   
+  mutate(  
+    Cash_sell = as.numeric(Cash..Sell.),  
+    Cash_buy = as.numeric(Cash..Buy.)  
+    ) %>%   
+  select(Currency, date, contains("Cash_")) %>%   
+  pivot_longer(-c("Currency", "date"), names_to = "names", values_to = "values") %>%   
+  filter(!is.na(values)) %>%   
+  ggplot(aes(x = date, y = values, color = Currency)) +  
+  geom_line(show.legend = F) +  
+  geom_point(show.legend = F, size = 0.1, color = "black") +  
+  facet_grid(Currency~names, scales = "free_y") +  
+  theme_bw() +  
+  theme(strip.text.x = element_text(face = "bold"),  
+        strip.text.y = element_text(size = 8),  
+        plot.caption = element_text(color = "blue")  
+        ) +  
+  labs(x = NULL, y = NULL, caption = "Source: https://www.dab.gov.af/exchange-rates")
+```
+
+
+![](img\rvest-scraping-tables-3.jpg)
+
+
+
+
+
+
+
+
+
