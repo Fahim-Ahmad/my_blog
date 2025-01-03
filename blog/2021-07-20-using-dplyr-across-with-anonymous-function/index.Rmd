@@ -1,0 +1,125 @@
+---
+title: Using dplyr::across( ) with Anonymous Function
+author: Fahim Ahmad
+date: '2021-07-20'
+slug: using-across-with-anonymous-function
+categories:
+  - R
+tags:
+  - R
+
+output:
+  html_document:
+    keep_md: false
+    toc: true
+    self_contained: false
+    theme: null
+    template: "../src/blog-template.html"
+---
+
+In my previous [post](https://fahimahmad.netlify.app/posts/advantages-of-dplyracross-to-apply-a-function-across-multiple-columns/), I briefly described the advantages of using `across()` while applying the same function over multiple columns. In this post, I provide an overview of using `across()` with the anonymous function.
+
+I simulate the below data frame to use as an example here.
+
+```{r}
+set.seed(1000)
+n <- 10
+df <- data.frame(
+  age = c(sample(18:30, n, replace = T), 80),
+  income = c(sample(2000:3000, n, replace = T), 8000),
+  education_level = c(sample(12:20, n, replace = T), 25),
+  gender = c(sample(c("Male", "Female"), n, replace = T), "Male")
+)
+df
+```
+
+For instance, let’s say you decide to replace the outliers in numeric columns with the mean value before carrying out some statistical analysis.
+
+>**Note**: The presence of outliers can be checked using the `boxplot.stats()` function from **grDevices** package. Use **?boxplot.stats** for more information.
+
+First, let's replace the outliers with the mean value on one column at a time, and then the next column, and so on.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+df %>%
+  mutate(
+    age = case_when(
+      age %in% boxplot.stats(age)$out ~ mean(age, na.rm = T),
+      TRUE ~ age
+    ),
+    income = case_when(
+      income %in% boxplot.stats(income)$out ~ mean(income, na.rm = T),
+      TRUE ~ income
+    ),
+    education_level = case_when(
+      education_level %in% boxplot.stats(education_level)$out ~ mean(education_level, na.rm = T),
+      TRUE ~ education_level
+    )
+  )
+```
+
+Imagine what if you had 100 additional numeric columns in the data set from which you wanted to handle the outliers? using the above approach you would have to write a very long chunk of code inside the `mutate()` function.
+
+Alternatively, you can create a custom function to deal with the outliers and apply it to all numeric columns using the `across()` function as below.
+
+```{r}
+# creating a function to replace outliers with the mean value
+outliers_to_mean <- function(x) {
+  x = case_when(
+    x %in% boxplot.stats(x)$out ~ mean(x, na.rm = T),
+    TRUE ~ x
+  )
+}
+
+# using the custom function inside the across() function
+df %>% 
+  mutate(
+    across(
+      .cols = where(is.numeric),
+      .fns = outliers_to_mean
+    )
+  )
+```
+
+The question is what if you need the `outliers_to_mean()` function only in this specific instance, and you know you would not use it again in the future?
+
+In this case, it is better to use an anonymous function instead of a named function. For instance, here is how you can use the above code as an anonymous function that produces the same result.
+
+```{r}
+df %>% 
+  mutate(
+    across(
+      .cols = where(is.numeric),
+      .fns = function(x) {
+        x = case_when(
+          x %in% boxplot.stats(x)$out ~ mean(x, na.rm = T),
+          TRUE ~ x
+          )
+      }
+    )
+  )
+
+```
+
+
+There is another way to even reduce the number of unnecessary stuff and write fewer lines of code. The `.fns` argument accepts purrr-style lambda as well. For example, in the above chunk of code, you can replace `function(x){}` with `~{}` which is just another way of saying that you have started an anonymous function.
+
+>**Note**: while using `~`, the `.x` symbol can be used to refer to the argument of the anonymous function.
+
+```{r}
+df %>% 
+  mutate(
+    across(
+      .cols = where(is.numeric),
+      .fns = 
+        ~{.x = case_when(
+          .x %in% boxplot.stats(.x)$out ~ mean(.x, na.rm = T),
+          TRUE ~ .x
+          )
+        }
+    )
+  )
+```
+
+

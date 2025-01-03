@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using dplyr::across( ) with Anonymous Function</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2021-07-20" />
+    <meta name="categories" content="R" />
+    <meta name="tags" content="R" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Using dplyr::across( ) with Anonymous
+Function</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2021-07-20</span>
+        </header>
+
+        <p>In my previous <a
+        href="https://fahimahmad.netlify.app/posts/advantages-of-dplyracross-to-apply-a-function-across-multiple-columns/">post</a>,
+        I briefly described the advantages of using
+        <code>across()</code> while applying the same function over
+        multiple columns. In this post, I provide an overview of using
+        <code>across()</code> with the anonymous function.</p>
+        <p>I simulate the below data frame to use as an example
+        here.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">age =</span> <span class="fu">c</span>(<span class="fu">sample</span>(<span class="dv">18</span><span class="sc">:</span><span class="dv">30</span>, n, <span class="at">replace =</span> T), <span class="dv">80</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">income =</span> <span class="fu">c</span>(<span class="fu">sample</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">3000</span>, n, <span class="at">replace =</span> T), <span class="dv">8000</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">education_level =</span> <span class="fu">c</span>(<span class="fu">sample</span>(<span class="dv">12</span><span class="sc">:</span><span class="dv">20</span>, n, <span class="at">replace =</span> T), <span class="dv">25</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">c</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>), n, <span class="at">replace =</span> T), <span class="st">&quot;Male&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>df</span></code></pre></div>
+        <pre><code>##    age income education_level gender
+## 1   21   2357              13   Male
+## 2   28   2300              16   Male
+## 3   23   2421              14   Male
+## 4   20   2928              20 Female
+## 5   25   2680              18   Male
+## 6   30   2540              19   Male
+## 7   20   2665              12 Female
+## 8   30   2441              17 Female
+## 9   19   2379              19   Male
+## 10  23   2438              19 Female
+## 11  80   8000              25   Male</code></pre>
+        <p>For instance, let’s say you decide to replace the outliers in
+        numeric columns with the mean value before carrying out some
+        statistical analysis.</p>
+        <blockquote>
+        <p><strong>Note</strong>: The presence of outliers can be
+        checked using the <code>boxplot.stats()</code> function from
+        <strong>grDevices</strong> package. Use
+        <strong>?boxplot.stats</strong> for more information.</p>
+        </blockquote>
+        <p>First, let’s replace the outliers with the mean value on one
+        column at a time, and then the next column, and so on.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">age =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>      age <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(age)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> T),</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> age</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    ),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="at">income =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>      income <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(income)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(income, <span class="at">na.rm =</span> T),</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> income</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    ),</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="at">education_level =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>      education_level <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(education_level)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(education_level, <span class="at">na.rm =</span> T),</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> education_level</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    )</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  )</span></code></pre></div>
+        <pre><code>##    age   income education_level gender
+## 1   21 2357.000              13   Male
+## 2   28 2300.000              16   Male
+## 3   23 2421.000              14   Male
+## 4   20 2928.000              20 Female
+## 5   25 2680.000              18   Male
+## 6   30 2540.000              19   Male
+## 7   20 2665.000              12 Female
+## 8   30 2441.000              17 Female
+## 9   19 2379.000              19   Male
+## 10  23 2438.000              19 Female
+## 11  29 3013.545              25   Male</code></pre>
+        <p>Imagine what if you had 100 additional numeric columns in the
+        data set from which you wanted to handle the outliers? using the
+        above approach you would have to write a very long chunk of code
+        inside the <code>mutate()</code> function.</p>
+        <p>Alternatively, you can create a custom function to deal with
+        the outliers and apply it to all numeric columns using the
+        <code>across()</code> function as below.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># creating a function to replace outliers with the mean value</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>outliers_to_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    x <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(x)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> T),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> x</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  )</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>}</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># using the custom function inside the across() function</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">where</span>(is.numeric),</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>      <span class="at">.fns =</span> outliers_to_mean</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>    )</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  )</span></code></pre></div>
+        <pre><code>##    age   income education_level gender
+## 1   21 2357.000              13   Male
+## 2   28 2300.000              16   Male
+## 3   23 2421.000              14   Male
+## 4   20 2928.000              20 Female
+## 5   25 2680.000              18   Male
+## 6   30 2540.000              19   Male
+## 7   20 2665.000              12 Female
+## 8   30 2441.000              17 Female
+## 9   19 2379.000              19   Male
+## 10  23 2438.000              19 Female
+## 11  29 3013.545              25   Male</code></pre>
+        <p>The question is what if you need the
+        <code>outliers_to_mean()</code> function only in this specific
+        instance, and you know you would not use it again in the
+        future?</p>
+        <p>In this case, it is better to use an anonymous function
+        instead of a named function. For instance, here is how you can
+        use the above code as an anonymous function that produces the
+        same result.</p>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">where</span>(is.numeric),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>        x <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>          x <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(x)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> T),</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>          <span class="cn">TRUE</span> <span class="sc">~</span> x</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>          )</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      }</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>    )</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  )</span></code></pre></div>
+        <pre><code>##    age   income education_level gender
+## 1   21 2357.000              13   Male
+## 2   28 2300.000              16   Male
+## 3   23 2421.000              14   Male
+## 4   20 2928.000              20 Female
+## 5   25 2680.000              18   Male
+## 6   30 2540.000              19   Male
+## 7   20 2665.000              12 Female
+## 8   30 2441.000              17 Female
+## 9   19 2379.000              19   Male
+## 10  23 2438.000              19 Female
+## 11  29 3013.545              25   Male</code></pre>
+        <p>There is another way to even reduce the number of unnecessary
+        stuff and write fewer lines of code. The <code>.fns</code>
+        argument accepts purrr-style lambda as well. For example, in the
+        above chunk of code, you can replace <code>function(x){}</code>
+        with <code>~{}</code> which is just another way of saying that
+        you have started an anonymous function.</p>
+        <blockquote>
+        <p><strong>Note</strong>: while using <code>~</code>, the
+        <code>.x</code> symbol can be used to refer to the argument of
+        the anonymous function.</p>
+        </blockquote>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">where</span>(is.numeric),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>      <span class="at">.fns =</span> </span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>        <span class="sc">~</span>{.x <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>          .x <span class="sc">%in%</span> <span class="fu">boxplot.stats</span>(.x)<span class="sc">$</span>out <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> T),</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>          <span class="cn">TRUE</span> <span class="sc">~</span> .x</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>          )</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>        }</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    )</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  )</span></code></pre></div>
+        <pre><code>##    age   income education_level gender
+## 1   21 2357.000              13   Male
+## 2   28 2300.000              16   Male
+## 3   23 2421.000              14   Male
+## 4   20 2928.000              20 Female
+## 5   25 2680.000              18   Male
+## 6   30 2540.000              19   Male
+## 7   20 2665.000              12 Female
+## 8   30 2441.000              17 Female
+## 9   19 2379.000              19   Male
+## 10  23 2438.000              19 Female
+## 11  29 3013.545              25   Male</code></pre>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>
