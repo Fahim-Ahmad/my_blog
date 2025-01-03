@@ -1,0 +1,206 @@
+---
+title: Advantages of dplyr::across( ) to Apply a Function Across Multiple Columns
+author: Fahim Ahmad
+date: '2021-05-15'
+slug: advantages-of-dplyr::across-to-apply-a-function-across-multiple-columns
+categories:
+  - R
+tags:
+  - R
+
+output:
+  html_document:
+    keep_md: false
+    toc: true
+    self_contained: false
+    theme: null
+    template: "../src/blog-template.html"
+---
+At some point in your life you have probably found yourself repeating the same function across multiple columns. Although there isn’t anything inherently wrong with doing this, sometimes you might want to simplify and shorten your code to have a neat script.
+
+In R, the `across()` function allows you to do data transformation or statistical analysis across all or a subset of columns of the data frame.
+
+I am using the __iris__ data as an example in this post. Let's have a glance at it, it has five columns - 4 numeric and a factor column. 
+
+```{r}
+str(iris)
+```
+
+Let’s say we want to find out the average of all numeric columns.
+
+One way of doing this is to feed the `mean()` with each column or combine the `summarise()` and `mean()` functions to have the result as a data frame.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+# mean(iris$Sepal.Length)
+# mean(iris$Sepal.Width)
+# mean(iris$Petal.Length)
+# mean(iris$Petal.Width)
+
+iris %>% 
+  summarise(
+    Sepal.Length_Mean = mean(Sepal.Length),
+    Sepal.Width_Mean = mean(Sepal.Width),
+    Petal.Length_Mean = mean(Petal.Length),
+    Petal.Width_Mean = mean(Petal.Width)
+  )
+
+```
+
+With the help of `across()` you can achieve the same result using the below chunk of code:
+
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+      .fns = mean
+    )
+    )
+```
+
+# Advantages of using across function
+
+My first impression while using the `across()` function was "**So what?**" *what is the advantage of using this approach if I need to write all columns names which I want to apply the function on them*, and I am sure if you are new to R you might have thought the same when using this function for the first time.
+
+Below are some reasons I think why we should use the `across()` function while performing data transformation or providing the same summary statistics of multiple columns instead of repeating the same function multiple times.
+
+### 1) .names argument
+
+You can use the `.names` argument to control the output names that will result from the `.fns` operation. The `.names` argument can take two special keywords, "{col}" and "{fn}"
+
+The default value is "{col}", the names of the resulting columns will be identical to the column names that were passed in the ".cols" argument. 
+
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+      .fns = mean,
+      .names = "{col}"
+    )
+    )
+```
+
+Let’s modify the names of the columns in a way that the names of the resulting columns should have the "_mean" as a suffix.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+      .fns = mean,
+      .names = "{col}_mean"
+    )
+    )
+```
+
+The special "{fn}" keyword comes in handy when you want to modify the column names in a way that the resulting data frame should have the same columns names and function name regardless of which function is used.
+
+```{r message=FALSE, warning=FALSE}
+# a named list of functions should be passed to the .fns argument
+
+iris %>% 
+  summarise(
+    across(
+      .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+      .fns = list(mean = mean, median = median),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+
+### 2) select helpers
+
+You can use the advantages of select helpers with the `across()` function to select a set of columns in different ways rather than passing the column names using a vector notation `c(column1, column2, column3, ...)`
+
+* `starts_with()` applies the function to the column whose names start with a specific character.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = starts_with("Sepal"),
+      .fns = list(mean = mean),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+* `ends_with()` applies the function to the column whose names end with a specific character.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = ends_with("Width"),
+      .fns = list(mean = mean),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+* `contains()` applies the function to the column whose names contain a specific character.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = contains("."),
+      .fns = list(mean = mean),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+* `where()` apply the function to all columns that satisfy a logical condition.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = where(is.numeric),
+      .fns = list(mean = mean),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+* You can also select the column names by their index
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = 1:4,
+      .fns = list(mean = mean),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+
+
+### 3) multiple functions at once
+
+Another significant advantage of using the `across()` function is that you can pass multiple functions to multiple columns at once. For instance, let's say you want to find out the minimum, mean, maximum, and standard deviation of all numeric columns in the data.
+
+```{r message=FALSE, warning=FALSE}
+iris %>% 
+  summarise(
+    across(
+      .cols = 1:4,
+      .fns = list(
+        Min = min,
+        Mean = mean,
+        Max = max,
+        sd = sd
+      ),
+      .names = "{col}_{fn}"
+    )
+    )
+```
+

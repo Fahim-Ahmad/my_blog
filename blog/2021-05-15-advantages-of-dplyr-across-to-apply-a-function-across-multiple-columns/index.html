@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advantages of dplyr::across( ) to Apply a Function Across
+Multiple Columns</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2021-05-15" />
+    <meta name="categories" content="R" />
+    <meta name="tags" content="R" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Advantages of dplyr::across( ) to Apply a
+Function Across Multiple Columns</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2021-05-15</span>
+        </header>
+
+        <p>At some point in your life you have probably found yourself
+        repeating the same function across multiple columns. Although
+        there isn’t anything inherently wrong with doing this, sometimes
+        you might want to simplify and shorten your code to have a neat
+        script.</p>
+        <p>In R, the <code>across()</code> function allows you to do
+        data transformation or statistical analysis across all or a
+        subset of columns of the data frame.</p>
+        <p>I am using the <strong>iris</strong> data as an example in
+        this post. Let’s have a glance at it, it has five columns - 4
+        numeric and a factor column.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">str</span>(iris)</span></code></pre></div>
+        <pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+        <p>Let’s say we want to find out the average of all numeric
+        columns.</p>
+        <p>One way of doing this is to feed the <code>mean()</code> with
+        each column or combine the <code>summarise()</code> and
+        <code>mean()</code> functions to have the result as a data
+        frame.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># mean(iris$Sepal.Length)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># mean(iris$Sepal.Width)</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># mean(iris$Petal.Length)</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co"># mean(iris$Petal.Width)</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="at">Sepal.Length_Mean =</span> <span class="fu">mean</span>(Sepal.Length),</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="at">Sepal.Width_Mean =</span> <span class="fu">mean</span>(Sepal.Width),</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="at">Petal.Length_Mean =</span> <span class="fu">mean</span>(Petal.Length),</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="at">Petal.Width_Mean =</span> <span class="fu">mean</span>(Petal.Width)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_Mean Sepal.Width_Mean Petal.Length_Mean Petal.Width_Mean
+## 1          5.843333         3.057333             3.758         1.199333</code></pre>
+        <p>With the help of <code>across()</code> you can achieve the
+        same result using the below chunk of code:</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">c</span>(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>      <span class="at">.fns =</span> mean</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    )</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width
+## 1     5.843333    3.057333        3.758    1.199333</code></pre>
+        <div id="advantages-of-using-across-function"
+        class="section level1">
+        <h1>Advantages of using across function</h1>
+        <p>My first impression while using the <code>across()</code>
+        function was “<strong>So what?</strong>” <em>what is the
+        advantage of using this approach if I need to write all columns
+        names which I want to apply the function on them</em>, and I am
+        sure if you are new to R you might have thought the same when
+        using this function for the first time.</p>
+        <p>Below are some reasons I think why we should use the
+        <code>across()</code> function while performing data
+        transformation or providing the same summary statistics of
+        multiple columns instead of repeating the same function multiple
+        times.</p>
+        <div id="names-argument" class="section level3">
+        <h3>1) .names argument</h3>
+        <p>You can use the <code>.names</code> argument to control the
+        output names that will result from the <code>.fns</code>
+        operation. The <code>.names</code> argument can take two special
+        keywords, “{col}” and “{fn}”</p>
+        <p>The default value is “{col}”, the names of the resulting
+        columns will be identical to the column names that were passed
+        in the “.cols” argument.</p>
+        <div class="sourceCode" id="cb7"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">c</span>(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>      <span class="at">.fns =</span> mean,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    )</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width
+## 1     5.843333    3.057333        3.758    1.199333</code></pre>
+        <p>Let’s modify the names of the columns in a way that the names
+        of the resulting columns should have the “_mean” as a
+        suffix.</p>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">c</span>(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>      <span class="at">.fns =</span> mean,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_mean&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    )</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Width_mean Petal.Length_mean Petal.Width_mean
+## 1          5.843333         3.057333             3.758         1.199333</code></pre>
+        <p>The special “{fn}” keyword comes in handy when you want to
+        modify the column names in a way that the resulting data frame
+        should have the same columns names and function name regardless
+        of which function is used.</p>
+        <div class="sourceCode" id="cb11"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># a named list of functions should be passed to the .fns argument</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">c</span>(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">median =</span> median),</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    )</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Length_median Sepal.Width_mean Sepal.Width_median Petal.Length_mean
+## 1          5.843333                 5.8         3.057333                  3             3.758
+##   Petal.Length_median Petal.Width_mean Petal.Width_median
+## 1                4.35         1.199333                1.3</code></pre>
+        </div>
+        <div id="select-helpers" class="section level3">
+        <h3>2) select helpers</h3>
+        <p>You can use the advantages of select helpers with the
+        <code>across()</code> function to select a set of columns in
+        different ways rather than passing the column names using a
+        vector notation
+        <code>c(column1, column2, column3, ...)</code></p>
+        <ul>
+        <li><code>starts_with()</code> applies the function to the
+        column whose names start with a specific character.</li>
+        </ul>
+        <div class="sourceCode" id="cb13"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;Sepal&quot;</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean),</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    )</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Width_mean
+## 1          5.843333         3.057333</code></pre>
+        <ul>
+        <li><code>ends_with()</code> applies the function to the column
+        whose names end with a specific character.</li>
+        </ul>
+        <div class="sourceCode" id="cb15"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">ends_with</span>(<span class="st">&quot;Width&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean),</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    )</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Width_mean Petal.Width_mean
+## 1         3.057333         1.199333</code></pre>
+        <ul>
+        <li><code>contains()</code> applies the function to the column
+        whose names contain a specific character.</li>
+        </ul>
+        <div class="sourceCode" id="cb17"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">contains</span>(<span class="st">&quot;.&quot;</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean),</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    )</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Width_mean Petal.Length_mean Petal.Width_mean
+## 1          5.843333         3.057333             3.758         1.199333</code></pre>
+        <ul>
+        <li><code>where()</code> apply the function to all columns that
+        satisfy a logical condition.</li>
+        </ul>
+        <div class="sourceCode" id="cb19"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="fu">where</span>(is.numeric),</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean),</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>    )</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Width_mean Petal.Length_mean Petal.Width_mean
+## 1          5.843333         3.057333             3.758         1.199333</code></pre>
+        <ul>
+        <li>You can also select the column names by their index</li>
+        </ul>
+        <div class="sourceCode" id="cb21"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean),</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    )</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_mean Sepal.Width_mean Petal.Length_mean Petal.Width_mean
+## 1          5.843333         3.057333             3.758         1.199333</code></pre>
+        </div>
+        <div id="multiple-functions-at-once" class="section level3">
+        <h3>3) multiple functions at once</h3>
+        <p>Another significant advantage of using the
+        <code>across()</code> function is that you can pass multiple
+        functions to multiple columns at once. For instance, let’s say
+        you want to find out the minimum, mean, maximum, and standard
+        deviation of all numeric columns in the data.</p>
+        <div class="sourceCode" id="cb23"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>      <span class="at">.cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>      <span class="at">.fns =</span> <span class="fu">list</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>        <span class="at">Min =</span> min,</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>        <span class="at">Mean =</span> mean,</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>        <span class="at">Max =</span> max,</span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>        <span class="at">sd =</span> sd</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>      ),</span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">&quot;{col}_{fn}&quot;</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    )</span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    )</span></code></pre></div>
+        <pre><code>##   Sepal.Length_Min Sepal.Length_Mean Sepal.Length_Max Sepal.Length_sd Sepal.Width_Min
+## 1              4.3          5.843333              7.9       0.8280661               2
+##   Sepal.Width_Mean Sepal.Width_Max Sepal.Width_sd Petal.Length_Min Petal.Length_Mean
+## 1         3.057333             4.4      0.4358663                1             3.758
+##   Petal.Length_Max Petal.Length_sd Petal.Width_Min Petal.Width_Mean Petal.Width_Max Petal.Width_sd
+## 1              6.9        1.765298             0.1         1.199333             2.5      0.7622377</code></pre>
+        </div>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>
