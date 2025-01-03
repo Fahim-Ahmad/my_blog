@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing COVID-19 Data in R | Johns Hopkins
+University</title>
+    <meta name="author" content="Fahim Ahmad" />
+    <meta name="date" content="2020-05-29" />
+    <meta name="categories" content="Rvisualization" />
+    <meta name="tags" content="Rvisualization" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- font awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- custom styles -->
+    <link href="/styles.css" rel="stylesheet">
+    <link href="/blog/src/blog-styles.css" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light p-2 pl-md-5 pr-md-5 position-sticky border-bottom" style="top: 0; z-index: 100;">
+        <div class="change-theme">
+            <i class="fa-sharp fa-solid fa-moon text-muted mr-2"></i>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse my-2 my-lg-0" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/publication"><small>Publications</small></a>
+                      <a class="dropdown-item" href="/dashboard"><small>Dashboards</small></a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="/blog"><small>Today I Learned</small></a>
+                    </div>
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container p-4 blog-post">
+        <header>
+            <h1 class="title">Visualizing COVID-19 Data in R | Johns
+Hopkins University</h1>
+            <span class="author">Fahim Ahmad |</span>
+            <span class="date">2020-05-29</span>
+        </header>
+
+        <p>In this post, I obtain COVID-19 data from the Johns Hopkins
+        University’s GitHub account and explore how to visualize it
+        specific to each country - Afghanistan as an example here.</p>
+        <p>First thing first, below packages should be installed and
+        loaded.</p>
+        <div class="sourceCode" id="cb1"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;dplyr&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># install.packages(&quot;ggplot2&quot;)</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># install.packages(&quot;tidyr&quot;)</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># install.packages(&quot;data.table&quot;)</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># install.packages(&quot;lubridate&quot;)</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co"># install.packages(&quot;patchwork&quot;)</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+        <div
+        id="step-1-load-the-covid-19-confirmed-recovered-and-deaths-data"
+        class="section level2">
+        <h2>Step 1: Load the COVID-19 confirmed, recovered, and deaths
+        data</h2>
+        <p>I am using the <code>fread()</code> function from
+        <strong>data.table</strong> package for this purpose.</p>
+        <div class="sourceCode" id="cb2"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>covid19_confirmed_cases <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>covid19_recovered <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>covid19_deaths <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv&quot;</span>)</span></code></pre></div>
+        </div>
+        <div id="step-2-combine-the-data-frames" class="section level2">
+        <h2>Step 2: Combine the data frames</h2>
+        <p>Since there is a separate data frame for each type of
+        COVID-19 cases, I combine all data frames using
+        <code>rbind()</code> function.</p>
+        <div class="sourceCode" id="cb3"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  covid19_confirmed_cases <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;confirmed&quot;</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  covid19_recovered <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;deaths&quot;</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  covid19_deaths <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;recovered&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>)</span></code></pre></div>
+        <p>Let’s have a look at the spread of COVID-19 around the
+        globe.</p>
+        <div class="sourceCode" id="cb4"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>covid19 <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">select</span>(Lat, Long, <span class="at">value =</span> <span class="fu">colnames</span>(covid19)[<span class="fu">length</span>(<span class="fu">colnames</span>(covid19))<span class="sc">-</span><span class="dv">1</span>], type) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">geom_map</span>(<span class="at">data =</span> <span class="fu">map_data</span>(<span class="st">&#39;world&#39;</span>), <span class="at">map =</span> <span class="fu">map_data</span>(<span class="st">&#39;world&#39;</span>), <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group, <span class="at">map_id=</span>region), <span class="at">fill =</span> <span class="st">&quot;black&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Long, <span class="at">y=</span>Lat, <span class="at">size =</span> value, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>type, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(), <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">60</span>, <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>()) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>(), <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>)) </span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="960" /></p>
+        </div>
+        <div id="step-3-subset-the-merged-data-frame"
+        class="section level1">
+        <h1>Step 3: Subset the merged data frame</h1>
+        <p>Using the <code>filter()</code> function from
+        <strong>dplyr</strong> package you can filter the data for any
+        specific country - Afghanistan as an example here<a href="#fn1"
+        class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+        <div class="sourceCode" id="cb5"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>covid19_AFG <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="co"># filter the data where Country/Region is Afghanistan</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country/Region</span><span class="st">`</span> <span class="sc">%in%</span> <span class="st">&quot;Afghanistan&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="co"># remove the Province/State, Country/Region, Lat, and Long columns</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Province/State</span><span class="st">`</span>, <span class="sc">-</span><span class="st">`</span><span class="at">Country/Region</span><span class="st">`</span>, <span class="sc">-</span>Lat, <span class="sc">-</span>Long) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="co"># transform the data from wide to long format</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>type, <span class="at">names_to =</span> <span class="st">&quot;date&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;cases&quot;</span>)</span></code></pre></div>
+        </div>
+        <div id="step-4-plot-the-data" class="section level1">
+        <h1>Step 4: Plot the data</h1>
+        <p>At this stage, let’s have a glance at the structure of the
+        data.</p>
+        <div class="sourceCode" id="cb6"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">str</span>(covid19_AFG)</span></code></pre></div>
+        <pre><code>## tibble [3,429 × 3] (S3: tbl_df/tbl/data.frame)
+##  $ type : chr [1:3429] &quot;confirmed&quot; &quot;confirmed&quot; &quot;confirmed&quot; &quot;confirmed&quot; ...
+##  $ date : chr [1:3429] &quot;1/22/20&quot; &quot;1/23/20&quot; &quot;1/24/20&quot; &quot;1/25/20&quot; ...
+##  $ cases: int [1:3429] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+        <p>As seen above, the date column is stored as character format.
+        One important point to always remember is while visualizing the
+        time-series data, the time variable must be recorded as
+        date/time format. To do so, I am using the <code>mdy()</code><a
+        href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+        function from <strong>lubridate</strong> package to transform
+        the date column into a standard date format.</p>
+        <div class="sourceCode" id="cb8"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>covid19_AFG <span class="ot">&lt;-</span> covid19_AFG <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">mdy</span>(date)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="co"># optionally filter the data for any date range</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">&lt;</span> <span class="fu">ymd</span>(<span class="st">&quot;2021-06-30&quot;</span>))</span></code></pre></div>
+        <p>Next, I use the <code>geom_line()</code> function from
+        <strong>ggplot2</strong> package to plot the data.</p>
+        <div class="sourceCode" id="cb9"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>plot <span class="ot">&lt;-</span> covid19_AFG <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="co"># initialize a ggplot object</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="co"># specify the line plot aesthetics</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> cases, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="co"># use the black and white theme and set the text angle in the x-axis to -45</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="sc">-</span><span class="dv">45</span>)) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="co"># remove the x-axis, y-axis, and legend titles; add the plot title</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Cumulative COVID-19 Cases in Afghanistan&quot;</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>plot</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+        <div id="formatting-the-x-axis" class="section level3">
+        <h3>Formatting the x-axis</h3>
+        <p>The <code>scale_x_date()</code> function can be used to
+        customize the date format in the x-axis. Below are some examples
+        of how to use the function.</p>
+        <div class="sourceCode" id="cb10"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># date in &#39;MM DD YY&#39; Format. Months in abbreviated format</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> plot <span class="sc">+</span> <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">&quot;%b %d - %y&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># date in &#39;MM DD YY&#39; Format. Months in unabbreviated format</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> plot <span class="sc">+</span> <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">&quot;%B %d - %Y&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co"># date in &#39;YYYY-MM-DD&#39; format</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> plot <span class="sc">+</span> <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">&quot;%Y-%m-%d&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>(p1) <span class="sc">/</span> (p2 <span class="sc">|</span> p3) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&#39;collect&#39;</span>) <span class="sc">&amp;</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+        <p>Here are the available options for customizing the date
+        variable:</p>
+        <table>
+        <caption>List of available options for customizing the date
+        variable.</caption>
+        <thead>
+        <tr class="header">
+        <th align="left">Symbol</th>
+        <th align="left">Meaning</th>
+        <th align="left">Example</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd">
+        <td align="left">%d</td>
+        <td align="left">Days as number</td>
+        <td align="left">01-31</td>
+        </tr>
+        <tr class="even">
+        <td align="left">%a</td>
+        <td align="left">Abbreviated weekday</td>
+        <td align="left">Mon</td>
+        </tr>
+        <tr class="odd">
+        <td align="left">%A</td>
+        <td align="left">Unabbreviated weekday</td>
+        <td align="left">Monday</td>
+        </tr>
+        <tr class="even">
+        <td align="left">%m</td>
+        <td align="left">Month as number</td>
+        <td align="left">01-12</td>
+        </tr>
+        <tr class="odd">
+        <td align="left">%b</td>
+        <td align="left">Abbreviated month</td>
+        <td align="left">Jan</td>
+        </tr>
+        <tr class="even">
+        <td align="left">%B</td>
+        <td align="left">Unabbreviated month</td>
+        <td align="left">January</td>
+        </tr>
+        <tr class="odd">
+        <td align="left">%y</td>
+        <td align="left">2-digit year</td>
+        <td align="left">02</td>
+        </tr>
+        <tr class="even">
+        <td align="left">%Y</td>
+        <td align="left">4-digit year</td>
+        <td align="left">2020</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>It is also possible to control the numbers of major breaks
+        and minor breaks using the <code>date_breaks()</code> and
+        <code>date_minor_breaks()</code> functions.</p>
+        <div class="sourceCode" id="cb11"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>plot <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="co"># set the date format to Month+Day</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">&quot;%b %d&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>               <span class="co"># set the date breaks to 1 month</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>               <span class="at">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>               <span class="co"># set the minor ticks in the x-axis to 1 week</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>               <span class="at">date_minor_breaks =</span> <span class="st">&quot;1 week&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
+        <p>The above plot shows the cumulative number of Covid19 cases
+        in Afghanistan. Let’s compute the daily cases by deducting the
+        value of each row from its previous row.</p>
+        <div class="sourceCode" id="cb12"><pre
+        class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>covid19_AFG_daily_cases <span class="ot">&lt;-</span> covid19_AFG <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">group_by</span>(type) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cases =</span> <span class="fu">ifelse</span>(<span class="fu">row_number</span>()<span class="sc">==</span><span class="dv">1</span>, cases, cases <span class="sc">-</span> <span class="fu">lag</span>(cases, <span class="at">default =</span> <span class="fu">first</span>(cases))))</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>covid19_AFG_daily_cases <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> cases, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">color =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">&quot;Daily COVID-19 Cases in Afghanistan&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="sc">-</span><span class="dv">45</span>)) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">&quot;%b %d&quot;</span>, <span class="at">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>, <span class="at">date_minor_breaks =</span> <span class="st">&quot;1 week&quot;</span>)</span></code></pre></div>
+        <p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+        </div>
+        </div>
+        <div class="footnotes footnotes-end-of-document">
+        <hr />
+        <ol>
+        <li id="fn1"><p>For those countries that the data is recorded at
+        the province/state level, sum of all provinces/states should be
+        used as country level data.<a href="#fnref1"
+        class="footnote-back">↩︎</a></p></li>
+        <li id="fn2"><p>I am using the mdy() function becuase the date
+        is stored as Month/Day/Year. Other possible options are dmy(),
+        myd(), ymd(), ydm(), dym()…<a href="#fnref2"
+        class="footnote-back">↩︎</a></p></li>
+        </ol>
+        </div>
+ 
+    </div>
+
+    <footer class="p-4 border-top">
+        <p class="text-center text-muted">© <span class="currentYear text-muted"></span> Fahim Ahmad</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <!-- custom javascript -->
+    <script src="/script.js"></script>
+    <script src="/blog/src/blog-script.js"></script>
+</body>
+</html>
