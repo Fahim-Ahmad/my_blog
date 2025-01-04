@@ -35,17 +35,8 @@ function addShareCopiedTextArea(event) {
     
         const shareCopiedTextArea = document.querySelector('.share-copied-text-area');
 
-        if (event.target && event.target.closest) {
-            if (shareCopiedTextArea && event.target.closest('.share-btn')) {
-                return;
-            }
-            if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {
-                shareCopiedTextArea.remove();
-            }
-        }
-
-        // if (shareCopiedTextArea && event.target.closest('.share-btn')) {return;}
-        // if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {shareCopiedTextArea.remove();}
+        if (shareCopiedTextArea && event.target.closest('.share-btn')) {return;}
+        if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {shareCopiedTextArea.remove();}
     
         if (selectedText) {
             const range = selection.getRangeAt(0);
