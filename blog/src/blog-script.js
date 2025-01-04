@@ -34,8 +34,18 @@ function addShareCopiedTextArea(event) {
         let selectedText = selection.toString();
     
         const shareCopiedTextArea = document.querySelector('.share-copied-text-area');
-        if (shareCopiedTextArea && event.target.closest('.share-btn')) {return;}
-        if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {shareCopiedTextArea.remove();}
+
+        if (event.target && event.target.closest) {
+            if (shareCopiedTextArea && event.target.closest('.share-btn')) {
+                return;
+            }
+            if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {
+                shareCopiedTextArea.remove();
+            }
+        }
+
+        // if (shareCopiedTextArea && event.target.closest('.share-btn')) {return;}
+        // if (shareCopiedTextArea && !shareCopiedTextArea.contains(event.target)) {shareCopiedTextArea.remove();}
     
         if (selectedText) {
             const range = selection.getRangeAt(0);
@@ -64,4 +74,13 @@ function addShareCopiedTextArea(event) {
 }
 
 document.addEventListener('mouseup', addShareCopiedTextArea);
-document.addEventListener('touchend', addShareCopiedTextArea);
+// document.addEventListener('touchend', addShareCopiedTextArea);
+document.addEventListener('touchend', (event) => {
+    const isLink = event.target.closest('a');
+    
+    if (!isLink) {
+        event.preventDefault();
+    }
+    
+    addShareCopiedTextArea(event);
+});
