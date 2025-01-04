@@ -66,12 +66,3 @@ function addShareCopiedTextArea(event) {
 
 document.addEventListener('mouseup', addShareCopiedTextArea);
 // document.addEventListener('touchend', addShareCopiedTextArea);
-document.addEventListener('touchend', (event) => {
-    const isLink = event.target.closest('a');
-    
-    if (!isLink) {
-        event.preventDefault();
-    }
-    
-    addShareCopiedTextArea(event);
-});
