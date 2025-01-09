@@ -1,6 +1,6 @@
 ////////////////////////////////////////// for debugging
 // const body = document.querySelector('body');
-// const elements = document.querySelectorAll('div, .container, nav, footer');
+// const elements = document.querySelectorAll('div, .container, nav, footer'); // use * to add border to all elements
 // let debug = false;
 
 // body.addEventListener('click', function () {
