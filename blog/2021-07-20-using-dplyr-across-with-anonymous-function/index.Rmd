@@ -17,7 +17,7 @@ output:
     template: "../src/blog-template.html"
 ---
 
-In my previous [post](https://fahimahmad.netlify.app/posts/advantages-of-dplyracross-to-apply-a-function-across-multiple-columns/), I briefly described the advantages of using `across()` while applying the same function over multiple columns. In this post, I provide an overview of using `across()` with the anonymous function.
+In my previous [post](../2021-05-15-advantages-of-dplyr-across-to-apply-a-function-across-multiple-columns/), I briefly described the advantages of using `across()` while applying the same function over multiple columns. In this post, I provide an overview of using `across()` with the anonymous function.
 
 I simulate the below data frame to use as an example here.
 
