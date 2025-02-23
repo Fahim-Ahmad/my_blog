@@ -185,3 +185,14 @@ i.taf-publication {
 i.taf-publication:hover {
     opacity: 0.8;
 }
+
+i.fa-download {
+    color: var(--col-secondary);
+    opacity: 0.8;
+}
+
+i.fa-download:hover {
+    color: var(--col-url-hover);
+    opacity: 1;
+}
+
