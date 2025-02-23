@@ -196,3 +196,6 @@ i.fa-download:hover {
     opacity: 1;
 }
 
+a:has(i.fa-download):hover {
+    text-decoration: none;
+}
